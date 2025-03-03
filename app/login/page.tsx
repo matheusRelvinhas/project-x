@@ -1,4 +1,6 @@
 'use client';
+import { useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import RegisterForm from "@/components/registerform";
 import ForgotPassword from "@/components/forgotpassword";
 import Icon from '@/components/icon';
@@ -8,7 +10,7 @@ import Image from "next/image";
 
 export default function LoginPage() {
   const { message } = useAppContext();
-
+  
   // Estados para senha e erro de senha
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -120,13 +122,16 @@ export default function LoginPage() {
           <a href="#" className="text-sm text-indigo-600 hover:text-indigo-700"><RegisterForm/></a>
         </div>
 
-       {/* Entrar com o Google */}
-        <div className="mt-6 text-center">
-          <button className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-          <Icon name="flat-color-icons:google" className="w-6 h-6 mr-2" />
-          Entrar com Google
-          </button>
-        </div>
+        {/* Entrar com o Google */}
+      <div className="mt-6 text-center">
+        <button
+        onClick={() => signIn("google")} // Chama o processo de login com Google
+        className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        >
+        <Icon name="flat-color-icons:google" className="w-6 h-6 mr-2" />
+        Entrar com Google
+        </button>
+      </div>
       </div>
     </div>
   );
