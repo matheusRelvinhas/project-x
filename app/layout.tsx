@@ -1,17 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AppProvider } from "@/context/context";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Menu from "@/components/menu";
+import Theme from "@/components/theme";
 
 export const metadata: Metadata = {
   title: "project-x",
@@ -27,9 +18,13 @@ export default function RootLayout({
     <html lang="en">
       <AppProvider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`bg-default-100 flex h-full w-full`}
         >
-          {children}
+          <Menu />
+          <Theme />
+          <div className="p-2">
+            {children}
+          </div>
         </body>
       </AppProvider>
     </html>
