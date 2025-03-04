@@ -20,11 +20,10 @@ export default function RootLayout({
         <body
           className={`bg-default-100 flex h-full w-full`}
         >
-          <Menu />
-          <Theme />
-          <div className="p-2">
+          <Menu>
             {children}
-          </div>
+          </Menu>
+          <Theme />
         </body>
       </AppProvider>
     </html>

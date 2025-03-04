@@ -17,7 +17,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 720);
+      setIsMobile(window.innerWidth < 1040);
     };
     checkScreenSize();
     window.addEventListener('resize', checkScreenSize);
