@@ -11,7 +11,7 @@ interface MenuProps {
 }
 
 const Menu = ({ children }: MenuProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const { isMobile } = useAppContext();
   const router = useRouter();
 
@@ -21,14 +21,14 @@ const Menu = ({ children }: MenuProps) => {
   ];
 
   const handleNavigation = (href: string) => {
-    setIsOpen(false);
+    if (isMobile) setIsOpen(false);
     router.push(href);
   };
 
   const menuButton = (
     <button
       onClick={() => setIsOpen(!isOpen)}
-      className="fadeIn transition p-2 flex items-center justify-center h-[44px] w-[44px] bg-default-900 text-default-200 rounded-md fixed top-4 right-4 z-100"
+      className="fadeIn transition p-2 flex items-center justify-center h-[44px] w-[44px] bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 rounded-md fixed top-4 right-4 z-100 shadow"
     >
       {isOpen ? <Icon name="mdi:close" className="text-3xl fadeIn" /> : <Icon name="mdi:menu" className="text-3xl fadeIn" />}
     </button>
@@ -36,7 +36,7 @@ const Menu = ({ children }: MenuProps) => {
 
   useEffect(() => {
     if (!isMobile) setIsOpen(true); 
-    if (isMobile) setIsOpen(false); 
+    else setIsOpen(false); 
   }, [isMobile])
 
   return (
@@ -52,7 +52,7 @@ const Menu = ({ children }: MenuProps) => {
           {menuItems.map((item) => (
             <div
               key={item.name}
-              className="flex px-2 py-2 items-center gap-4 border-b border-default-400 text-default-900 font-medium cursor-pointer transition hover:bg-glass-effect"
+              className="flex pl-6 px-2 py-3 items-center gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition"
               onClick={() => handleNavigation(item.href)}
             >
               <Icon name={item.icon} className="text-2xl" />

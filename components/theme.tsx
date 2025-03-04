@@ -25,7 +25,7 @@ const Theme = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="fixed flex items-center justify-center h-[48px] w-[48px] bottom-4 z-100 right-4 p-3 bg-default-900 text-default-200 rounded-full shadow-md transition duration-300"
+      className="fixed flex items-center justify-center h-[48px] w-[48px] bottom-4 z-100 right-4 p-3 bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 rounded-full shadow-md transition duration-300 shadow"
     >
       {theme == "light" && 
         <Icon name={"mdi:weather-sunny"} className="text-2xl fadeIn" />
