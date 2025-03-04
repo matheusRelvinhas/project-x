@@ -1,6 +1,5 @@
 'use client';
-import { useSession } from "next-auth/react";
-import { signIn } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 import RegisterForm from "@/components/registerform";
 import ForgotPassword from "@/components/forgotpassword";
 import Icon from '@/components/icon';
