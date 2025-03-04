@@ -2,17 +2,18 @@
 
 @layer base {
   :root {
+    --glass-effect: #59595931;
     --default-50: #ffffff;
-    --default-100: #fafafa;
-    --default-200: #f5f5f5;
-    --default-300: #e5e5e5;
-    --default-400: #dfdfdf;
-    --default-500: #8c8c8c;
-    --default-600: #595959;
-    --default-700: #434343;
-    --default-800: #262626;
-    --default-900: #1f1f1f;
-    --default-950: #141414;
+    --default-100: #f7f7f7;
+    --default-200: #eaeaea;
+    --default-300: #d6d6d6;
+    --default-400: #bfbfbf;
+    --default-500: #a6a6a6;
+    --default-600: #8c8c8c;
+    --default-700: #737373;
+    --default-800: #595959;
+    --default-900: #404040;
+    --default-950: #262626;
     --default-1000: #000000;
 
     --primary-50: #F3E5F5;
@@ -43,17 +44,18 @@
   }
 
   [data-theme="dark"] {
-    --default-50: #0d0d0d;
-    --default-100: #171717;
-    --default-200: #1f1f1f;
-    --default-300: #2a2a2a;
-    --default-400: #333333;
-    --default-500: #404040;
-    --default-600: #525252;
-    --default-700: #737373;
+    --glass-effect: #a3a3a331;
+    --default-50: #0f0f0f;
+    --default-100: #1a1a1a;
+    --default-200: #262626;
+    --default-300: #333333;
+    --default-400: #404040;
+    --default-500: #525252;
+    --default-600: #6b6b6b;
+    --default-700: #878787;
     --default-800: #a3a3a3;
-    --default-900: #ededed;
-    --default-950: #f5f5f5;
+    --default-900: #d1d1d1;
+    --default-950: #eaeaea;
     --default-1000: #ffffff;
 
     --primary-50: #F3E5F5;
@@ -123,6 +125,7 @@
 .text-secondary-950 { color: var(--secondary-950); }
 .text-secondary-1000 { color: var(--secondary-1000); }
 
+.bg-glass-effect { background-color: var(--glass-effect); }
 .bg-default-50 { background-color: var(--default-50); }
 .bg-default-100 { background-color: var(--default-100); }
 .bg-default-200 { background-color: var(--default-200); }
@@ -199,6 +202,7 @@
 }
 
 @layer utilities {
+  .hover\:bg-glass-effect:hover { background-color: var(--glass-effect); }
   .hover\:bg-default-50:hover { background-color: var(--default-50); }
   .hover\:bg-default-100:hover { background-color: var(--default-100); }
   .hover\:bg-default-200:hover { background-color: var(--default-200); }
