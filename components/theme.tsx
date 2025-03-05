@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Icon from "@/components/icon";
+import Button from "@/components/button";
 
 const Theme = () => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -9,7 +10,7 @@ const Theme = () => {
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") as "light" | "dark";
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    
+
     const initialTheme = savedTheme || (prefersDark ? "dark" : "light");
     setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
@@ -23,18 +24,16 @@ const Theme = () => {
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="fixed flex items-center justify-center h-[48px] w-[48px] bottom-4 z-100 right-4 p-3 bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 rounded-full shadow-md transition duration-300 shadow"
-    >
-      {theme == "light" && 
-        <Icon name={"mdi:weather-sunny"} className="text-2xl fadeIn" />
-      }
-      {theme != "light" && 
-        <Icon name={"mdi:weather-night"} className="text-2xl fadeIn" />
-      }
-
-    </button>
+    <div className='fadeIn fixed bottom-4 z-100 right-4 rounded-full z-100'>
+      <Button
+          onClick={toggleTheme}
+          rounded={false}
+          className="flex rounded-full items-center justify-center h-[50px] w-[50px] p-1 bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 transition shadow"
+        >
+          { theme == "light" && <Icon name={"material-symbols:wb-sunny"} className="text-3xl fadeIn" /> }
+          { theme != "light" && <Icon name={"material-symbols:clear-night"} className="text-3xl fadeIn" /> }
+      </Button>
+    </div>
   );
 };
 
