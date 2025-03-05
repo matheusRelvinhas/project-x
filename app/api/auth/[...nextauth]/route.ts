@@ -1,11 +1,26 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import InstagramProvider from "next-auth/providers/instagram";
+import FacebookProvider from "next-auth/providers/facebook"; // Facebook
+import TwitterProvider from "next-auth/providers/twitter"; // Twitter (X)
 
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    InstagramProvider({
+      clientId: process.env.INSTAGRAM_CLIENT_ID!,
+      clientSecret: process.env.INSTAGRAM_CLIENT_SECRET!,
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID!, // Variável de ambiente do Facebook
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!, // Variável de ambiente do Facebook
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_CLIENT_ID!, // Variável de ambiente do Twitter (X)
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!, // Variável de ambiente do Twitter (X)
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
