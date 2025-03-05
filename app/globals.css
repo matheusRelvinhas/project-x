@@ -2,6 +2,7 @@
 
 @layer base {
   :root {
+    
     --glass-effect: #52525231;
     --default-50: #0f0f0f;
     --default-100: #1a1a1a;
