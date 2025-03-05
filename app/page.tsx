@@ -1,19 +1,24 @@
 'use client'
 
 import Button from "@/components/button";
+import Icon from "@/components/icon";
+import Input from "@/components/input";
+import { useState } from "react";
 
 export default function Home() {
+  const [value, setValue] = useState('')
+
   return (
-    <div className="flex text-default-900">
+
+    <div className="flex fadeIn text-default-900">
       HomePage
       <Button
         onClick={() => console.log('test')}
-        rounded={true}
-        border={true}
-        className="px-2 py-1 bg-primary-400 hover:bg-primary-900 text-default-100"
       >
         test
       </Button>
+      <Input value={value} label={'test'} onValueChange={setValue} startContent={<Icon name="mdi:account-circle" className="text-2xl fadeIn rounded-full" />} />
+      {value}
     </div>
   );
 }

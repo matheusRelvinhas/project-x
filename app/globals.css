@@ -2,35 +2,6 @@
 
 @layer base {
   :root {
-    --glass-effect: #a6a6a631;
-    --default-50: #ffffff;
-    --default-100: #f7f7f7;
-    --default-200: #eaeaea;
-    --default-300: #d6d6d6;
-    --default-400: #bfbfbf;
-    --default-500: #a6a6a6;
-    --default-600: #8c8c8c;
-    --default-700: #737373;
-    --default-800: #595959;
-    --default-900: #2c2c2c;
-    --default-950: #1a1a1a;
-    --default-1000: #000000;
-
-    --primary-50: #F5F0FF;
-    --primary-100: #E6D6FF;
-    --primary-200: #D1B3FF;
-    --primary-300: #BA8EFF;
-    --primary-400: #A66BFF;
-    --primary-500: #7E57C2;
-    --primary-600: #6E47B2;
-    --primary-700: #5E37A2;
-    --primary-800: #4E2792;
-    --primary-900: #3E1782;
-    --primary-950: #2E0772;
-    --primary-1000: #1E0062;
-  }
-
-  [data-theme="dark"] {
     --glass-effect: #52525231;
     --default-50: #0f0f0f;
     --default-100: #1a1a1a;
@@ -45,18 +16,47 @@
     --default-950: #e2e2e2;
     --default-1000: #ffffff;
 
-    --primary-50: #2E1A38;
-    --primary-100: #3D2252;
-    --primary-200: #4D2B6C;
-    --primary-300: #5D3486;
-    --primary-400: #6D3DA0;
-    --primary-500: #8E44AD;
-    --primary-600: #A05AC2;
-    --primary-700: #B270D7;
-    --primary-800: #C486EC;
-    --primary-900: #D69CFF;
-    --primary-950: #E8B2FF;
-    --primary-1000: #FAC8FF;
+    --primary-50: #11010c;
+    --primary-100: #220117;
+    --primary-200: #520339;
+    --primary-300: #780650;
+    --primary-400: #9e1068;
+    --primary-500: #c41d7f;
+    --primary-600: #eb2f96;
+    --primary-700: #f759ab;
+    --primary-800: #ff85c0;
+    --primary-900: #ffadd2;
+    --primary-950: #ffd6e7;
+    --primary-1000: #fff0f6;
+  }
+
+  [data-theme="dark"] {
+    --glass-effect: #a6a6a631;
+    --default-50: #ffffff;
+    --default-100: #f7f7f7;
+    --default-200: #eaeaea;
+    --default-300: #d6d6d6;
+    --default-400: #bfbfbf;
+    --default-500: #a6a6a6;
+    --default-600: #8c8c8c;
+    --default-700: #737373;
+    --default-800: #595959;
+    --default-900: #2c2c2c;
+    --default-950: #1a1a1a;
+    --default-1000: #000000;
+    
+    --primary-50: #fcf9fa;
+    --primary-100: #fff0f6;
+    --primary-200: #ffd6e7;
+    --primary-300: #ffadd2;
+    --primary-400: #ff94c8;
+    --primary-500: #fa60b0;
+    --primary-600: #f33ea2;
+    --primary-700: #c41d7f;
+    --primary-800: #ac1d75;
+    --primary-900: #830c59;
+    --primary-950: #660a49;
+    --primary-1000: #310422;
   }
 }
 
@@ -126,31 +126,18 @@
 .border-default-950 { border-color: var(--default-950); }
 .border-default-1000 { border-color: var(--default-1000); }
 
-.glass {
-  backdrop-filter: blur(5px);
-  background-color: transparent;
-}
-
-.fadeIn {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.transition {
-  transition: 0.3s;
-}
-
-.shadow {
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
+.border-primary-50 { border-color: var(--primary-50); }
+.border-primary-100 { border-color: var(--primary-100); }
+.border-primary-200 { border-color: var(--primary-200); }
+.border-primary-300 { border-color: var(--primary-300); }
+.border-primary-400 { border-color: var(--primary-400); }
+.border-primary-500 { border-color: var(--primary-500); }
+.border-primary-600 { border-color: var(--primary-600); }
+.border-primary-700 { border-color: var(--primary-700); }
+.border-primary-800 { border-color: var(--primary-800); }
+.border-primary-900 { border-color: var(--primary-900); }
+.border-primary-950 { border-color: var(--primary-950); }
+.border-primary-1000 { border-color: var(--primary-1000); }
 
 .hover\:bg-glass-effect:hover { background-color: var(--glass-effect); }
 .hover\:bg-default-50:hover { background-color: var(--default-50); }
@@ -191,3 +178,29 @@
 .hover\:bg-primary-900:hover { background-color: var(--primary-900); }
 .hover\:bg-primary-950:hover { background-color: var(--primary-950); }
 .hover\:bg-primary-1000:hover { background-color: var(--primary-1000); }
+
+.glass {
+  backdrop-filter: blur(5px);
+  background-color: transparent;
+}
+
+.fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.transition {
+  transition: 0.3s;
+}
+
+.shadow {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
