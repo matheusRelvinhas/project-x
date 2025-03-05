@@ -49,7 +49,7 @@ const Input: React.FC<InputProps> = ({
         >
             {startContent && <div className="pl-2">{startContent}</div>}
             <div className="relative w-full">
-                <label className={`absolute top-1/2 h-full transform -translate-y-1/2 text-default-600 transition-all duration-300 ${value ? "top-[-0] left-0 text-xs text-default-800" : "text-base left-4"}`}>
+                <label className={`absolute top-1/2 h-full transform -translate-y-1/2 text-default-600 transition-all duration-300 ${value ? "top-[2] left-0 text-xs text-default-800" : "text-base left-4"}`}>
                     {label}
                 </label>
                 <input
