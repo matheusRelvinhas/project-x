@@ -47,20 +47,20 @@ const Input: React.FC<InputProps> = ({
             className={`${borderClass} ${roundedClass} ${defaultClass} ${className}`}
             onClick={handleClick}
         >
-            {startContent && <div className="pl-2">{startContent}</div>}
+            {startContent && <div className="pl-1">{startContent}</div>}
             <div className="relative w-full">
                 <label className={`absolute top-1/2 h-full transform -translate-y-1/2 text-default-600 transition-all duration-300 ${value ? "top-[2] left-0 text-xs text-default-800" : "text-base left-4"}`}>
                     {label}
                 </label>
                 <input
                     ref={inputRef}
-                    className="px-2 w-full bg-transparent outline-none text-base"
+                    className="px-1 w-full bg-transparent outline-none text-base"
                     value={value}
                     onChange={handleChange}
                     type="text"
                 />
             </div>
-            {endContent && <div className="pr-2">{endContent}</div>}
+            {endContent && <div className="pr-1">{endContent}</div>}
         </Ripple>
     );
 };
