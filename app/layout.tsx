@@ -18,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <AppProvider>
         <body
-          className={`bg-default-100 flex h-full w-full`}
+          className={`transition bg-default-100 flex h-full w-full`}
         >
           <Menu>
             {children}
