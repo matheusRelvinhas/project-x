@@ -1,8 +1,8 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import InstagramProvider from "next-auth/providers/instagram";
-import FacebookProvider from "next-auth/providers/facebook"; // Facebook
-import TwitterProvider from "next-auth/providers/twitter"; // Twitter (X)
+import FacebookProvider from "next-auth/providers/facebook";
+import TwitterProvider from "next-auth/providers/twitter";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -15,17 +15,36 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.INSTAGRAM_CLIENT_SECRET!,
     }),
     FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!, // Variável de ambiente do Facebook
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!, // Variável de ambiente do Facebook
+      clientId: process.env.FACEBOOK_CLIENT_ID!,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
     }),
     TwitterProvider({
-      clientId: process.env.TWITTER_CLIENT_ID!, // Variável de ambiente do Twitter (X)
-      clientSecret: process.env.TWITTER_CLIENT_SECRET!, // Variável de ambiente do Twitter (X)
+      clientId: process.env.TWITTER_CLIENT_ID!,
+      clientSecret: process.env.TWITTER_CLIENT_SECRET!,
     }),
+    // Provedor TikTok personalizado
+    {
+      id: "tiktok",
+      name: "TikTok",
+      type: "oauth",
+      authorizationUrl: "https://open-api.tiktok.com/oauth/authorize?response_type=code",  // Usando URL correta
+      clientId: process.env.TIKTOK_CLIENT_ID!,
+      clientSecret: process.env.TIKTOK_CLIENT_SECRET!,
+      redirectUri: `${process.env.NEXTAUTH_URL}/api/auth/callback/tiktok`,  // Redirecionamento após autenticação
+      scope: "user.info.basic",  // Escopo básico para obter informações do usuário
+      async profile(profile) {
+        return {
+          id: profile.data.id,
+          name: profile.data.name,
+          email: profile.data.email || "",
+          image: profile.data.avatar || "",
+        };
+      },
+    },
   ],
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/login",
+    signIn: "/login",  // Página de login
   },
   callbacks: {
     async jwt({ token, user }) {
