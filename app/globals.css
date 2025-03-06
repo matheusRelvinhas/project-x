@@ -2,7 +2,6 @@
 
 @layer base {
   :root {
-    
     --glass-effect: #52525231;
     --default-50: #0f0f0f;
     --default-100: #1a1a1a;
@@ -180,21 +179,34 @@
 .hover\:bg-primary-950:hover { background-color: var(--primary-950); }
 .hover\:bg-primary-1000:hover { background-color: var(--primary-1000); }
 
+.hover\:border-primary-50:hover { border-color: var(--primary-50); }
+.hover\:border-primary-100:hover { border-color: var(--primary-100); }
+.hover\:border-primary-200:hover { border-color: var(--primary-200); }
+.hover\:border-primary-300:hover { border-color: var(--primary-300); }
+.hover\:border-primary-400:hover { border-color: var(--primary-400); }
+.hover\:border-primary-500:hover { border-color: var(--primary-500); }
+.hover\:border-primary-600:hover { border-color: var(--primary-600); }
+.hover\:border-primary-700:hover { border-color: var(--primary-700); }
+.hover\:border-primary-800:hover { border-color: var(--primary-800); }
+.hover\:border-primary-900:hover { border-color: var(--primary-900); }
+.hover\:border-primary-950:hover { border-color: var(--primary-950); }
+.hover\:border-primary-1000:hover { border-color: var(--primary-1000); }
+
 .glass {
   backdrop-filter: blur(5px);
   background-color: transparent;
 }
 
-.fadeIn {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
 .transition {
-  transition: 0.3s;
+    transition: 0.3s;
 }
 
 .shadow {
-  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -204,4 +216,160 @@
   100% {
     opacity: 1;
   }
+}
+
+.ui-checkbox {
+    --primary-color: var(--primary-600);
+    --secondary-color: #f0f0f0;
+    --primary-hover-color: var(--primary-700);
+    --checkbox-diameter: 20px;
+    --checkbox-border-radius: 5px;
+    --checkbox-border-color: var(--default-400);
+    --checkbox-border-width: 1px;
+    --checkbox-border-style: solid;
+    --checkmark-size: 1.2;
+}
+
+.ui-checkbox,
+.ui-checkbox *,
+.ui-checkbox *::before,
+.ui-checkbox *::after {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.ui-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: var(--checkbox-diameter);
+    height: var(--checkbox-diameter);
+    border-radius: var(--checkbox-border-radius);
+    background: transparent;
+    border: var(--checkbox-border-width) var(--checkbox-border-style) var(--checkbox-border-color);
+    -webkit-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+}
+
+.ui-checkbox::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+    box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+    border-radius: inherit;
+    opacity: 0;
+    -webkit-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+    -o-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+    transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+}
+
+.ui-checkbox::before {
+    top: 40%;
+    left: 50%;
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 7px;
+    border-right: 2px solid var(--secondary-color);
+    border-bottom: 2px solid var(--secondary-color);
+    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    transform: translate(-50%, -50%) rotate(45deg) scale(0);
+    opacity: 0;
+    -webkit-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+    -o-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+    transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+}
+
+.ui-checkbox:hover {
+    border-color: var(--primary-color);
+}
+
+.ui-checkbox:checked {
+    background: var(--primary-color);
+    border-color: transparent;
+}
+
+.ui-checkbox:checked::before {
+    opacity: 1;
+    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+    -webkit-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    -o-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+}
+
+.ui-checkbox:active:not(:checked)::after {
+    -webkit-transition: none;
+    -o-transition: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    transition: none;
+    opacity: 1;
+}
+
+.switch {
+    font-size: 12px;
+    position: relative;
+    display: inline-block;
+    width: 46px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--default-200);
+    transition: .4s;
+    border-radius: 10px;
+    border: 1px solid var(--default-400)
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    border-radius: 6px;
+    left: 5px;
+    bottom: 3px;
+    transform: rotate(270deg);
+    background-color: #f0f0f0;
+    transition: .4s;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--primary-600);
+}
+
+.switch input:hover + .slider {
+    border: 1px solid var(--primary-600)
+}
+
+.switch input:checked + .slider:before {
+    transform: translateX(1.5em);
+}
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
