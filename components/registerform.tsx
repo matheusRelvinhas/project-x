@@ -1,38 +1,46 @@
 import { useState } from "react";
+import { validatePassword, validateEmail, validatePhone } from "../utils/formValidation"; // Importando as funções de validação
 
 export default function RegisterForm() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState(""); // Campo de celular
   const [message, setMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState(""); // Erro de email
+  const [phoneError, setPhoneError] = useState(""); // Erro de telefone
 
-  // Função para validar a senha
-  const validatePassword = (password: string) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+  // Funções de validação em tempo real
+  const handlePasswordChange = (password: string) => {
+    setPassword(password);
+    setPasswordError(validatePassword(password)); // Valida a senha
+  };
 
-    if (regex.test(password)) {
-      setPasswordError(""); // Senha válida, limpa o erro
-    } else {
-      setPasswordError("A senha precisa ter pelo menos 8 caracteres, incluir uma letra e um número.");
-    }
+  const handleEmailChange = (email: string) => {
+    setEmail(email);
+    setEmailError(validateEmail(email)); // Valida o email
+  };
+
+  const handlePhoneChange = (phone: string) => {
+    setPhone(phone);
+    setPhoneError(validatePhone(phone)); // Valida o telefone
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
     if (!name || !email || !password) {
-      setMessage("Preencha todos os campos.");
+      setMessage("Preencha todos os campos obrigatórios.");
       return;
     }
 
-    if (passwordError) {
+    if (passwordError || emailError || phoneError) {
       setMessage("Corrija os erros antes de continuar.");
       return;
     }
 
-    // Aqui você pode enviar os dados para uma API de cadastro
     setMessage("Cadastro realizado com sucesso! Verifique seu e-mail.");
   };
 
@@ -61,24 +69,31 @@ export default function RegisterForm() {
                 type="email"
                 placeholder="E-mail"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => handleEmailChange(e.target.value)} // Usando a função de validação de email
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black mb-2"
               />
+              {emailError && <p className="text-sm text-red-500">{emailError}</p>}
               <input
                 type="password"
                 placeholder="Senha"
                 value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  validatePassword(e.target.value);
-                }}
+                onChange={(e) => handlePasswordChange(e.target.value)} // Usando a função de validação de senha
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black mb-2"
               />
               {passwordError && <p className="text-sm text-red-500">{passwordError}</p>}
+              <input
+                type="tel"
+                placeholder="Celular (opcional)"
+                value={phone}
+                onChange={(e) => handlePhoneChange(e.target.value)} // Usando a função de validação de telefone
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black mb-2"
+              />
+              {phoneError && <p className="text-sm text-red-500">{phoneError}</p>}
               {message && <p className="text-sm text-red-500 mt-2">{message}</p>}
               <button
                 type="submit"
                 className="w-full py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 mt-2"
+                disabled={!!passwordError || !!emailError || !!phoneError || !name || !email || !password}
               >
                 Criar Conta
               </button>
