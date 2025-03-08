@@ -131,13 +131,16 @@ export default function LoginPage() {
                                     <Icon name="mdi:email" className="text-2xl text-default-950 mt-3" />
                                 </div>
                             )}
-                            <Button
-                                typeButton="primary"
-                                onClick={() => handleRecoverPassword()}
-                                isDisabled={!isEmail || !isConfirmEmail}
-                            >
-                                Recuperar senha
-                            </Button>
+                            <div className='pt-2'>
+                                <Button
+                                    typeButton="primary"
+                                    onClick={() => handleRecoverPassword()}
+                                    isDisabled={!isEmail || !isConfirmEmail}
+                                >
+                                    Recuperar senha
+                                </Button>
+                            </div>
+
                             <div className="flex">
                                 <span onClick={() => handleParam('forgot_password=0')} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
                                     Voltar
@@ -196,7 +199,7 @@ export default function LoginPage() {
                                     </Button>
                                 </div>
                             )}
-                            <div className="flex items-center gap-3">
+                            {isRegister && <div className="flex items-center gap-3 fadeIn">
                                 <Checkbox checked={acceptTerms} onChange={setAcceptTerms} />
                                 <div className="text-default-950 text-sm">
                                     <span>Eu concordo com os </span>
@@ -209,18 +212,20 @@ export default function LoginPage() {
                                     </Link>
                                     <span>.</span>
                                 </div>
+                            </div>}
+                            <div className={isRegister ? '' : 'pt-2'}>
+                                <Button
+                                    typeButton="primary"
+                                    onClick={() => handleSubmit('default')}
+                                    isDisabled={!isEmail || !isPassword || !acceptTerms}
+                                >
+                                    {loading ? (
+                                        <span className="loader">Carregando...</span>
+                                    ) : (
+                                        `${isRegister ? 'Registrar' : 'Entrar'}`
+                                    )}
+                                </Button>
                             </div>
-                            <Button
-                                typeButton="primary"
-                                onClick={() => handleSubmit('default')}
-                                isDisabled={!isEmail || !isPassword || !acceptTerms}
-                            >
-                                {loading ? (
-                                    <span className="loader">Carregando...</span>
-                                ) : (
-                                    `${isRegister ? 'Registrar' : 'Entrar'}`
-                                )}
-                            </Button>
                             <div className="flex w-full items-center gap-3">
                                 <div className="flex w-full border-b border-default-400"></div>
                                 <span className="text-default-500 font-medium">OU</span>
