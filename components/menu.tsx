@@ -43,19 +43,17 @@ const Menu = ({ children }: MenuProps) => {
     );
 
     const expandButton = (
-        <div className="">
-            <Button
-                onClick={() => setIsExpanded(!isExpanded)}
-                border={false}
-                rounded={false}
-                className="flex transition items-center justify-end w-full h-[48px] p-2 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium"
-            >
-                <Icon
-                    name="material-symbols:arrow-back-ios-new"
-                    className={`text-3xl transition-transform ${isExpanded && 'rotate-180'}`}
-                />
-            </Button>
-        </div>
+        <Button
+            onClick={() => setIsExpanded(!isExpanded)}
+            border={false}
+            rounded={false}
+            className="flex transition items-center justify-end w-full h-[48px] p-2 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium"
+        >
+            <Icon
+                name="material-symbols:arrow-back-ios-new"
+                className={`text-3xl transition-transform ${isExpanded && 'rotate-180'}`}
+            />
+        </Button>
     );
 
     useEffect(() => {
@@ -64,12 +62,12 @@ const Menu = ({ children }: MenuProps) => {
     }, [isMobile]);
 
     return (
-        <div className="flex">
+        <div className="flex w-full h-full">
             {isMobile && menuButton}
 
             {isOpen && (
                 <div
-                    className={`fixed fadeIn glass transition border-e border-default-400 h-full z-90 fadeIn flex flex-col ${!isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'
+                    className={`fixed fadeIn glass overflow-hidden transition border-e border-default-400 h-full z-90 fadeIn flex flex-col ${!isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'
                         }`}
                 >
                     {!isMobile && expandButton}
@@ -93,7 +91,7 @@ const Menu = ({ children }: MenuProps) => {
             )}
 
             <div
-                className={`transition ${isMobile ? 'px-4 pt-6' : 'px-6 pt-8'} ${isMobile
+                className={`flex transition h-full ${isMobile ? 'pt-12 pb-4 py-6' : 'px-6 py-8'} ${isMobile
                     ? 'w-full'
                     : isOpen
                         ? isExpanded

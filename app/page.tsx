@@ -2,7 +2,6 @@
 
 import Button from "@/components/button";
 import Checkbox from "@/components/checkbox";
-import Icon from "@/components/icon";
 import Input from "@/components/input";
 import Switch from "@/components/switch";
 import { useState } from "react";
@@ -14,20 +13,18 @@ export default function Home() {
 
     return (
 
-        <div className="flex flex-col items-center justify-center gap-2 fadeIn text-default-900">
+        <div className="flex flex-col items-center justify-center gap-2 w-full h-full fadeIn text-default-900">
             HomePage
 
-            <Button
-                onClick={() => console.log('test')}
-            >
-                test
-            </Button>
+            <Button typeButton={'primary'} onClick={() => console.log('primary')}>primary</Button>
 
-            <Input value={value} label={'text'} onValueChange={setValue} startContent={<Icon name="mdi:account-circle" className="text-2xl fadeIn rounded-full" />} />
+            <Button onClick={() => console.log('secundary')}>secundary</Button>
+
+            <Input value={value} label={'text'} onValueChange={setValue} />
             {value}
 
             <Input value={n} label={'number'} className="px-2" typeInput="number" size="sm" onValueChange={setN} />
-            {value}
+            {n}
             
             <Checkbox checked={checkbox} onChange={setCheckbox}/>
             {checkbox ? 'true' : 'false'}
@@ -36,4 +33,4 @@ export default function Home() {
             
         </div>
     );
-}
+};

@@ -11,9 +11,9 @@ interface User {
 }
 
 interface AppContextType {
-  message: string;
-  setMessage: (message: string) => void;
   isMobile: boolean;
+  theme: "light"|"dark";
+  setTheme: (t:"light"|"dark") => void;
   user: User;
   setUser: (user: User) => void;
 }
@@ -21,7 +21,8 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [message, setMessage] = useState<string>('LOGIN');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   
   const [user, setUser] = useState<User>({
     name: null,
@@ -31,7 +32,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     logged: null,
   });
   
-  const [isMobile, setIsMobile] = useState<boolean>(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -46,9 +46,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AppContext.Provider value={{
-      message,
-      setMessage,
       isMobile,
+      theme,
+      setTheme,
       user,
       setUser,
     }}>
