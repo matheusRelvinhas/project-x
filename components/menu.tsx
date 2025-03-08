@@ -19,7 +19,8 @@ const Menu = ({ children }: MenuProps) => {
     const pathname = usePathname();
 
     const menuItems = [
-        { name: 'Home', href: '/', icon: 'mdi:hand-heart' }
+        { name: 'Home', href: '/', icon: 'mdi:hand-heart' },
+        { name: 'First Steps', href: '/first_steps', icon: 'game-icons:footsteps' }
     ];
 
     const handleNavigation = (href: string) => {

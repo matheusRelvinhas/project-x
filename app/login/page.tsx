@@ -65,10 +65,16 @@ export default function LoginPage() {
         if (typeLogin=='default') {
             if (!isEmail) return toast.error("Email inválido.");
             if (!isPassword) return toast.error("Senha precisa ter 8 carácteres, 1 letra, 1 número.");
-            if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+            if(isRegister) {
+                if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+                toast.success("Usuário registrado.")
+            }
             toast.success("Usuário logado.");
         } else {
-            if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+            if(isRegister) {
+                if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+                toast.success("Usuário registrado.")
+            }
             signIn(typeLogin);
             toast.success("Usuário logado.");
         }
@@ -173,7 +179,7 @@ export default function LoginPage() {
                                     {!seePassword && <Icon name="lsicon:view-off-filled" className="text-2xl fadeIn text-default-950" />}
                                 </Button>
                             </div>
-                            {((email && isEmail && password && isPassword && isRegister) || confirmPassword) && (
+                            {((email && isEmail && password && isPassword && isRegister) || (confirmPassword&&isRegister)) && (
                                 <div className="flex items-center justify-center gap-2 fadeIn">
                                     <Input
                                         value={confirmPassword}
@@ -217,7 +223,7 @@ export default function LoginPage() {
                                 <Button
                                     typeButton="primary"
                                     onClick={() => handleSubmit('default')}
-                                    isDisabled={!isEmail || !isPassword || !acceptTerms}
+                                    isDisabled={!isEmail || !isPassword || (!acceptTerms&&isRegister)}
                                 >
                                     {loading ? (
                                         <span className="loader">Carregando...</span>
