@@ -1,179 +1,258 @@
 'use client';
-import { useSession, signIn } from "next-auth/react";
-import RegisterForm from "@/components/registerform";
-import ForgotPassword from "@/components/forgotpassword";
+
+import { signIn } from "next-auth/react";
 import Icon from '@/components/icon';
 import { useState, useEffect } from "react";
-import { useAppContext } from "@/context/context";
-import { validateEmail, validatePassword } from "@/utils/formValidation"; // Importar as funções de validação
-import Image from "next/image";
+import { validateEmail, validatePassword } from "@/utils/formValidation";
+import Input from "@/components/input";
+import Button from "@/components/button";
+import Checkbox from "@/components/checkbox";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
-  const { message } = useAppContext();
-  
-  // Estados para senha e erro de senha
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState("");
 
-  // Estados para o e-mail e erro de e-mail
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
 
-  // Estado de carregamento
-  const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState<string>("");
+    const [isEmail, setIsEmail] = useState<boolean>(false);
 
-  // UseEffect para validar a senha e o e-mail sempre que mudarem
-  useEffect(() => {
-    setPasswordError(validatePassword(password));
-  }, [password]);
+    const [confirmEmail, setConfirmEmail] = useState<string>("");
+    const [isConfirmEmail, setIsConfirmEmail] = useState<boolean>(false);
 
-  useEffect(() => {
-    setEmailError(validateEmail(email));
-  }, [email]);
+    const [password, setPassword] = useState<string>("");
+    const [isPassword, setIsPassword] = useState<boolean>(false);
+    const [seePassword, setSeePassword] = useState<boolean>(false);
 
-  // Função de envio do formulário
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!emailError && !passwordError) {
-      setLoading(true);
-      console.log("Tentando fazer login com e-mail:", email);
-      // Realiza o login com as credenciais
-      signIn("credentials", { email, password })
-        .then(() => {
-          setLoading(false);
-          // Limpar campos após envio
-          setEmail("");
-          setPassword("");
-          setEmailError("");
-          setPasswordError("");
-        })
-        .catch((error) => {
-          setLoading(false);
-          console.error("Erro no login:", error);
-        });
-    }
-  };
+    const [confirmPassword, setConfirmPassword] = useState<string>("");
+    const [isConfirmPassword, setIsConfirmPassword] = useState<boolean>(false);
+    const [seeConfirmPassword, setSeeConfirmPassword] = useState<boolean>(false);
 
-  return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-4">Login</h2>
-        
-        {/* Mensagem de erro ou informações gerais */}
-        <div className="text-center text-red-500 mb-4">
-          {message}
+    const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
+
+
+    const [loading, setLoading] = useState(false);
+
+    const socialsLinks = [
+        { name_id: 'google', icon: 'flat-color-icons:google', name: 'Google' },
+        { name_id: 'instagram', icon: 'skill-icons:instagram', name: 'Instagram' },
+        { name_id: 'facebook', icon: 'logos:facebook', name: 'Facebook' },
+        { name_id: 'tiktok', icon: 'logos:tiktok-icon', name: 'Tiktok' },
+        { name_id: 'twitter', icon: 'ri:twitter-x-line', name: 'Twitter' },
+    ]
+
+    useEffect(() => {
+        setIsEmail(validateEmail(email));
+    }, [email]);
+
+    useEffect(() => {
+        setIsConfirmEmail(validateEmail(confirmEmail) && email == confirmEmail);
+    }, [confirmEmail]);
+
+    useEffect(() => {
+        setIsPassword(validatePassword(password));
+    }, [password]);
+
+    useEffect(() => {
+        setIsConfirmPassword(validatePassword(confirmPassword) && password == confirmPassword);
+    }, [confirmPassword]);
+
+    const handleSubmit = (typeLogin:string) => {
+        if (typeLogin=='default') {
+            if (!isEmail) return toast.error("Email inválido.");
+            if (!isPassword) return toast.error("Senha precisa ter 8 carácteres, 1 letra, 1 número.");
+            if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+            toast.success("Usuário logado.");
+        } else {
+            if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+            signIn(typeLogin);
+            toast.success("Usuário logado.");
+        }
+    };
+
+    const handleRecoverPassword = () => {
+        if (!isEmail) return toast.error("Email inválido.");
+        if (!isConfirmEmail) return toast.error("Confirme seu email.");
+        toast.success("Email enviado, verifique seu email.");
+    };
+
+    const handleParam = (param: string) => {
+        const currentUrl = window.location.pathname;
+        router.push(`${currentUrl}?${param}`);
+    };
+
+    useEffect(() => {
+        setForgotPassword(searchParams.get("forgot_password") === "1");
+        setIsRegister(searchParams.get("register") === "1");
+    }, [searchParams]);
+
+    return (
+        <div className="flex h-full w-full flex-row justify-center items-center fadeIn select-none">
+            <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded-lg">
+                <span className="text-lg font-bold text-default-950">{isRegister ? 'Registrar' : forgotPassword  ? 'Recuperar senha' : 'Login'}</span>
+                <div className="flex gap-3 flex-col mt-8">
+                    <div className="flex items-center justify-center gap-2">
+                        <Input
+                            value={email}
+                            onValueChange={setEmail}
+                            label="E-mail"
+                            typeInput="email"
+                            size="lg"
+                            endContent={
+                                <div className="flex pr-2 text-xl">
+                                    {(!isEmail && email) && <Icon name="mdi:close" className="fadeIn text-red-400" />}
+                                    {(isEmail) && <Icon name="mdi:check" className="fadeIn text-green-600" />}
+                                </div>
+                            }
+                        />
+                        <Icon name="mdi:email" className="text-2xl text-default-950 mt-3" />
+                    </div>
+                    {forgotPassword ? (
+                        <div className="fadeIn flex gap-3 flex-col">
+                            {(isEmail || confirmEmail) && (
+                                <div className="flex items-center justify-center gap-2 fadeIn">
+                                    <Input
+                                        value={confirmEmail}
+                                        onValueChange={setConfirmEmail}
+                                        label="Confirme seu e-mail"
+                                        typeInput="email"
+                                        size="lg"
+                                        endContent={
+                                            <div className="flex pr-2 text-xl">
+                                                {(!isConfirmEmail && confirmEmail) && <Icon name="mdi:close" className="fadeIn text-red-400" />}
+                                                {(isConfirmEmail) && <Icon name="mdi:check" className="fadeIn text-green-600" />}
+                                            </div>
+                                        }
+                                    />
+                                    <Icon name="mdi:email" className="text-2xl text-default-950 mt-3" />
+                                </div>
+                            )}
+                            <Button
+                                typeButton="primary"
+                                onClick={() => handleRecoverPassword()}
+                                isDisabled={!isEmail || !isConfirmEmail}
+                            >
+                                Recuperar senha
+                            </Button>
+                            <div className="flex">
+                                <span onClick={() => handleParam('forgot_password=0')} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
+                                    Voltar
+                                </span>
+                            </div>
+                        </div> 
+                    ) : (
+                        <div className="fadeIn flex gap-3 flex-col">
+                            <div className="flex items-center justify-center gap-2">
+                                <Input
+                                    value={password}
+                                    onValueChange={setPassword}
+                                    label="Senha"
+                                    typeInput={`${seePassword ? 'text' : 'password'}`}
+                                    size="lg"
+                                    endContent={
+                                        <div className="flex pr-2 text-xl">
+                                            {(!isPassword && password) && <Icon name="mdi:close" className="fadeIn text-red-400" />}
+                                            {(isPassword) && <Icon name="mdi:check" className="fadeIn text-green-600" />}
+                                        </div>
+                                    }
+                                />
+                                <Button
+                                    border={false}
+                                    rounded={false}
+                                    className="rounded-full cursor-pointer mt-3 min-w-[24px]"
+                                    onClick={() => setSeePassword(!seePassword)}
+                                >
+                                    {seePassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
+                                    {!seePassword && <Icon name="lsicon:view-off-filled" className="text-2xl fadeIn text-default-950" />}
+                                </Button>
+                            </div>
+                            {((email && isEmail && password && isPassword && isRegister) || confirmPassword) && (
+                                <div className="flex items-center justify-center gap-2 fadeIn">
+                                    <Input
+                                        value={confirmPassword}
+                                        onValueChange={setConfirmPassword}
+                                        label="Confirme sua senha"
+                                        typeInput={`${seeConfirmPassword ? 'text' : 'password'}`}
+                                        size="lg"
+                                        endContent={
+                                            <div className="flex pr-2 text-xl">
+                                                {(!isConfirmPassword && confirmPassword) && <Icon name="mdi:close" className="fadeIn text-red-400" />}
+                                                {(isConfirmPassword) && <Icon name="mdi:check" className="fadeIn text-green-600" />}
+                                            </div>
+                                        }
+                                    />
+                                    <Button
+                                        border={false}
+                                        rounded={false}
+                                        className="rounded-full cursor-pointer mt-3 min-w-[24px]"
+                                        onClick={() => setSeeConfirmPassword(!seeConfirmPassword)}
+                                    >
+                                        {seeConfirmPassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
+                                        {!seeConfirmPassword && <Icon name="lsicon:view-off-filled" className="text-2xl fadeIn text-default-950" />}
+                                    </Button>
+                                </div>
+                            )}
+                            <div className="flex items-center gap-3">
+                                <Checkbox checked={acceptTerms} onChange={setAcceptTerms} />
+                                <div className="text-default-950 text-sm">
+                                    <span>Eu concordo com os </span>
+                                    <Link className="transition text-primary-600 hover:text-primary-700 font-semibold" href={'/terms'}>
+                                        termos
+                                    </Link>
+                                    <span> e </span>
+                                    <Link className="transition text-primary-600 hover:text-primary-700 font-semibold" href={'/terms'}>
+                                        políticas de privacidade
+                                    </Link>
+                                    <span>.</span>
+                                </div>
+                            </div>
+                            <Button
+                                typeButton="primary"
+                                onClick={() => handleSubmit('default')}
+                                isDisabled={!isEmail || !isPassword || !acceptTerms}
+                            >
+                                {loading ? (
+                                    <span className="loader">Carregando...</span>
+                                ) : (
+                                    `${isRegister ? 'Registrar' : 'Entrar'}`
+                                )}
+                            </Button>
+                            <div className="flex w-full items-center gap-3">
+                                <div className="flex w-full border-b border-default-400"></div>
+                                <span className="text-default-500 font-medium">OU</span>
+                                <div className="flex w-full border-b border-default-400"></div>
+                            </div>
+                            {socialsLinks.map((social) => (
+                                <Button
+                                    typeButton="default"
+                                    onClick={() => handleSubmit(social.name_id)}
+                                    key={`${social.name_id}${social.icon}`}
+                                    isDisabled={!acceptTerms}
+                                >
+                                    <div className="flex w-full items-center justify-start gap-3">
+                                        <Icon name={social.icon} className="w-[100px] text-2xl text-default-950" />
+                                        <span className="flex w-full items-center justify-center pr-20">{social.name}</span>
+                                    </div>
+                                </Button>
+                            ))}
+                            <div className="flex">
+                                <span onClick={() => handleParam('forgot_password=1')} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
+                                    Esqueceu a senha?
+                                </span>
+                            </div>
+                            <div className="flex">
+                                <span onClick={() => handleParam(`register=${!isRegister ? '1' : '0'}`)} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
+                                    {!isRegister ? 'Cadastre-se' : 'Login'}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
-
-        {/* Formulário de Login */}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Login</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Digite seu e-mail"
-              className={`w-full px-4 py-2 mt-1 border ${emailError ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-              aria-describedby="email-error"
-            />
-            {emailError && (
-              <div id="email-error" className="text-sm text-red-600 mt-2">{emailError}</div>
-            )}
-          </div>
-
-          <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Senha</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Digite sua senha"
-              className={`w-full px-4 py-2 mt-1 border ${passwordError ? 'border-red-500' : 'border-gray-300'} rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500`}
-              aria-describedby="password-error"
-            />
-            {passwordError && (
-              <div id="password-error" className="text-sm text-red-600 mt-2">{passwordError}</div>
-            )}
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            disabled={!!emailError || !!passwordError || !email || !password || loading}
-          >
-            {loading ? (
-              <span className="loader">Carregando...</span> // Pode adicionar um spinner de carregamento aqui
-            ) : (
-              "Entrar"
-            )}
-          </button>
-        </form>
-
-        <div className="mt-4 text-center">
-          <a href="#" className="text-sm text-indigo-600 hover:text-indigo-700"><ForgotPassword /></a>
-        </div>
-
-        <div className="mt-4 text-center">
-          <a href="#" className="text-sm text-indigo-600 hover:text-indigo-700"><RegisterForm/></a>
-        </div>
-
-        {/* Entrar com o Google */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn("google")}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            <Icon name="flat-color-icons:google" className="w-6 h-6 mr-2" />
-            Entrar com Google
-          </button>
-        </div>
-
-        {/* Entrar com o Instagram */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn("instagram")}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            <Icon name="logos:instagram" className="w-6 h-6 mr-2" />
-            Entrar com Instagram
-          </button>
-        </div>
-
-        {/* Entrar com o Facebook */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn("facebook")}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            <Icon name="logos:facebook" className="w-6 h-6 mr-2" />
-            Entrar com Facebook
-          </button>
-        </div>
-
-        {/* Entrar com o TikTok */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn("tiktok")}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            <Icon name="logos:tiktok" className="w-6 h-6 mr-2" />
-            Entrar com TikTok
-          </button>
-        </div>
-
-        {/* Entrar com o X (Twitter) - com o ícone do X */}
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => signIn("twitter")}
-            className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-          >
-            <Icon name="logos:x" className="w-6 h-6 mr-2" /> {/* Alterado para o ícone do X */}
-            Entrar com X
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

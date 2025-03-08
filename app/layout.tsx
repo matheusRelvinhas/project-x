@@ -3,29 +3,30 @@ import "./globals.css";
 import { AppProvider } from "@/context/context";
 import Menu from "@/components/menu";
 import Theme from "@/components/theme";
+import Toast from "@/components/toast";
 
 export const metadata: Metadata = {
-  title: "project-x",
-  description: "",
+    title: "project-x",
+    description: "",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <AppProvider>
-        <body
-          className={`transition bg-default-100 flex h-full w-full`}
-        >
-          <Menu>
-            {children}
-          </Menu>
-          <Theme />
-        </body>
-      </AppProvider>
-    </html>
-  );
-}
+    const classFull = 'transition bg-default-100 flex w-full h-full';
+    return (
+        <html lang="pt" className={classFull}>
+            <AppProvider>
+                <body className={classFull}>
+                    <Toast />
+                    <Menu>
+                        {children}
+                    </Menu>
+                    <Theme />
+                </body>
+            </AppProvider>
+        </html>
+    );
+};
