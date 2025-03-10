@@ -4,6 +4,7 @@ import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface UserMenuProps {
     isMobile: boolean;
@@ -14,6 +15,15 @@ interface UserMenuProps {
 const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => {
     const { user } = useAppContext();
     const pathname = usePathname();
+
+    useEffect(() => {
+        if (user.logged && pathname === '/login') {
+            handleNavigation('/profile');
+        } else if (!user.logged && pathname === '/profile') {
+            handleNavigation('/login');
+        }
+    }, [pathname, user.logged, handleNavigation]);
+
     return (
         <Button
             rounded={false}
@@ -23,11 +33,11 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
             }`}
             onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
         >   
-            {pathname === '/login' && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-500'>{''}</div>}
+            {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-500'>{''}</div>}
             <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
             {(isExpanded || isMobile) && (
                 <div className="flex fadeIn flex-col justify-center">
-                    <p className="font-medium">{user.logged ? user.name : 'User'}</p>
+                    <p className="font-medium">{user.logged ? (user.name ? user.name : user.email) : 'User'}</p>
                     <p className="text-default-800 text-xs">{`ID: ${user.logged ? user.id : '#'}`}</p>
                 </div>
             )}
