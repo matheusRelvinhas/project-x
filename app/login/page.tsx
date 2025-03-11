@@ -10,8 +10,12 @@ import Checkbox from "@/components/checkbox";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { axiosGet } from "@/utils/axios";
+import { useAppContext } from "@/context/context";
 
 export default function LoginPage() {
+
+    const { setAccessToken } = useAppContext();
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -61,19 +65,34 @@ export default function LoginPage() {
         setIsConfirmPassword(validatePassword(confirmPassword) && password == confirmPassword);
     }, [confirmPassword]);
 
-    const handleSubmit = (typeLogin:string) => {
+    const handleSubmit = (typeLogin:string='default') => {
+        toast.dismiss();
         if (typeLogin=='default') {
+            let loginForm = 'login';
             if (!isEmail) return toast.error("Email inválido.");
-            if (!isPassword) return toast.error("Senha precisa ter 8 carácteres, 1 letra, 1 número.");
+            if (!isPassword) return toast.error("Senha precisa ter no mínimo 8 carácteres, 1 letra e 1 número.");
             if(isRegister) {
+                if (!isConfirmPassword) return toast.error("Confirme sua senha, para continuar.");
                 if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
-                toast.success("Usuário registrado.")
+                loginForm = 'register';
             }
-            toast.success("Usuário logado.");
+            axiosGet(`/login?email=${email}&pwd=${password}&login_type=${loginForm}`, (data) => {
+                if (data.message == 'user_registered') toast.success('Usuário registrado e logado com sucesso.');
+                if (data.message == 'login_success') toast.success('Usuário logado.');
+                localStorage.setItem("token_access", data.token);
+                setAccessToken(data.token);
+            }, (error) => {
+                if (error.error == 'invalid_email_password') toast.error('Email ou senha inválidos.');
+                if (error.error == 'user_exists') toast.error('Usuário já existe.');
+                if (error.error == 'user_not_found') {
+                    handleParam ('register=1');
+                    toast.error('Usuário não cadastrado, faça registro.');
+                }
+            });
         } else {
             if(isRegister) {
                 if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
-                toast.success("Usuário registrado.")
+                toast.success("Usuário registrado.");
             }
             signIn(typeLogin);
             toast.success("Usuário logado.");
@@ -100,7 +119,7 @@ export default function LoginPage() {
         <div className="flex h-full w-full flex-row justify-center items-center fadeIn select-none">
             <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded-lg">
                 <span className="text-lg font-bold text-default-950">{isRegister ? 'Registrar' : forgotPassword  ? 'Recuperar senha' : 'Login'}</span>
-                <div className="flex gap-3 flex-col mt-8">
+                <form className="flex gap-3 flex-col mt-8" onSubmit={(e) => {e.preventDefault(); handleSubmit('default')}}>
                     <div className="flex items-center justify-center gap-2">
                         <Input
                             value={email}
@@ -142,6 +161,7 @@ export default function LoginPage() {
                                     typeButton="primary"
                                     onClick={() => handleRecoverPassword()}
                                     isDisabled={!isEmail || !isConfirmEmail}
+                                    
                                 >
                                     Recuperar senha
                                 </Button>
@@ -222,8 +242,9 @@ export default function LoginPage() {
                             <div className={isRegister ? '' : 'pt-2'}>
                                 <Button
                                     typeButton="primary"
-                                    onClick={() => handleSubmit('default')}
-                                    isDisabled={!isEmail || !isPassword || (!acceptTerms&&isRegister)}
+                                    onClick={() => {handleSubmit('default')}}
+                                    isSubmit={true}
+                                    isDisabled={((!isEmail || !isPassword) && !isRegister) || ((!isEmail || !isPassword || !isConfirmPassword || !acceptTerms) &&isRegister)}
                                 >
                                     {loading ? (
                                         <span className="loader">Carregando...</span>
@@ -262,7 +283,7 @@ export default function LoginPage() {
                             </div>
                         </div>
                     )}
-                </div>
+                </form>
             </div>
         </div>
     );

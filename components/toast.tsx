@@ -17,6 +17,7 @@ const Toast = () => {
             draggable
             pauseOnHover
             theme={theme}
+            limit={2}
         />
     );
 };

@@ -6,6 +6,7 @@ import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';
 import UserMenu from '@/components/user-menu';
+import Logout from './logout';
 
 interface MenuProps {
     children: ReactNode;
@@ -18,6 +19,8 @@ const Menu = ({ children }: MenuProps) => {
     const router = useRouter();
     const pathname = usePathname();
 
+    const { user } = useAppContext();
+
     const menuItems = [
         { name: 'Home', href: '/', icon: 'mdi:hand-heart' },
         { name: 'First Steps', href: '/first_steps', icon: 'game-icons:footsteps' }
@@ -28,6 +31,14 @@ const Menu = ({ children }: MenuProps) => {
         if (!isMobile) setIsExpanded(false);
         router.push(href);
     };
+
+    useEffect(() => {
+        if (user.logged && pathname === '/login') {
+            handleNavigation('/profile');
+        } else if (!user.logged && pathname === '/profile') {
+            handleNavigation('/login');
+        }
+    }, [pathname, user.logged, handleNavigation]);
 
     const menuButton = (
         <div className='fadeIn fixed top-4 right-4 z-100'>
@@ -68,31 +79,32 @@ const Menu = ({ children }: MenuProps) => {
 
             {isOpen && (
                 <div
-                    className={`fixed fadeIn glass overflow-hidden transition border-e border-default-400 h-full z-90 fadeIn flex flex-col ${!isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'
-                        }`}
+                    className={`fixed fadeIn glass overflow-x-hidden transition border-e border-default-400 h-full z-90 fadeIn flex flex-col ${!isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'}`}
                 >
                     {!isMobile && expandButton}
 
-                    {<UserMenu isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />}
-                    {menuItems.map((item) => (
-                        <Button
-                            key={item.name}
-                            rounded={false}
-                            border={false}
-                            className={`flex flex-row transition items-center h-[48px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${(isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
-                                }`}
-                            onClick={() => handleNavigation(item.href)}
-                        >
-                            {pathname == item.href && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-500'>{''}</div>}
-                            <Icon name={item.icon} className="text-3xl" />
-                            {(isExpanded || isMobile) && <span className='fadeIn'>{item.name}</span>}
-                        </Button>
-                    ))}
+                    <UserMenu isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />
+                    <div className='flex flex-col h-full overflow-x-hidden overflow-y-auto'>
+                        {menuItems.map((item) => (
+                            <Button
+                                key={item.name}
+                                rounded={false}
+                                border={false}
+                                className={`flex flex-row transition items-center h-[48px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${(isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'}`}
+                                onClick={() => handleNavigation(item.href)}
+                            >
+                                {pathname == item.href && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-500'>{''}</div>}
+                                <Icon name={item.icon} className="text-3xl" />
+                                {(isExpanded || isMobile) && <span className='fadeIn'>{item.name}</span>}
+                            </Button>
+                        ))}
+                    </div>
+                    {user.logged && <Logout isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation}/>}
                 </div>
             )}
 
             <div
-                className={`flex transition h-full ${isMobile ? 'pt-12 pb-4 py-6' : 'px-6 py-8'} ${isMobile
+                className={`flex transition h-full ${isMobile
                     ? 'w-full'
                     : isOpen
                         ? isExpanded
@@ -101,7 +113,9 @@ const Menu = ({ children }: MenuProps) => {
                         : 'w-full'
                     }`}
             >
-                {children}
+                <div className={`flex w-full h-full ${isMobile ? 'pt-12 pb-4 px-4' : 'px-6 py-8'}`}>
+                    {children}
+                </div>
             </div>
         </div>
     );
