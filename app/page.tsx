@@ -16,21 +16,23 @@ export default function Home() {
     const [n, setN] = useState<string|number|null>(null);
     const [checkbox, setCheckbox] = useState(false);
 
-    const get = () => {
-        axiosGet(`/login/logout?token=${localStorage.getItem("token_access")}`, (data) => {
-            console.log(data);
-            setAccessToken('not_user');
+    const logout = () => {
+        axiosGet(`/login/logout`, (data) => {
+            if(data.message == 'logout_success') {
+                localStorage.setItem("token_access", 'not_user');
+                setAccessToken('not_user');
+            }
         }, (error) => {
             console.log(error);
-        });
-    }
+        }, true);
+    };
 
     return (
 
         <div className="flex flex-col items-center justify-center gap-2 w-full h-full fadeIn text-default-900">
             HomePage
 
-            <Button typeButton={'primary'} onClick={() => get()}>primary</Button>
+            <Button typeButton={'primary'} onClick={() => logout()}>primary</Button>
 
             <Button onClick={() => console.log('secundary')}>secundary</Button>
 

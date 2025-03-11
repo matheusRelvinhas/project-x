@@ -65,7 +65,8 @@ export default function LoginPage() {
         setIsConfirmPassword(validatePassword(confirmPassword) && password == confirmPassword);
     }, [confirmPassword]);
 
-    const handleSubmit = (typeLogin:string) => {
+    const handleSubmit = (typeLogin:string='default') => {
+        toast.dismiss();
         if (typeLogin=='default') {
             let loginForm = 'login';
             if (!isEmail) return toast.error("Email inválido.");
@@ -118,7 +119,7 @@ export default function LoginPage() {
         <div className="flex h-full w-full flex-row justify-center items-center fadeIn select-none">
             <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded-lg">
                 <span className="text-lg font-bold text-default-950">{isRegister ? 'Registrar' : forgotPassword  ? 'Recuperar senha' : 'Login'}</span>
-                <div className="flex gap-3 flex-col mt-8">
+                <form className="flex gap-3 flex-col mt-8" onSubmit={(e) => {e.preventDefault(); handleSubmit('default')}}>
                     <div className="flex items-center justify-center gap-2">
                         <Input
                             value={email}
@@ -160,6 +161,7 @@ export default function LoginPage() {
                                     typeButton="primary"
                                     onClick={() => handleRecoverPassword()}
                                     isDisabled={!isEmail || !isConfirmEmail}
+                                    
                                 >
                                     Recuperar senha
                                 </Button>
@@ -240,7 +242,8 @@ export default function LoginPage() {
                             <div className={isRegister ? '' : 'pt-2'}>
                                 <Button
                                     typeButton="primary"
-                                    onClick={() => handleSubmit('default')}
+                                    onClick={() => {handleSubmit('default')}}
+                                    isSubmit={true}
                                     isDisabled={((!isEmail || !isPassword) && !isRegister) || ((!isEmail || !isPassword || !isConfirmPassword || !acceptTerms) &&isRegister)}
                                 >
                                     {loading ? (
@@ -280,7 +283,7 @@ export default function LoginPage() {
                             </div>
                         </div>
                     )}
-                </div>
+                </form>
             </div>
         </div>
     );

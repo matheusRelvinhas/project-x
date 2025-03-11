@@ -76,6 +76,7 @@ const Input: React.FC<InputProps> = ({
                     min={min}
                     max={max}
                     type={typeInput}
+                    autoComplete={typeInput}
                     style={{ MozAppearance: "textfield" }}
                 />
             </div>

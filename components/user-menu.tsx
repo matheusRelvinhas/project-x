@@ -16,14 +16,6 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
     const { user } = useAppContext();
     const pathname = usePathname();
 
-    useEffect(() => {
-        if (user.logged && pathname === '/login') {
-            handleNavigation('/profile');
-        } else if (!user.logged && pathname === '/profile') {
-            handleNavigation('/login');
-        }
-    }, [pathname, user.logged, handleNavigation]);
-
     return (
         <Button
             rounded={false}
