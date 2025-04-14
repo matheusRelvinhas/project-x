@@ -42,11 +42,11 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     const socialsLinks = [
-        { name_id: 'google', icon: 'flat-color-icons:google', name: 'Google' },
-        { name_id: 'instagram', icon: 'skill-icons:instagram', name: 'Instagram' },
-        { name_id: 'facebook', icon: 'logos:facebook', name: 'Facebook' },
-        { name_id: 'tiktok', icon: 'logos:tiktok-icon', name: 'Tiktok' },
-        { name_id: 'twitter', icon: 'ri:twitter-x-line', name: 'Twitter' },
+        { name_id: 'google', icon: 'flat-color-icons:google', name: 'Google', active: true },
+        { name_id: 'instagram', icon: 'skill-icons:instagram', name: 'Instagram', active: false },
+        { name_id: 'facebook', icon: 'logos:facebook', name: 'Facebook', active: false },
+        { name_id: 'tiktok', icon: 'logos:tiktok-icon', name: 'Tiktok', active: false },
+        { name_id: 'twitter', icon: 'ri:twitter-x-line', name: 'Twitter', active: false },
     ]
 
     useEffect(() => {
@@ -89,6 +89,9 @@ export default function LoginPage() {
                     toast.error('Usuário não cadastrado, faça registro.');
                 }
             });
+        } else if (typeLogin=='google') {
+            if (isRegister && !acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
+            window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/login/google`;
         } else {
             if(isRegister) {
                 if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
@@ -111,8 +114,18 @@ export default function LoginPage() {
     };
 
     useEffect(() => {
-        setForgotPassword(searchParams.get("forgot_password") === "1");
-        setIsRegister(searchParams.get("register") === "1");
+        setForgotPassword(searchParams.get("forgot_password") == "1");
+        setIsRegister(searchParams.get("register") == "1");
+        const token = searchParams.get("token");
+        const loginType = searchParams.get("login_type");
+        if (token) {
+            localStorage.setItem("token_access", token);
+            setAccessToken(token);
+            setTimeout(() => {
+                if (loginType == 'login') toast.success("Usuário logado.");
+                else if (loginType == 'register') toast.success("Usuário registrado.");
+            }, 500);
+        }
     }, [searchParams]);
 
     return (
@@ -258,12 +271,12 @@ export default function LoginPage() {
                                 <span className="text-default-500 font-medium">OU</span>
                                 <div className="flex w-full border-b border-default-400"></div>
                             </div>
-                            {socialsLinks.map((social) => (
+                            {socialsLinks.map((social) => (social.active &&
                                 <Button
                                     typeButton="default"
                                     onClick={() => handleSubmit(social.name_id)}
                                     key={`${social.name_id}${social.icon}`}
-                                    isDisabled={!acceptTerms}
+                                    isDisabled={isRegister && !acceptTerms}
                                 >
                                     <div className="flex w-full items-center justify-start gap-3">
                                         <Icon name={social.icon} className="w-[100px] text-2xl text-default-950" />
