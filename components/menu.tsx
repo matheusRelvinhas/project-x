@@ -22,8 +22,10 @@ const Menu = ({ children }: MenuProps) => {
     const { user } = useAppContext();
 
     const menuItems = [
-        { name: 'Home', href: '/', icon: 'mdi:hand-heart' },
-        { name: 'First Steps', href: '/first_steps', icon: 'game-icons:footsteps' }
+        { name: 'Players', href: '/players', icon: 'heroicons:user-solid' },
+        { name: 'Teams', href: '/teams', icon: 'heroicons:user-group-solid' },
+        { name: 'Ligas', href: '/leagues', icon: 'game-icons:trophy' },
+        { name: 'Home', href: '/', icon: 'mdi:hand-heart' }
     ];
 
     const handleNavigation = (href: string) => {
@@ -56,15 +58,16 @@ const Menu = ({ children }: MenuProps) => {
 
     const expandButton = (
         <Button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={!isMobile ? () => setIsExpanded(!isExpanded) : ()=>{}}
             border={false}
             rounded={false}
-            className="flex transition items-center justify-end w-full h-[48px] p-2 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium"
-        >
-            <Icon
+            className="flex transition items-center justify-between w-full h-[48px] pl-3 pe-1 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium"
+        >   
+            <img src="/img/logo.png" className={`flex transition ${isMobile ? 'w-[120px]' : isExpanded ? 'w-[120px]' : 'w-[0px]'}`} alt="logo" /> 
+            {!isMobile && <Icon
                 name="material-symbols:arrow-back-ios-new"
-                className={`text-3xl transition-transform ${isExpanded && 'rotate-180'}`}
-            />
+                className={`text-2xl h-[48px] transition-transform ${isExpanded && 'rotate-180'}`}
+            />}
         </Button>
     );
 
@@ -81,7 +84,7 @@ const Menu = ({ children }: MenuProps) => {
                 <div
                     className={`fixed fadeIn glass overflow-x-hidden transition border-e border-default-400 h-full z-90 fadeIn flex flex-col ${!isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'}`}
                 >
-                    {!isMobile && expandButton}
+                    {expandButton}
 
                     <UserMenu isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />
                     <div className='flex flex-col h-full overflow-x-hidden overflow-y-auto'>

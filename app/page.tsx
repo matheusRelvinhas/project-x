@@ -7,6 +7,7 @@ import Switch from "@/components/switch";
 import { useAppContext } from "@/context/context";
 import { axiosGet } from "@/utils/axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Home() {
 
@@ -22,8 +23,8 @@ export default function Home() {
                 localStorage.setItem("token_access", 'not_user');
                 setAccessToken('not_user');
             }
-        }, (error) => {
-            console.log(error);
+        }, () => {
+            toast.error('Error')
         }, true);
     };
 
