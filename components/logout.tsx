@@ -1,5 +1,3 @@
-'use client';
-
 import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';

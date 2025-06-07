@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useRef, useState } from "react";
 import { useAppContext } from '@/context/context';
 
@@ -10,6 +8,7 @@ interface InputProps {
     startContent?: React.ReactNode;
     endContent?: React.ReactNode;
     label?: string;
+    placeholder?: string;
     size?: 'sm' | 'md' | 'lg';
     typeInput?: string | 'number';
     min?: number | undefined;
@@ -24,7 +23,8 @@ const Input: React.FC<InputProps> = ({
     className = "",
     startContent,
     endContent,
-    label = "Digite aqui...",
+    label,
+    placeholder = "Digite aqui...",
     size = 'md',
     typeInput = 'text',
     min = undefined,
@@ -53,22 +53,24 @@ const Input: React.FC<InputProps> = ({
 
     const borderClass = border ? `border ${isFocused ? "border-primary-600" : "border-default-400"}` : "";
     const roundedClass = rounded ? "rounded-lg" : "";
-    const sizeClass = size === 'md' ? `min-w-[240px] ${isMobile}` : size === 'sm' ? 'w-[72px]' : size === 'lg' && 'w-full';
-    const defaultClass = `relative py-2 text-default-900 hover:text-default-1000 bg-default-100 hover:bg-default-200 hover:border-primary-600 flex items-center justify-center h-[44px] select-none transition cursor-text ${sizeClass}`;
+    const sizeClass = size === 'md' ? `w-[240px] ${isMobile}` : size === 'sm' ? 'w-[72px]' : size === 'lg' && 'w-full';
+    const defaultClass = `relative text-default-900 hover:text-default-1000 bg-default-100 hover:bg-default-200 hover:border-primary-600 flex items-center justify-center min-h-[38px] select-none transition cursor-text ${sizeClass}`;
 
     return (
         <div
-            className={`${borderClass} ${roundedClass} ${defaultClass} ${className} flex gap-1 mt-4`}
+            className={`${borderClass} ${roundedClass} ${defaultClass} ${className} flex gap-1 ${label && 'mt-[14px]'}`}
             onClick={handleClick}
         >
-            {startContent && <div className="pl-1">{startContent}</div>}
+            {startContent && <div className="pl-2">{startContent}</div>}
             <div className="relative w-full">
-                <label className={`absolute cursor-text h-full transform -translate-y-[20px] text-default-600 transition-all duration-300 text-sm ${typeInput !== 'number' && 'left-[20px]'} ${value ? "top-[-13px] text-default-950" : `top-[21px]`}`}>
-                    {label}
-                </label>
+                {label && 
+                    <label className={`absolute cursor-text h-full transform -translate-y-[20px] text-default-600 transition-all duration-300 text-sm ${typeInput !== 'number' && 'left-[20px]'} ${value ? "top-[-10px] text-default-950" : `top-[21px]`}`}>
+                        {label}
+                    </label>
+                }
                 <input
                     ref={inputRef}
-                    className={`w-full bg-transparent outline-none text-base no-spinner ${((!startContent || !endContent) && typeInput !== 'number') && 'px-3'}`}
+                    className={`w-full bg-transparent outline-none text-sm no-spinner ${value && 'mb-[3px]'} ${startContent ? 'px-1' : endContent ? 'pl-2' : typeInput == 'number' ? 'px-0' : 'px-2'}`}
                     value={!value ? '' : value}
                     onChange={handleChange}
                     onFocus={handleFocus}
@@ -78,9 +80,10 @@ const Input: React.FC<InputProps> = ({
                     type={typeInput}
                     autoComplete={typeInput}
                     style={{ MozAppearance: "textfield" }}
+                    placeholder={!label ? placeholder: ''}
                 />
             </div>
-            {endContent && <div className="pr-1">{endContent}</div>}
+            {endContent && <div className="pr-2">{endContent}</div>}
         </div>
     );
 };

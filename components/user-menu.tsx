@@ -1,10 +1,7 @@
-'use client';
-
 import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
 
 interface UserMenuProps {
     isMobile: boolean;
@@ -25,7 +22,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
             }`}
             onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
         >   
-            {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-500'>{''}</div>}
+            {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
             <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
             {(isExpanded || isMobile) && (
                 <div className="flex fadeIn flex-col justify-center">

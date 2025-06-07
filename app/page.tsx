@@ -3,6 +3,7 @@
 import Button from "@/components/button";
 import Checkbox from "@/components/checkbox";
 import Input from "@/components/input";
+import Select from "@/components/select";
 import Switch from "@/components/switch";
 import { useAppContext } from "@/context/context";
 import { axiosGet } from "@/utils/axios";
@@ -16,6 +17,8 @@ export default function Home() {
     const [value, setValue] = useState<string|number|null>('');
     const [n, setN] = useState<string|number|null>(null);
     const [checkbox, setCheckbox] = useState(false);
+
+    const [sValue, setSValue] = useState<string|number|null>('');
 
     const logout = () => {
         axiosGet(`/login/logout`, (data) => {
@@ -48,6 +51,13 @@ export default function Home() {
             
             <Switch checked={checkbox} onChange={setCheckbox}/>
             
+            <Select value={sValue} setValue={setSValue} 
+                options={[
+                    {title:'Test', value: 'test_1'}, 
+                    {title:'Test_2', value: 'test_2'}
+                ]} 
+            />
+            {sValue}
         </div>
     );
 };

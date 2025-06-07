@@ -29,7 +29,8 @@ const Theme = () => {
                 onClick={toggleTheme}
                 rounded={false}
                 border={false}
-                className="flex rounded-full items-center justify-center h-[50px] w-[50px] p-1 bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 transition shadow"
+                padding='p-1'
+                className="flex rounded-full items-center justify-center h-[50px] w-[50px] bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 transition shadow"
             >
                 {theme != "light" && <Icon name={"material-symbols:wb-sunny"} className="text-3xl fadeIn" />}
                 {theme == "light" && <Icon name={"material-symbols:clear-night"} className="text-3xl fadeIn" />}

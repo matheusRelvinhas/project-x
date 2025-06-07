@@ -1,5 +1,3 @@
-'use client';
-
 interface CheckboxProps {
     checked?: boolean;
     onChange?: (checked: boolean) => void;
