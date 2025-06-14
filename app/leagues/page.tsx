@@ -94,7 +94,6 @@ export default function LeaguesPage() {
             (data) => {
                 if (status=='upcoming') {setUpcomingLeagues(data.leagues);return}
                 setLeaguesStats(data.leagues);
-                console.log(data)
             },
             () => toast.error('Erro inesperado, tente novamente.'), true
         );
