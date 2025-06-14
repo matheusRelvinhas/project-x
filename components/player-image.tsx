@@ -3,17 +3,19 @@ import { Icon } from '@iconify/react';
 
 type PlayerImageProps = {
     slug: string | null;
-    period?: string | null;
     className?: string;
 };
 
-const PlayerImage = ({ slug = 'Player', period, className = '' }: PlayerImageProps) => {
-    const [hasError, setHasError] = useState(false);
+const PlayerImage = ({ slug = 'Player', className = '' }: PlayerImageProps) => {
+    const [step, setStep] = useState(0); // 0 = webp, 1 = png
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const imageUrl = `http://localhost:3001/api/player_stats/player_image?slug=${slug}${period ? `&period=${period}` : ''}`;
+    const urls = [
+        `/img/imgs/players/${slug}.webp`,
+        `/img/imgs/players/${slug}.png`,
+    ];
 
-    if (!imageUrl || hasError) {
+    if (!slug || step >= urls.length) {
         return (
             <div
                 className={`rounded-4xl p-[3px] ${className}`}
@@ -26,6 +28,8 @@ const PlayerImage = ({ slug = 'Player', period, className = '' }: PlayerImagePro
             </div>
         );
     }
+
+    const imageUrl = urls[step];
 
     return (
         <div
@@ -40,7 +44,7 @@ const PlayerImage = ({ slug = 'Player', period, className = '' }: PlayerImagePro
                     src={imageUrl}
                     alt={slug || 'player_image'}
                     className={`${className} fadeIn`}
-                    onError={() => setHasError(true)}
+                    onError={() => setStep((prev) => prev + 1)}
                     onLoad={() => setIsLoaded(true)}
                     loading="lazy"
                 />
@@ -49,7 +53,7 @@ const PlayerImage = ({ slug = 'Player', period, className = '' }: PlayerImagePro
                 src={imageUrl}
                 alt=""
                 className="hidden"
-                onError={() => setHasError(true)}
+                onError={() => setStep((prev) => prev + 1)}
                 onLoad={() => setIsLoaded(true)}
             />
         </div>

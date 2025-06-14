@@ -94,6 +94,7 @@ export default function LeaguesPage() {
             (data) => {
                 if (status=='upcoming') {setUpcomingLeagues(data.leagues);return}
                 setLeaguesStats(data.leagues);
+                console.log(data)
             },
             () => toast.error('Erro inesperado, tente novamente.'), true
         );
@@ -159,14 +160,11 @@ export default function LeaguesPage() {
                         
                         <div className='flex w-full min-w-max items-center justify-center'>
                             {(status=='finished' && l.tournament_prizes && l.tournament_prizes.length) ?
-                                <FilterTag showNum={isMobile ? 3 : 6} items={l.tournament_prizes.filter(p => p.place?.startsWith('1')).map((p, idx) => (
+                                <FilterTag showNum={isMobile ? 3 : 6} items={l.tournament_prizes.filter(t => /^1(?!\d)/.test(t.place ?? '')).map((t, idx) => (
                                     <div key={idx} className="flex flex-col items-center justify-center gap-1">
                                         <Icon className="text-md text-default-900" name="mdi:crown" />
-                                        <TeamImage
-                                            slug={p.teams?.slug}
-                                            className="w-[24px] h-[24px]"
-                                        />
-                                        <span className="text-xs text-default-800 font-semibold">{p.teams?.name}</span>
+                                        <TeamImage slug={t.teams?.slug} className='w-[20px] h-[20px]' />
+                                        <span className='text-default-800 text-[10px]'>{t.teams?.name}</span>
                                     </div>
                                 ))}/>
                             : (status=='current' && l.teams && l.teams.length) ? 

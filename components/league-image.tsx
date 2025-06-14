@@ -7,12 +7,15 @@ type LeagueImageProps = {
 };
 
 const LeagueImage = ({ slug = 'League', className = '' }: LeagueImageProps) => {
-    const [hasError, setHasError] = useState(false);
+    const [step, setStep] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
+    
+    const urls = [
+        `/img/imgs/leagues/${slug}.webp`,
+        `/img/imgs/leagues/${slug}.png`,
+    ];
 
-    const imageUrl = `http://localhost:3001/api/leagues_stats/league_image?slug=${slug}`;
-
-    if (!imageUrl || hasError) {
+    if (!slug || step >= urls.length) {
         return (
             <div
                 className={`rounded-4xl p-[3px] ${className}`}
@@ -21,6 +24,8 @@ const LeagueImage = ({ slug = 'League', className = '' }: LeagueImageProps) => {
             </div>
         );
     }
+
+    const imageUrl = urls[step];
 
     return (
         <div
@@ -35,7 +40,7 @@ const LeagueImage = ({ slug = 'League', className = '' }: LeagueImageProps) => {
                     src={imageUrl}
                     alt={slug || 'league_image'}
                     className={`${className} fadeIn`}
-                    onError={() => setHasError(true)}
+                    onError={() => setStep((prev) => prev + 1)}
                     onLoad={() => setIsLoaded(true)}
                     loading="lazy"
                 />
@@ -44,7 +49,7 @@ const LeagueImage = ({ slug = 'League', className = '' }: LeagueImageProps) => {
                 src={imageUrl}
                 alt=""
                 className="hidden"
-                onError={() => setHasError(true)}
+                onError={() => setStep((prev) => prev + 1)}
                 onLoad={() => setIsLoaded(true)}
             />
         </div>

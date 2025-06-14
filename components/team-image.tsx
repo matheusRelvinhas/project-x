@@ -7,20 +7,23 @@ type TeamImageProps = {
 };
 
 const TeamImage = ({ slug = 'Team', className = '' }: TeamImageProps) => {
-    const [hasError, setHasError] = useState(false);
+    const [step, setStep] = useState(0);
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const imageUrl = `http://localhost:3001/api/teams_stats/team_image?slug=${slug}`;
+    const urls = [
+        `/img/imgs/teams/${slug}.webp`,
+        `/img/imgs/teams/${slug}.png`
+    ];
 
-    if (!imageUrl || hasError) {
+    if (!slug || step >= urls.length) {
         return (
-            <div
-                className={`rounded-4xl ${className}`}
-            >
+            <div className={`rounded-4xl ${className}`}>
                 <Icon icon="solar:shield-minus-bold" className={className} />
             </div>
         );
     }
+
+    const imageUrl = urls[step];
 
     return (
         <div
@@ -35,16 +38,17 @@ const TeamImage = ({ slug = 'Team', className = '' }: TeamImageProps) => {
                     src={imageUrl}
                     alt={slug || 'team_image'}
                     className={`${className} fadeIn`}
-                    onError={() => setHasError(true)}
+                    onError={() => setStep(prev => prev + 1)}
                     onLoad={() => setIsLoaded(true)}
                     loading="lazy"
                 />
             )}
+            {/* preload invisível */}
             <img
                 src={imageUrl}
                 alt=""
                 className="hidden"
-                onError={() => setHasError(true)}
+                onError={() => setStep(prev => prev + 1)}
                 onLoad={() => setIsLoaded(true)}
             />
         </div>

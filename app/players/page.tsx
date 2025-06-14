@@ -390,9 +390,9 @@ export default function PlayersPage() {
                                     <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
-                                                <PlayerImage slug={player.slug} period={period} className='h-[35px] min-w-[30px]' />
+                                                <PlayerImage slug={player.slug} className='h-[35px] min-w-[30px]' />
                                             </div>
-                                            <Flag code={player.country_code}  
+                                            <Flag code={player.country_code}
                                                 style={{
                                                     width: '14px',
                                                     position: 'absolute',
