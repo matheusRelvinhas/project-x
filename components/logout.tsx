@@ -29,13 +29,13 @@ const Logout = ({ isMobile, isExpanded, handleNavigation }: LogoutProps) => {
         <Button
             rounded={false}
             border={false}
-            className={`flex fadeIn flex-row transition items-center h-[48px] gap-4 border-t border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
+            className={`flex fadeIn flex-row transition items-center min-h-[48px] max-h-[48px] gap-4 border-t border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
                 (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
             }`}
             onClick={() => logout()}
         >   
             <Icon name="ri:logout-circle-r-line" className="text-3xl fadeIn rounded-full" />
-            {(isExpanded || isMobile) && <span className='fadeIn'>Sair</span>}
+            {(isExpanded || isMobile) && <span className='fadeIn-menu'>Sair</span>}
         </Button>
     );
 };

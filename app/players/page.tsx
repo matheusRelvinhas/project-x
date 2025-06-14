@@ -5,9 +5,14 @@ import { useState, useEffect, useMemo } from "react";
 import Select from "@/components/select";
 import Input from "@/components/input";
 import Button from "@/components/button";
+import Checkbox from "@/components/checkbox";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import Ripple from 'react-ripplejs';
 import PlayerImage from '@/components/player-image';
+import { useAppContext } from '@/context/context';
 import Pagination from '@/components/pagination';
 // @ts-ignore
 import Flag from 'react-world-flags';
@@ -125,15 +130,17 @@ type NumericStatKeys = {
 
 export default function PlayersPage() {
 
+    const { isMobile, setLoading } = useAppContext();
+
     const [period, setPeriod] = useState<string>('6_months');
-    const [gameCount, setGameCount] = useState<string>('5');
+    const [gameCount, setGameCount] = useState<string>('25');
     const [countrySelect, setCountrySelect] = useState<string[]>([]);
     const [teamSelect, setTeamSelect] = useState<string[]>([]);
     const [playersStats, setPlayersStats] = useState<PlayerStats[]>([]);
     const [filterPlayers, setFilterPlayers] = useState<PlayerStats[]>([]);
 
     const [showStats, setShowStats] = useState<string[]>([]);
-    const statstGroup = [
+    const statsGroup = [
         { title: 'Geral', stats: ['avg_kills', 'avg_death', 'avg_damage', 'games_count']},
         { title: 'Desempenho', stats: ['avg_first_kills', 'avg_first_death', 'avg_trade_kills', 'avg_assists']},
         { title: 'Objetivo', stats: ['avg_headshots', 'avg_headshot_kills_accuracy', 'avg_shots', 'avg_shots_accuracy']},
@@ -144,12 +151,12 @@ export default function PlayersPage() {
         { title: 'Multikills', stats: ['multikills_vs_5', 'multikills_vs_4', 'multikills_vs_3', 'multikills_vs_2']},
         { title: 'Clutches', stats: ['clutches_vs_5', 'clutches_vs_4', 'clutches_vs_3', 'clutches_vs_2', 'clutches_vs_1']},
     ];
-    if (!showStats.length) setShowStats(statstGroup[0].stats);
+    if (!showStats.length) setShowStats(statsGroup[0].stats);
 
     const ITEMS_PER_PAGE = 12;
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [isModaFilterOpen, setIsModaFilterOpen] = useState(false);
+    const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
     const [searchInput, setSearchInput] = useState('');
     const [countries, setCountries] = useState<{ value: string; name: string, title: any }[]>([]);
     const [teams, setTeams] = useState<{ value: string; name: string, title: any }[]>([]);
@@ -162,6 +169,7 @@ export default function PlayersPage() {
     
     const [sortedBy, setSortedBy] = useState<NumericStatKeys>('avg_kills');
     const [desc, setDesc] = useState<boolean>(true);
+    const [playerHover, setPlayerHover] = useState<string|null>('');
 
     const selectStat = (stat:string) => {
         if (sortedBy == stat) setDesc(!desc);
@@ -206,18 +214,21 @@ export default function PlayersPage() {
     };
       
     useEffect(() => {
-        const getPlayers = () => {
-            axiosGet(`/player_stats?period=${period}&game_count=${gameCount}`, (data) => {
-                console.log(data);
-                setPlayersStats(data.players);
-            }, (error) => {
-                console.log(error);
-            }, true);
+        const getPlayers = async () => {
+            setLoading(true);
+            await axiosGet(
+                `/player_stats?period=${period}&game_count=${gameCount}`,
+                (data) => {
+                    setPlayersStats(data.players);
+                },
+                () => toast.error('Erro inesperado, tente novamente.'), true
+            );
+            setLoading(false);
         };
         getPlayers();
         setCurrentPage(1);
     }, [period, gameCount]);
-
+    
     useEffect(() => {
         const sortedCountries = getUniqueCountries(playersStats).sort((a, b) => {
             const nameA = a.name ?? '';
@@ -232,7 +243,7 @@ export default function PlayersPage() {
         setCountries(sortedCountries);
         setTeams(sortedTeams);
     }, [playersStats]);
-
+    
     useEffect(() => {
         const fuse = new Fuse(playersStats, {
             keys: ['nickname', 'first_name', 'last_name', 'slug', 'team_name', 'team_slug', 'country', 'country_code'],
@@ -256,7 +267,7 @@ export default function PlayersPage() {
         else if (period =='3_months') return 'Últimos 3 meses';
         else if (period =='6_months') return 'Últimos 6 meses';
         else if (period =='12_months') return 'Últimos 12 meses';
-        else return '';
+        else return period;
     };
 
     const statText = (statKey:string) => {
@@ -322,7 +333,7 @@ export default function PlayersPage() {
                 <Input placeholder='Busca avançada' value={searchInput} onValueChange={setSearchInput}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
-                <Button onClick={() => setIsModaFilterOpen(true)}>
+                <Button onClick={() => setIsModalFilterOpen(true)}>
                     <div className='flex gap-2'>
                         <Icon name='mdi:filter-cog-outline' className='text-lg'/>
                         <span>Filtros</span>
@@ -330,7 +341,7 @@ export default function PlayersPage() {
                 </Button>
             </div>
 
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 w-full max-w-5xl'>
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
                     <FilterTag items={periodText(period)} />
                     <FilterTag items={`No mínimo ${gameCount} jogos`} />
@@ -341,90 +352,89 @@ export default function PlayersPage() {
                                 <span className="text-default-900 text-[10px]">{c}</span>
                             </>
                         ))}
-                        />
+                    />
                     <FilterTag items={teams.filter(team => teamSelect.includes(team.value)).map(team => (team.title))}/>
                 </div>
 
                 <div className="w-full overflow-x-auto rounded-lg">
                     <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
-                        {statstGroup.map(g => (
-                        <Button
-                            key={g.title}
-                            onClick={() => setShowStats(g.stats)}
-                            padding='px-[6px] py-0'
-                            typeButton={g.stats.includes(showStats[0]) ? 'primary' : 'default'}
-                        >
-                            <div className='flex gap-2 items-center'>
-                            <span className='text-sm'>{g.title}</span>
-                            </div>
-                        </Button>
+                        {statsGroup.map(g => (
+                            <Button
+                                key={g.title}
+                                onClick={() => setShowStats(g.stats)}
+                                padding='px-[6px] py-0'
+                                typeButton={g.stats.includes(showStats[0]) ? 'primary' : 'default'}
+                            >
+                                <div className='flex gap-2 items-center'>
+                                <span className='text-sm'>{g.title}</span>
+                                </div>
+                            </Button>
                         ))}
                     </div>
                 </div>
 
-                {currentPlayers.length ? 
-                    <div className='overflow-x-auto fadeIn border-1 border-default-400 rounded-lg w-full'>
-                    <div className='min-w-max'>
-                        <div className='flex text-xs font-bold border-b-1 border-default-400 bg-default-200 text-default-700 items-center select-none rounded-t-lg'>
-                            <span className='flex w-full pl-3 py-2 min-w-[180px] max-w-[30%]'>Jogador</span>
-                            {showStats.map(s => (
-                                <Ripple key={s} onClick={()=>selectStat(s)} className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px] cursor-pointer ${sortedBy==s && 'text-default-1000'}`}>
-                                    <span className='flex'>{statText(s)}</span>
-                                    <Icon name="material-symbols:keyboard-arrow-down-rounded" className={`text-[14px] transition ${(!desc && sortedBy==s) && 'rotate-180'}`}/>
-                                </Ripple>
-                            ))}
-                        </div>
-                        {currentPlayers.map((player, i) => (
-                            <div className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary ${i && 'border-t-1 border-default-400'}`} key={player.slug}>
-                                <div className='flex items-center gap-3 py-[6px] w-full pl-3 min-w-[180px] max-w-[30%]'>
-                                    <div className='relative'>
-                                        <div className='flex h-[35px] w-[35px]'>
-                                            <PlayerImage slug={player.slug} period={period} className='h-[35px] min-w-[30px]' />
-                                        </div>
-                                        <Flag code={player.country_code}  
-                                            style={{
-                                                width: '14px',
-                                                position: 'absolute',
-                                                bottom: '-2px',
-                                                right: '-4px',
-                                                borderRadius: '2px',
-                                                filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
-                                            }} 
-                                        />
-                                    </div>
-                                    <div className='flex h-full w-full flex-col'>
-                                        <div className='flex gap-2 items-center'>
-                                            <span className='font-bold'>{player.nickname}</span>
-                                            <span className='text-[10px] text-default-800 whitespace-nowrap overflow-hidden text-ellipsis'>{player.team_name && player.team_name}</span>                                
-                                        </div>
-                                        <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${player.first_name} ${player.last_name}`}</span>
-                                    </div>
-                                </div>
-                                {showStats.map((s) => (
-                                    <span key={i+s} className="flex fadeIn font-semibold text-[12px] w-full items-center justify-center min-w-[88px]">
-                                        {(player[s as keyof PlayerStats] !== undefined && player[s as keyof PlayerStats] !== null)
-                                            ? formatStat(s, (player[s as keyof PlayerStats] as number)) : '-'
-                                        }
-                                    </span>
+                {currentPlayers.length ? <div className='flex flex-col gap-2 p-2 bg-default-200 rounded-lg'>
+                    <div className='overflow-x-auto fadeIn bg-default-50 border-1 border-default-400 rounded-lg w-full'>
+                        <div className='min-w-max'>
+                            <div className='flex text-xs font-bold bg-default-100 text-default-800 items-center select-none rounded-t-lg'>
+                                <span className={`flex w-full pl-3 py-2 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>Jogador</span>
+                                {showStats.map(s => (
+                                    <Ripple key={s} onClick={()=>selectStat(s)} className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px] cursor-pointer ${sortedBy==s && 'text-default-1000'}`}>
+                                        <span className='flex'>{statText(s)}</span>
+                                        <Icon name="material-symbols:keyboard-arrow-down-rounded" className={`text-[14px] transition ${(!desc && sortedBy==s) && 'rotate-180'}`}/>
+                                    </Ripple>
                                 ))}
                             </div>
-                        ))}
+                            {currentPlayers.map((player, i) => (
+                                <div onClick={()=>setPlayerHover(player.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${player.slug==playerHover && 'bg-glass-primary'}`} key={player.slug}>
+                                    <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
+                                        <div className='relative'>
+                                            <div className='flex h-[35px] w-[35px] items-center'>
+                                                <PlayerImage slug={player.slug} period={period} className='h-[35px] min-w-[30px]' />
+                                            </div>
+                                            <Flag code={player.country_code}  
+                                                style={{
+                                                    width: '14px',
+                                                    position: 'absolute',
+                                                    bottom: '-2px',
+                                                    right: '-4px',
+                                                    borderRadius: '2px',
+                                                    filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
+                                                }} 
+                                            />
+                                        </div>
+                                        <div className='flex h-full w-full flex-col'>
+                                            <div className='flex gap-2 items-center'>
+                                                <span className='flex font-bold whitespace-nowrap'>{player.nickname}</span>
+                                                <span className='flex w-full text-[10px] text-default-800 whitespace-nowrap overflow-hidden'>{player.team_name && player.team_name}</span>                                
+                                            </div>
+                                            <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${player.first_name} ${player.last_name}`}</span>
+                                        </div>
+                                    </div>
+                                    {showStats.map((s) => (
+                                        <span key={i+s} className="flex fadeIn font-semibold text-[12px] w-full items-center justify-center min-w-[88px]">
+                                            {(player[s as keyof PlayerStats] !== undefined && player[s as keyof PlayerStats] !== null)
+                                                ? formatStat(s, (player[s as keyof PlayerStats] as number)) : '-'
+                                            }
+                                        </span>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={(page:number) => setCurrentPage(page)}
+                    />
                 </div> : 
                 <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded-lg h-[100px] gap-3'>
                     <Icon name='cuida:alert-outline' className='text-3xl'/>
-                    <span>Nenhum jogo encontrado</span>
+                    <span>Nenhum jogador encontrado</span>
                 </div>}
             </div>
-            {currentPlayers.length ?
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={(page:number) => setCurrentPage(page)}
-                />
-            : null}
             <span className='flex transition text-default-800 text-sm'>Utilizando nossas estatísticas é possível analisar o desempenho dos jogadores e chegar a conclusões através de diversas métricas. Estatísticas acima é baseado na média de cada jogador por cada partida.</span>
-            <Modal isOpen={isModaFilterOpen} setIsOpen={setIsModaFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
+            <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
                 <div className='flex flex-col gap-2'>
                     <div className='flex text-sm gap-1 flex-col'>
                         <span className=''>Período:</span>

@@ -64,13 +64,13 @@ const Input: React.FC<InputProps> = ({
             {startContent && <div className="pl-2">{startContent}</div>}
             <div className="relative w-full">
                 {label && 
-                    <label className={`absolute cursor-text h-full transform -translate-y-[20px] text-default-600 transition-all duration-300 text-sm ${typeInput !== 'number' && 'left-[20px]'} ${value ? "top-[-10px] text-default-950" : `top-[21px]`}`}>
+                    <label className={`absolute cursor-text h-full transform -translate-y-[20px] text-default-600 transition-all duration-300 text-sm ${typeInput !== 'number' && 'left-[20px]'} ${value ? "top-[-8px] text-default-950" : `top-[22px]`}`}>
                         {label}
                     </label>
                 }
                 <input
                     ref={inputRef}
-                    className={`w-full bg-transparent outline-none text-sm no-spinner ${value && 'mb-[3px]'} ${startContent ? 'px-1' : endContent ? 'pl-2' : typeInput == 'number' ? 'px-0' : 'px-2'}`}
+                    className={`w-full bg-transparent outline-none text-sm no-spinner ${startContent ? 'px-1' : endContent ? 'pl-2' : typeInput == 'number' ? 'px-0' : 'px-2'}`}
                     value={!value ? '' : value}
                     onChange={handleChange}
                     onFocus={handleFocus}

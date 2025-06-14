@@ -17,7 +17,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
         <Button
             rounded={false}
             border={false}
-            className={`flex flex-row transition items-center h-[48px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
+            className={`flex flex-row transition items-center min-h-[48px] max-h-[48px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
                 (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
             }`}
             onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
@@ -25,7 +25,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
             {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
             <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
             {(isExpanded || isMobile) && (
-                <div className="flex fadeIn flex-col justify-center">
+                <div className="flex fadeIn-menu flex-col justify-center">
                     <p className="font-medium">{user.logged ? (user.name ? user.name : user.email) : 'User'}</p>
                     <p className="text-default-800 text-xs">{`ID: ${user.logged ? user.id : '#'}`}</p>
                 </div>

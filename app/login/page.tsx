@@ -181,7 +181,7 @@ export default function LoginPage() {
                                     </div>
                                 }
                             />
-                            <Icon name="mdi:email" className="text-2xl text-default-950 mt-3" />
+                            <Icon name="mdi:email" className="text-[26px] text-default-950 mt-3" />
                         </div>
                     )}
                     {forgotPassword ? (
@@ -201,7 +201,7 @@ export default function LoginPage() {
                                             </div>
                                         }
                                     />
-                                    <Icon name="mdi:email" className="text-2xl text-default-950 mt-3" />
+                                    <Icon name="mdi:email" className="text-[26px] text-default-950 mt-3" />
                                 </div>
                             )}
                             <div className='pt-2'>
@@ -239,7 +239,8 @@ export default function LoginPage() {
                                 <Button
                                     border={false}
                                     rounded={false}
-                                    className="rounded-full cursor-pointer mt-3 min-w-[24px]"
+                                    padding='p-0'
+                                    className="rounded-full cursor-pointer mt-3 min-w-[24px] max-w-[24px]"
                                     onClick={() => setSeeNewPassword(!seeNewPassword)}
                                 >
                                     {seeNewPassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
@@ -263,11 +264,12 @@ export default function LoginPage() {
                                 <Button
                                     border={false}
                                     rounded={false}
-                                    className="rounded-full cursor-pointer mt-3 min-w-[24px]"
-                                    onClick={() => setSeeConfirmNewPassword(!seeNewPassword)}
+                                    padding='p-0'
+                                    className="rounded-full cursor-pointer mt-3 min-w-[24px] max-w-[24px]"
+                                    onClick={() => setSeeConfirmNewPassword(!seeConfirmNewPassword)}
                                 >
-                                    {seeNewPassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
-                                    {!seeNewPassword && <Icon name="lsicon:view-off-filled" className="text-2xl fadeIn text-default-950" />}
+                                    {seeConfirmNewPassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
+                                    {!seeConfirmNewPassword && <Icon name="lsicon:view-off-filled" className="text-2xl fadeIn text-default-950" />}
                                 </Button>
                             </div>
                             <div className='pt-2'>
@@ -305,7 +307,8 @@ export default function LoginPage() {
                                 <Button
                                     border={false}
                                     rounded={false}
-                                    className="rounded-full cursor-pointer mt-3 min-w-[24px]"
+                                    padding='p-0'
+                                    className="rounded-full cursor-pointer mt-3 min-w-[24px] max-w-[24px]"
                                     onClick={() => setSeePassword(!seePassword)}
                                 >
                                     {seePassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
