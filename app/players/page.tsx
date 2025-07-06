@@ -33,6 +33,7 @@ interface PlayerStats {
     country_code: string;
     country: string;
     total_prize: number | null;
+    img_extension: string | null;
     games_count: number | null;
     rounds_count: number | null;
     rounds_win: number | null;
@@ -356,7 +357,7 @@ export default function PlayersPage() {
                     <FilterTag items={teams.filter(team => teamSelect.includes(team.value)).map(team => (team.title))}/>
                 </div>
 
-                <div className="w-full overflow-x-auto rounded-lg">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
                     <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
                         {statsGroup.map(g => (
                             <Button
@@ -390,7 +391,7 @@ export default function PlayersPage() {
                                     <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
-                                                <PlayerImage slug={player.slug} className='h-[35px] min-w-[30px]' />
+                                                <PlayerImage slug={player.slug} extension={player.img_extension} className='h-[35px] min-w-[30px]' />
                                             </div>
                                             <Flag code={player.country_code}
                                                 style={{
@@ -470,11 +471,11 @@ export default function PlayersPage() {
                         />
                     </div>
                     <div className='flex text-sm gap-1 flex-col'>
-                        <span className=''>Equipes:</span>
+                        <span className=''>Times:</span>
                         <SearchSelect
                             value={teamSelect} 
                             setValue={setTeamSelect} 
-                            placeholder='Selecione equipes'
+                            placeholder='Selecione times'
                             options={teams}
                             maxSelect={20}
                         />

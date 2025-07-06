@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppProvider } from "@/context/context";
 import Menu from "@/components/menu";
-import Theme from "@/components/theme";
 import Toast from "@/components/toast";
 
 export const metadata: Metadata = {
@@ -24,7 +23,6 @@ export default function RootLayout({
                     <Menu>
                         {children}
                     </Menu>
-                    <Theme />
                 </body>
             </AppProvider>
         </html>

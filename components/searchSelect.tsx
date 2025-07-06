@@ -65,7 +65,9 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
 		if (value.includes(val)) {
 			setValue(value.filter((v) => v !== val));
 		} else {
-			if (value.length < maxSelect) {
+            if (maxSelect == 1) {
+                setValue([val]);
+            } else if (value.length < maxSelect) {
 				setValue([...value, val]);
 			}
 		}
@@ -127,7 +129,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
                 />
             </div>
             
-            {value.length ? <Ripple onClick={() => setValue([])} className="border-1 cursor-pointer fadeIn flex items-center justify-center border-default-400 rounded-4xl p-[3px] transition text-danger hover:text-default-50 hover:bg-danger hover:border-danger">
+            {value.length && maxSelect > 1 ? <Ripple onClick={() => setValue([])} className="border-1 cursor-pointer fadeIn flex items-center justify-center border-default-400 rounded-4xl p-[3px] transition text-danger hover:text-default-50 hover:bg-danger hover:border-danger">
                 <Icon name='material-symbols:close-rounded' />
             </Ripple> : null}
 

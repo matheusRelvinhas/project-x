@@ -6,7 +6,6 @@ import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';
 import UserMenu from '@/components/user-menu';
-import Logout from './logout';
 import Loader from "@/components/loader";
 import LogoButton from './logo-button';
 
@@ -17,21 +16,22 @@ interface MenuProps {
 const Menu = ({ children }: MenuProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const [isExpanded, setIsExpanded] = useState<boolean>(true);
-    const { isMobile, theme } = useAppContext();
+    const { isMobile } = useAppContext();
     const router = useRouter();
     const pathname = usePathname();
 
     const { user } = useAppContext();
 
     const menuItems = [
-        { name: 'Players', href: '/players', icon: 'heroicons:user-solid' },
-        { name: 'Times', href: '/teams', icon: 'heroicons:user-group-solid' },
+        { name: 'Jogos', href: '/games', icon: 'simple-icons:counterstrike' },
         { name: 'Campeonatos', href: '/leagues', icon: 'game-icons:trophy' },
+        { name: 'Jogadores', href: '/players', icon: 'heroicons:user-solid' },
+        { name: 'Times', href: '/teams', icon: 'heroicons:user-group-solid' },
     ];
 
     const handleNavigation = (href: string) => {
         if (isMobile) setIsOpen(false);
-        if (!isMobile) setIsExpanded(false);
+        //if (!isMobile) setIsExpanded(false);
         router.push(href);
     };
 
@@ -80,12 +80,11 @@ const Menu = ({ children }: MenuProps) => {
                 <div
                     onMouseEnter={() => !isMobile && setIsExpanded(true)}
                     onMouseLeave={() => !isMobile && setIsExpanded(false)}
-                    className={`fixed fadeIn glass overflow-x-hidden transition-all duration-300 border-e border-default-400 h-full z-90 flex flex-col ${
+                    className={`fixed fadeIn glass overflow-x-hidden overflow-y-hidden transition-all duration-300 border-e border-default-400 h-full z-90 flex flex-col ${
                         !isMobile ? (isExpanded ? 'w-[320px]' : 'w-[88px]') : 'w-full'
                     }`}
                 >
                     <LogoButton isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />
-
                     <div className='flex flex-col h-full overflow-x-hidden overflow-y-auto'>
                         {menuItems.map((item) => (
                             <Button
@@ -102,7 +101,6 @@ const Menu = ({ children }: MenuProps) => {
                         ))}
                     </div>
                     <UserMenu isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />
-                    {user.logged && <Logout isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation}/>}
                 </div>
             )}
 
@@ -114,7 +112,8 @@ const Menu = ({ children }: MenuProps) => {
                             ? 'ml-[320px] w-[calc(100%-320px)]'
                             : 'ml-[88px] w-[calc(100%-88px)]'
                         : 'w-full'
-                    }`}
+                    }`
+                }
             >
                 <Loader />
                 <div className={`flex w-full h-full ${isMobile ? 'pt-12 pb-4 px-4' : 'px-6 py-8'}`}>

@@ -23,22 +23,25 @@ type TournamentPrize = {
     teams: {
         slug: string|null;
         name: string|null;
+        img_extension: string|null;
     };
 };
 
 type TournamentTeams = {
     slug: string|null;
     name: string|null;
+    img_extension: string|null; 
 };
 
 interface LeagueStats {
     id: number;
     slug: string;
     name: string;
+    img_extension: string|null; 
     status: string|null;
     prize: number|null;
     start_date: string|null;
-    timestamp: number|null;
+    start_timestamp: number|null;
     tier: string|null;
     teams: TournamentTeams[]|null;
     tournament_prizes: TournamentPrize[]|null;
@@ -78,7 +81,7 @@ export default function LeaguesPage() {
                 typeButton={status == statusValue ? 'primary' : 'default'}
             >
                 <div className='flex gap-2 items-center'>
-                <span className='text-sm'>{statusValue=='current' ? 'Atual' : statusValue=='finished' && 'Finalizado'}</span>
+                    <span className='text-sm'>{statusValue=='current' ? 'Atual' : statusValue=='finished' && 'Finalizado'}</span>
                 </div>
             </Button>
         );
@@ -92,7 +95,7 @@ export default function LeaguesPage() {
         await axiosGet(
             `/leagues_stats?status=${status}&years=${yearsParam}`,
             (data) => {
-                if (status=='upcoming') {setUpcomingLeagues(data.leagues);return}
+                if (status=='upcoming') {setUpcomingLeagues(data.leagues);return};
                 setLeaguesStats(data.leagues);
             },
             () => toast.error('Erro inesperado, tente novamente.'), true
@@ -114,7 +117,7 @@ export default function LeaguesPage() {
         });
         const searchFilter = searchInput ? fuse.search(searchInput).map(result => result.item) : leagues;
         const tierFilter = tier=='s-a' ?  searchFilter : searchFilter.filter(l => tier.includes(l.tier?l.tier:''));
-        const sortedFilter = tierFilter.sort((a, b) => (status === 'finished' ? -1 : 1) * ((a.timestamp ?? 0) - (b.timestamp ?? 0)));
+        const sortedFilter = tierFilter.sort((a, b) => (status === 'finished' ? -1 : 1) * ((a.start_timestamp ?? 0) - (b.start_timestamp ?? 0)));
         return sortedFilter;
     };
 
@@ -138,9 +141,9 @@ export default function LeaguesPage() {
                 <div className='min-w-max flex flex-col'>{(leagues.length ? leagues.map((l,i)=>
                     <div key={l.slug+l.id} onClick={()=>setLeagueHover(l.slug)} className={`flex fadeIn border-default-400 px-2 py-2 gap-2 items-center transition hover:bg-glass-primary ${l.slug == leagueHover && 'bg-glass-primary'} ${i && 'border-t-1'}`}>
                         <div className='flex w-full gap-2'>
-                            <LeagueImage slug={l.slug} className='min-w-[40px] w-[40px] mr-2' />
-                            <div className='flex flex-col gap-1 w-full min-w-[150px]'>
-                                <span className='text-xs text-default-800'>{l.timestamp && formatTimestampToStr(l.timestamp)}</span>
+                            <LeagueImage slug={l.slug} extension={l.img_extension} className='min-w-[40px] w-[40px] mr-2' />
+                            <div className={`flex flex-col gap-1 w-full ${isMobile && 'min-w-[200px] max-w-[200px]'}`}>
+                                <span className='text-xs text-default-800'>{l.start_timestamp && formatTimestampToStr(l.start_timestamp)}</span>
                                 <span className='font-semibold text-sm'>{l.name}</span>
                                 <div className='flex h-[12px]'>
                                     {l.prize ? (
@@ -157,32 +160,32 @@ export default function LeaguesPage() {
                             </div>
                         </div>
                         
-                        <div className='flex w-full min-w-max items-center justify-center'>
+                        <div className='flex w-full gap-1 items-center justify-center'>
                             {(status=='finished' && l.tournament_prizes && l.tournament_prizes.length) ?
-                                <FilterTag showNum={isMobile ? 3 : 6} items={l.tournament_prizes.filter(t => /^1(?!\d)/.test(t.place ?? '')).map((t, idx) => (
+                                <FilterTag className='' showNum={isMobile ? 3 : 6} items={l.tournament_prizes.filter(t => /^1(?!\d)/.test(t.place ?? '')).map((t, idx) => (
                                     <div key={idx} className="flex flex-col items-center justify-center gap-1">
                                         <Icon className="text-md text-default-900" name="mdi:crown" />
-                                        <TeamImage slug={t.teams?.slug} className='w-[20px] h-[20px]' />
+                                        <TeamImage slug={t.teams?.slug} extension={t.teams?.img_extension} className='w-[20px] h-[20px]' />
                                         <span className='text-default-800 text-[10px]'>{t.teams?.name}</span>
                                     </div>
                                 ))}/>
                             : (status=='current' && l.teams && l.teams.length) ? 
-                                <FilterTag showNum={isMobile ? 3 : 6} items={l.teams.map((t,i)=> 
+                                <FilterTag className='' showNum={isMobile ? 3 : 6} items={l.teams.map((t,i)=> 
                                     <div key={l.slug+i} className='flex flex-col w-full items-center justify-center gap-1'>
-                                        <TeamImage slug={t.slug} className='w-[20px] h-[20px]' />
+                                        <TeamImage slug={t.slug} extension={t.img_extension} className='w-[20px] h-[20px]' />
                                         <span className='text-default-800 text-[10px]'>{t.name}</span>
                                     </div>)}
                                 />
                             : (
-                                <div className='flex items-center text-default-800 gap-1'>
-                                    <Icon name='cuida:alert-outline' className='text-lg'/>
-                                    <span className='text-xs'>Aguardando resultados</span>
-                                </div>
+                                <>
+                                    <Icon name='cuida:alert-outline' className='text-lg text-default-800'/>
+                                    <span className='text-xs text-default-800'>Aguardando resultados</span>
+                                </>
                             )}
                         </div>
                     </div>
                     ) : (
-                    <div className='flex px-2 fadeIn items-center justify-center text-default-800 h-[100px] gap-3'>
+                    <div className='flex px-2 fadeIn items-center justify-center text-default-800 pb-5 h-[70px] gap-3'>
                         <Icon name='cuida:alert-outline' className='text-3xl'/>
                         <span>Nenhum campeonato encontrado</span>
                     </div>))}
@@ -221,7 +224,7 @@ export default function LeaguesPage() {
                     <FilterTag items={tierGroup.find(t => t.value === tier)?.title ?? ''} />
                     <FilterTag items={years} />   
                 </div>
-                <div className="w-full overflow-x-auto rounded-lg">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
                     <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
                         {buttonGroup('finished')}
                         {buttonGroup('current')} 

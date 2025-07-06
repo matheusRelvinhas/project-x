@@ -2,6 +2,8 @@ import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
 import Button from '@/components/button';
 import { usePathname } from 'next/navigation';
+import Logout from './logout';
+import Theme from './theme';
 
 interface UserMenuProps {
     isMobile: boolean;
@@ -14,23 +16,26 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
     const pathname = usePathname();
 
     return (
-        <Button
-            rounded={false}
-            border={false}
-            className={`flex flex-row transition items-center min-h-[48px] max-h-[48px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
-                (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
-            }`}
-            onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
-        >   
-            {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
-            <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
-            {(isExpanded || isMobile) && (
-                <div className="flex fadeIn-menu flex-col justify-center">
-                    <p className="font-medium">{user.logged ? (user.name ? user.name : user.email) : 'User'}</p>
-                    <p className="text-default-800 text-xs">{`ID: ${user.logged ? user.id : '#'}`}</p>
-                </div>
-            )}
-        </Button>
+        <div className='flex w-full justify-between'>
+            <Button
+                rounded={false}
+                border={false}
+                className={`flex flex-row w-full transition items-center min-h-[48px] max-h-[48px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
+                    (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
+                }`}
+                onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
+            >   
+                {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
+                <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
+                {(isExpanded || isMobile) && (
+                    <span className="flex fadeIn-menu text-xs flex-col justify-center font-medium">
+                        {user.logged ? (user.name ? user.name : user.email) : 'User'}
+                    </span>
+                )}
+            </Button>
+            {(isExpanded || isMobile) && <Theme />}
+            {(user.logged && (isExpanded || isMobile)) && <Logout handleNavigation={handleNavigation}/>}
+        </div>
     );
 };
 

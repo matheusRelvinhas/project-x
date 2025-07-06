@@ -4,9 +4,6 @@ import Icon from '@/components/icon';
 import { useState, useEffect, useMemo } from "react";
 import Input from "@/components/input";
 import Button from "@/components/button";
-import Checkbox from "@/components/checkbox";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import { useAppContext } from "@/context/context";
@@ -20,11 +17,11 @@ import Ripple from 'react-ripplejs';
 import Pagination from '@/components/pagination';
 import TeamImage from '@/components/team-image';
 
-
 interface TeamStats {
     id: number;
     slug: string;
     team_name: string;
+    img_extension: string | null;
     country_code: string;
     country_name: string;
     region_code: string;
@@ -173,7 +170,7 @@ export default function TeamsPage() {
                     />
                 </div>
 
-                <div className="w-full overflow-x-auto rounded-lg">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
                     <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
                         {regionGroup.map(g => (
                             <Button
@@ -207,7 +204,7 @@ export default function TeamsPage() {
                                     <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
-                                                <TeamImage slug={team.slug} className='h-[27px] min-w-[27px] text-default-950' />
+                                                <TeamImage slug={team.slug} extension={team.img_extension} className='h-[27px] min-w-[27px] text-default-950' />
                                             </div>
                                             <Flag code={team.country_code}
                                                 style={{
