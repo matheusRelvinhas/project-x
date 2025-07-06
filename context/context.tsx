@@ -19,6 +19,8 @@ interface AppContextType {
     setUser: (user: User) => void;
     accessToken: string|null;
     setAccessToken: (t:string|null) => void;
+    loading: boolean;
+    setLoading: (l:boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -27,6 +29,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [isMobile, setIsMobile] = useState<boolean>(false);
     const [theme, setTheme] = useState<"light" | "dark">("light");
     const [accessToken, setAccessToken] = useState<string|null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const defaultUser = {
         id: null,
@@ -34,7 +37,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         email: null,
         premium: null,
         logged: null
-    }
+    };
 
     const [user, setUser] = useState<User>(defaultUser);
 
@@ -85,7 +88,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             user,
             setUser,
             accessToken,
-            setAccessToken
+            setAccessToken,
+            loading,
+            setLoading
         }}>
             {children}
         </AppContext.Provider>

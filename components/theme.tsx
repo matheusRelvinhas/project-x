@@ -2,8 +2,8 @@
 
 import { useEffect } from "react";
 import Icon from "@/components/icon";
-import Button from "@/components/button";
 import { useAppContext } from "@/context/context";
+import Ripple from "react-ripplejs";
 
 const Theme = () => {
     const { theme, setTheme } = useAppContext();
@@ -24,17 +24,13 @@ const Theme = () => {
     };
 
     return (
-        <div className='fadeIn fixed bottom-4 z-100 right-4 rounded-full z-100'>
-            <Button
-                onClick={toggleTheme}
-                rounded={false}
-                border={false}
-                className="flex rounded-full items-center justify-center h-[50px] w-[50px] p-1 bg-default-900 hover:bg-default-1000 text-default-200 hover:text-default-50 transition shadow"
-            >
+        <Ripple
+            className='flex flex-col transition select-none cursor-pointer items-center justify-center py-1 border-t-1 border-l-1 border-default-400 min-h-[48px] max-h-[48px] min-w-[48px] text-default-900 hover:text-default-1000 hover:bg-glass-effect'
+            onClick={toggleTheme}
+        >  
                 {theme != "light" && <Icon name={"material-symbols:wb-sunny"} className="text-3xl fadeIn" />}
                 {theme == "light" && <Icon name={"material-symbols:clear-night"} className="text-3xl fadeIn" />}
-            </Button>
-        </div>
+        </Ripple>
     );
 };
 
