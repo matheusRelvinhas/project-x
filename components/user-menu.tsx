@@ -28,13 +28,19 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
                 {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
                 <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
                 {(isExpanded || isMobile) && (
-                    <span className="flex fadeIn-menu text-xs flex-col justify-center font-medium">
-                        {user.logged ? (user.name ? user.name : user.email) : 'User'}
+                    <span className="flex fadeIn-menu text-xs font-medium">
+                    {user?.logged
+                        ? ((user?.name ?? user?.email ?? "User").length > 16
+                            ? (user?.name ?? user?.email ?? "User").slice(0, 16) + "..."
+                            : (user?.name ?? user?.email ?? "User"))
+                        : "User"}
                     </span>
                 )}
             </Button>
             {(isExpanded || isMobile) && <Theme />}
+            
             {(user.logged && (isExpanded || isMobile)) && <Logout handleNavigation={handleNavigation}/>}
+            
         </div>
     );
 };

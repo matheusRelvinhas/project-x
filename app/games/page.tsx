@@ -67,7 +67,7 @@ interface Teams {
 
 export default function GamesPage() {
 
-    const { setLoading } = useAppContext();
+    const { setLoading, isMobile } = useAppContext();
 
     const [gamesStats, setGamesStats] = useState<GameStats[]>([]);
     const [currentGamesStats, setCurrentGamesStats] = useState<GameStats[]>([]);
@@ -273,8 +273,8 @@ export default function GamesPage() {
                         </div>
                         <div className='flex gap-2'>
                             <span className='flex items-center text-center text-default-800 text-[10px] w-[88px] border-x-1 px-2 border-default-400'>{game.league_name}</span>
-                            <div className='flex w-full'>
-                                <div className='flex flex-col gap-2 justify-center w-full min-w-[150px] max-w-[220px]'>
+                            <div className='flex'>
+                                <div className='flex flex-col gap-2 justify-center min-w-[150px] max-w-[220px]'>
                                     <div className='flex items-center gap-2'>
                                         <TeamImage slug={game.team1_slug} extension={game.team1_img_extension} className='h-[27px] w-[27px]'/>
                                         <span className='text-default-900 text-sm'>{game.team1_name}</span>
@@ -290,11 +290,11 @@ export default function GamesPage() {
                                 </div>
                             </div>
                         </div>
-                        <div className='pl-2 flex w-full gap-2 justify-between'>
-                            <div className='flex flex-col gap-1'>
-                                <span className='text-default-800 text-xs min-w-[64px]'>{game.stage_round && game.stage_round.round}</span>
-                                <span className='text-default-800 text-xs min-w-[64px]'>{game.bo_type && `Bo${game.bo_type}`}</span>
-                            </div>
+                        <div className='flex flex-col gap-1 min-w-[64px]'>
+                            <span className='text-default-800 text-xs'>{game.stage_round && game.stage_round.round}</span>
+                            <span className='text-default-800 text-xs'>{game.bo_type && `Bo${game.bo_type}`}</span>
+                        </div>
+                        <div className={`flex justify-end ${isMobile ? '' : 'w-full'}`}>
                             {(game.status == 'finished' && game.games_score) ? gameMapsScore(game.games_score, game) : null}
                         </div>
                     </div>
