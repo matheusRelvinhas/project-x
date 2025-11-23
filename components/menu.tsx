@@ -23,10 +23,10 @@ const Menu = ({ children }: MenuProps) => {
     const { user } = useAppContext();
 
     const menuItems = [
-        { name: 'Jogos', href: '/games', icon: 'simple-icons:counterstrike' },
-        { name: 'Campeonatos', href: '/leagues', icon: 'game-icons:trophy' },
-        { name: 'Jogadores', href: '/players', icon: 'heroicons:user-solid' },
-        { name: 'Times', href: '/teams', icon: 'heroicons:user-group-solid' },
+        { name: 'Jogos', href: '/games', navId: '/game', icon: 'simple-icons:counterstrike' },
+        { name: 'Campeonatos', href: '/leagues', navId: '/league', icon: 'game-icons:trophy' },
+        { name: 'Jogadores', href: '/players', navId: '/player', icon: 'heroicons:user-solid' },
+        { name: 'Times', href: '/teams', navId: '/team', icon: 'heroicons:user-group-solid' },
     ];
 
     const handleNavigation = (href: string) => {
@@ -94,7 +94,7 @@ const Menu = ({ children }: MenuProps) => {
                                 className={`flex flex-row transition items-center min-h-[48px] max-h-[48px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${(isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'}`}
                                 onClick={() => handleNavigation(item.href)}
                             >
-                                {pathname == item.href && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
+                                {pathname.startsWith(item.navId) && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
                                 <Icon name={item.icon} className="text-3xl" />
                                 {(isExpanded || isMobile) && <span className='fadeIn-menu'>{item.name}</span>}
                             </Button>
