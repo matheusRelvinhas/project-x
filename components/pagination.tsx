@@ -43,7 +43,7 @@ const Pagination: React.FC<PaginationProps> = ({
                         key={`page-${page}`}
                         onClick={() => onPageChange(page)}
                         className={`px-3 py-1 rounded-4xl cursor-pointer ${page === currentPage
-                            ? 'bg-primary-600 text-white font-semibold'
+                            ? 'bg-primary-600 text-default-100 font-semibold'
                             : 'bg-default-100 text-default-900 hover:bg-default-300 hover:text-default-950'
                             }`}
                     >

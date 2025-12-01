@@ -16,8 +16,9 @@ import { FilterTag } from '@/components/filter-tag';
 import Ripple from 'react-ripplejs';
 import Pagination from '@/components/pagination';
 import TeamImage from '@/components/team-image';
+import { useRouter, usePathname } from 'next/navigation';
 
-interface TeamStats {
+export interface TeamStats {
     id: number;
     slug: string;
     team_name: string;
@@ -36,8 +37,9 @@ type NumericKeys<T> = {
   }[keyof T];
 
 export default function TeamsPage() {
-
+    
     const { isMobile, setLoading } = useAppContext();
+    const router = useRouter();
     
     const [teamsStats, setTeamsStats] = useState<TeamStats[]>([]);
     const [searchInput, setSearchInput] = useState('');
@@ -140,6 +142,10 @@ export default function TeamsPage() {
         return rank !== -1 ? rank + 1 : null;
     };
 
+    const handleNavigation = (href: string) => {
+        router.push(href);
+    };
+
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
             <div className='flex transition border-default-400 border-b-1'>
@@ -201,7 +207,9 @@ export default function TeamsPage() {
                             </div>
                             {currentTeams.map((team, i) => (
                                 <div onClick={()=>setTeamHover(team.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${team.slug==teamHover && 'bg-glass-primary'}`} key={team.slug}>
-                                    <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
+                                    <div className={`flex cursor-pointer items-center gap-3 py-[6px] transition w-full pl-3 hover:text-primary-600 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
+                                        onClick={()=>handleNavigation(`/team/${team.slug}`)}
+                                    >
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
                                                 <TeamImage slug={team.slug} extension={team.img_extension} className='h-[27px] min-w-[27px] text-default-950' />

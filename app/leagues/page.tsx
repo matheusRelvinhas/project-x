@@ -4,9 +4,6 @@ import Icon from '@/components/icon';
 import { useState, useEffect } from "react";
 import Input from "@/components/input";
 import Button from "@/components/button";
-import Checkbox from "@/components/checkbox";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import { useAppContext } from "@/context/context";
@@ -15,10 +12,9 @@ import SearchSelect from '@/components/searchSelect';
 import Select from '@/components/select';
 import { FilterTag } from '@/components/filter-tag';
 import Fuse from "fuse.js";
-import LeagueImage from '@/components/league-image';
-import TeamImage from '@/components/team-image';
+import LeaguesStatsTable from '@/components/leagues-stats-table';
 
-type TournamentPrize = {
+export type TournamentPrize = {
     place: string|null;
     teams: {
         slug: string|null;
@@ -33,7 +29,7 @@ type TournamentTeams = {
     img_extension: string|null; 
 };
 
-interface LeagueStats {
+export interface LeagueStats {
     id: number;
     slug: string;
     name: string;
@@ -41,7 +37,7 @@ interface LeagueStats {
     status: string|null;
     prize: number|null;
     start_date: string|null;
-    start_timestamp: number|null;
+    start_timestamp: number;
     tier: string|null;
     teams: TournamentTeams[]|null;
     tournament_prizes: TournamentPrize[]|null;
@@ -52,7 +48,7 @@ interface LeagueStats {
 
 export default function LeaguesPage() {
 
-    const { isMobile, setLoading } = useAppContext();
+    const { setLoading } = useAppContext();
 
     const [leaguesStats, setLeaguesStats] = useState<LeagueStats[]>([]);
     const [upcomingLeagues, setUpcomingLeagues] = useState<LeagueStats[]>([]);
@@ -63,7 +59,9 @@ export default function LeaguesPage() {
     const [years, setYears] = useState<string[]>([String(new Date().getFullYear())]);
     const [searchInput, setSearchInput] = useState('');
     const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
-    const [leagueHover, setLeagueHover] = useState<string|null>(null);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentUpcomingPage, setCurrentUpcomingPage] = useState(1);
     
     const tierGroup = [
         {title: 'Tier S e A', value: 's-a'},
@@ -131,76 +129,9 @@ export default function LeaguesPage() {
 
     useEffect(() => {
         if (status === 'current') setYears([String(new Date().getFullYear())]);
+        setCurrentPage(1);
+        setCurrentUpcomingPage(1);
     }, [status]);
-
-    const leaguesTable = (leagues:LeagueStats[], title:string) => {
-        if (!Array.isArray(leagues)) return null;
-        return <div className='flex flex-col p-2 bg-default-200 gap-1 rounded-lg'>
-            <span className='text-default-800 font-semibold text-sm'>{title}</span>
-            <div className={`overflow-x-auto fadeIn  rounded-lg w-full ${leagues.length && 'bg-default-50 border-1 border-default-400'}`}>
-                <div className='min-w-max flex flex-col'>{(leagues.length ? leagues.map((l,i)=>
-                    <div key={l.slug+l.id} onClick={()=>setLeagueHover(l.slug)} className={`flex fadeIn border-default-400 px-2 py-2 gap-2 items-center transition hover:bg-glass-primary ${l.slug == leagueHover && 'bg-glass-primary'} ${i && 'border-t-1'}`}>
-                        <div className='flex w-full gap-2'>
-                            <LeagueImage slug={l.slug} extension={l.img_extension} className='min-w-[40px] w-[40px] mr-2' />
-                            <div className={`flex flex-col gap-1 w-full ${isMobile && 'min-w-[200px] max-w-[200px]'}`}>
-                                <span className='text-xs text-default-800'>{l.start_timestamp && formatTimestampToStr(l.start_timestamp)}</span>
-                                <span className='font-semibold text-sm'>{l.name}</span>
-                                <div className='flex h-[12px]'>
-                                    {l.prize ? (
-                                        <>
-                                            <Icon className='text-success text-sm' name={`mdi:dollar`}/>
-                                            <span className="text-xs">{l.prize.toLocaleString('fr-FR')}</span>
-                                        </>
-                                    ):''}
-                                </div>
-                            </div>
-                            <div className='flex items-center'>
-                                <span className='italic text-sm text-default-800'>tier</span>
-                                <Icon className='text-3xl text-primary-600' name={`mdi:letter-${l.tier}`}/>
-                            </div>
-                        </div>
-                        
-                        <div className='flex w-full gap-1 items-center justify-center'>
-                            {(status=='finished' && l.tournament_prizes && l.tournament_prizes.length) ?
-                                <FilterTag className='' showNum={isMobile ? 3 : 6} items={l.tournament_prizes.filter(t => /^1(?!\d)/.test(t.place ?? '')).map((t, idx) => (
-                                    <div key={idx} className="flex flex-col items-center justify-center gap-1">
-                                        <Icon className="text-md text-default-900" name="mdi:crown" />
-                                        <TeamImage slug={t.teams?.slug} extension={t.teams?.img_extension} className='w-[20px] h-[20px]' />
-                                        <span className='text-default-800 text-[10px]'>{t.teams?.name}</span>
-                                    </div>
-                                ))}/>
-                            : (status=='current' && l.teams && l.teams.length) ? 
-                                <FilterTag className='' showNum={isMobile ? 3 : 6} items={l.teams.map((t,i)=> 
-                                    <div key={l.slug+i} className='flex flex-col w-full items-center justify-center gap-1'>
-                                        <TeamImage slug={t.slug} extension={t.img_extension} className='w-[20px] h-[20px]' />
-                                        <span className='text-default-800 text-[10px]'>{t.name}</span>
-                                    </div>)}
-                                />
-                            : (
-                                <>
-                                    <Icon name='cuida:alert-outline' className='text-lg text-default-800'/>
-                                    <span className='text-xs text-default-800'>Aguardando resultados</span>
-                                </>
-                            )}
-                        </div>
-                    </div>
-                    ) : (
-                    <div className='flex px-2 fadeIn items-center justify-center text-default-800 pb-5 h-[70px] gap-3'>
-                        <Icon name='cuida:alert-outline' className='text-3xl'/>
-                        <span>Nenhum campeonato encontrado</span>
-                    </div>))}
-                </div>
-            </div>
-        </div>
-    };
-
-    const formatTimestampToStr = (timestamp: number): string => {
-        const date = new Date(timestamp * 1000);
-        const day = date.getDate();
-        const month = date.toLocaleString('pt-BR', { month: 'long' });
-        const year = date.getFullYear();
-        return `${day} de ${month} - ${year}`;
-    };
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
@@ -230,15 +161,15 @@ export default function LeaguesPage() {
                         {buttonGroup('current')} 
                     </div>
                 </div>
-                {status=='finished' && leaguesTable(filterLeagues, 'Campeonatos finalizados')}
-                {status=='current' && leaguesTable(filterLeagues, 'Campeonatos em andamento')}
-                {(status=='current' && filterUpcomingLeagues.length) ? leaguesTable(filterUpcomingLeagues, 'Campeonatos futuros'): null}
+                {status=='finished' && <LeaguesStatsTable leaguesStats={filterLeagues} title='Campeonatos finalizados' currentPage={currentPage} onPageChange={setCurrentPage} />}
+                {status=='current' && <LeaguesStatsTable leaguesStats={filterLeagues} title='Campeonatos em andamento' currentPage={currentPage} onPageChange={setCurrentPage} />}
+                {(status=='current' && filterUpcomingLeagues.length) ? <LeaguesStatsTable leaguesStats={filterUpcomingLeagues} title='Campeonatos futuros' currentPage={currentUpcomingPage} onPageChange={setCurrentUpcomingPage} /> : null}
             </div>
 
             <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
                 <div className='flex flex-col gap-2'>
                     <div className='flex text-sm gap-1 flex-col'>
-                        <span className=''>Tier</span>
+                        <span>Tier</span>
                         <Select value={tier} setValue={setTier} placeholder='Selecione um tier'
                             options={tierGroup}
                         />
