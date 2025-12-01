@@ -230,7 +230,7 @@ export default function TeamPage() {
 
             <div className={`flex items-start flex-wrap gap-2 w-full`}>
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
-                    <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'}
+                    <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'} slug={slug}
                         onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 3 + (isMobile ? 0 : 1)} >
                         {wlGames && performanceGrid(
                                 wlGames[period]?.win + wlGames[period]?.lose,
@@ -243,7 +243,7 @@ export default function TeamPage() {
                 </div>
                 <div className={`flex max-w-sm ${isMobile ? 'w-full' : 'w-1/2'}`}>
                     <MapsStatsTable mapsStats={filteredMapsStats} currentPage={mapsCurrentPage} onPageChange={setMapsCurrentPage}
-                        itemsPerPage={ 3 + (isMobile ? 0 : 1)} >
+                        itemsPerPage={ 3 + (isMobile ? 0 : 1)} slug={slug}>
                         {performanceGrid(
                             filteredMapsStats.length, 
                             filteredMapsStats.filter(m=>m.winner_team==slug).length, 

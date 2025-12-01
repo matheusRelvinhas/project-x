@@ -11,6 +11,7 @@ interface GamesStatsTableProps {
     currentPage: number;
     onPageChange: (n:number) => void;
     title?: string|null;
+    slug?: string|string[];
     gameMap?: boolean;
     itemsPerPage?: number;
 }
@@ -20,8 +21,9 @@ export default function GamesStatsTable({
     currentPage,
     onPageChange,
     children=null,
-    title = null,
-    gameMap = true,
+    title=null,
+    slug='',
+    gameMap=true,
     itemsPerPage = 8
 }: GamesStatsTableProps) {
 
@@ -86,6 +88,9 @@ export default function GamesStatsTable({
                         <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                             <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>{game.stage_round && game.stage_round.round}</span>
                             <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>{game.bo_type && `Bo${game.bo_type}`}</span>
+                        </div>
+                        <div 
+                            className={`absolute bottom-[-38px] left-[-32px] h-[32px] w-[32px] rotate-45 transform translate-x-1/2 -translate-y-1/2 ${slug ? (game.winner_team_slug==slug ? 'bg-success' : 'bg-danger') : ''}`} >
                         </div>
                         <div className='flex flex-col w-[36px] gap-1 items-center text-center justify-center'>
                             <span className='text-default-800 text-xs'>{formatTimestamp(game.start_timestamp, 'date')}</span>
