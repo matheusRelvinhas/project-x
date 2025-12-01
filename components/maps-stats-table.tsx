@@ -1,6 +1,5 @@
 import Icon from '@/components/icon';
 import { useMemo, ReactNode } from "react";
-import { useAppContext } from "@/context/context";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';
 import { type GameScore } from "@/app/games/page";
@@ -23,8 +22,6 @@ export default function MapsStatsTable({
     slug='',
     itemsPerPage = 8
 }: MapsStatsTableProps) {
-
-    const { isMobile } = useAppContext();
 
     const totalPages = Math.ceil(mapsStats.length / itemsPerPage);
     const currentMaps = useMemo(() => {

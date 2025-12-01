@@ -1,5 +1,5 @@
 import Icon from '@/components/icon';
-import { useState, useMemo, ReactNode } from "react";
+import { useMemo, ReactNode } from "react";
 import { useAppContext } from "@/context/context";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';

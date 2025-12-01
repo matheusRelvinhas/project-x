@@ -139,7 +139,7 @@ export default function LeaguesPage() {
                 <span className='text-lg font-bold text-default-950'>Campeonatos</span>
             </div>
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>
-                <Input placeholder='Busca avançada' value={searchInput} onValueChange={setSearchInput}
+                <Input placeholder='Busca avançada' value={searchInput} onValueChange={(val) => setSearchInput(val as string)}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
                 <Button onClick={() => setIsModalFilterOpen(true)}>

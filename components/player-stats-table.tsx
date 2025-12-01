@@ -4,7 +4,7 @@ import Ripple from 'react-ripplejs';
 import PlayerImage from '@/components/player-image';
 import { useAppContext } from '@/context/context';
 import Pagination from '@/components/pagination';
-// @ts-ignore
+// @ts-expect-error
 import Flag from 'react-world-flags';
 import Button from "@/components/button";
 import { type PlayerStats, type NumericStatKeys } from "@/app/players/page"; 
@@ -122,7 +122,7 @@ export default function PlayerStatsTable({
     useEffect(() => {
         setSortedBy(showStats[0] as NumericStatKeys);
         setDesc(true);
-    }, [showStats]);
+    }, [showStats, setDesc, setSortedBy]);
 
     useEffect(() => {
         const sortedFilter = [...filterPlayers].sort((a, b) => desc ? (b[sortedBy] ?? 0) - (a[sortedBy] ?? 0) : (a[sortedBy] ?? 0) - (b[sortedBy] ?? 0));

@@ -1,5 +1,5 @@
 import Icon from '@/components/icon';
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useAppContext } from "@/context/context";
 import { FilterTag } from '@/components/filter-tag';
 import LeagueImage from '@/components/league-image';

@@ -13,8 +13,8 @@ interface InputProps {
     typeInput?: string | 'number';
     min?: number | undefined;
     max?: number | undefined;
-    value: string | number | null | any;
-    onValueChange?: (value: string | number | null | any) => void;
+    value: string | number | null;
+    onValueChange?: (value: string | number | null) => void;
 }
 
 const Input: React.FC<InputProps> = ({

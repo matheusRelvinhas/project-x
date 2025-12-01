@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { JSX, useEffect, useRef, useState } from "react";
 import { useAppContext } from "@/context/context";
 import Icon from "@/components/icon";
 
@@ -11,7 +11,7 @@ interface SelectProps {
 	border?: boolean;
 	rounded?: boolean;
 	size?: "md" | "lg" | "sm";
-	value: any;
+	value: string | JSX.Element;
 	setValue: (value: any) => void;
 	options: Option[];
 	disabledDefault?: boolean;

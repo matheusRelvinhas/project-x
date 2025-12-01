@@ -1,7 +1,7 @@
 'use client';
 
 import Icon from '@/components/icon';
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, JSX } from "react";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import { toast } from "react-toastify";
@@ -10,13 +10,13 @@ import { useAppContext } from "@/context/context";
 import Modal from '@/components/modal';
 import Fuse from "fuse.js";
 import SearchSelect from '@/components/searchSelect';
-// @ts-ignore
+// @ts-expect-error
 import Flag from 'react-world-flags';
 import { FilterTag } from '@/components/filter-tag';
 import Ripple from 'react-ripplejs';
 import Pagination from '@/components/pagination';
 import TeamImage from '@/components/team-image';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export interface TeamStats {
     id: number;
@@ -45,7 +45,7 @@ export default function TeamsPage() {
     const [searchInput, setSearchInput] = useState('');
     const [countrySelect, setCountrySelect] = useState<string[]>([]);
     const [regionCode, setRegionCode] = useState<string>('all');
-    const [countries, setCountries] = useState<{ value: string; name: string, title: any }[]>([]);
+    const [countries, setCountries] = useState<{ value: string; name: string, title: string | JSX.Element }[]>([]);
     const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterTeams, setFilterTeams] = useState<TeamStats[]>([]);
@@ -111,7 +111,7 @@ export default function TeamsPage() {
         setCountrySelect([]);
         setCurrentPage(1);
         setDesc(true);
-    }, [regionCode]);
+    }, [regionCode, setLoading]);
 
     useEffect(() => {
         const sortedCountries = getUniqueCountries(teamsStats).sort((a, b) => {
@@ -120,7 +120,7 @@ export default function TeamsPage() {
             return nameA.localeCompare(nameB);
         });
         setCountries(sortedCountries);
-    }, [teamsStats]);
+    }, [teamsStats, setCountries]);
 
     useEffect(() => {
         const fuse = new Fuse(teamsStats, {
@@ -152,7 +152,7 @@ export default function TeamsPage() {
                 <span className='text-lg font-bold text-default-950'>Times</span>
             </div>
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>
-                <Input placeholder='Busca avançada' value={searchInput} onValueChange={setSearchInput}
+                <Input placeholder='Busca avançada' value={searchInput} onValueChange={(val) => setSearchInput(val as string)}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
                 <Button onClick={() => setIsModalFilterOpen(true)}>
@@ -206,7 +206,7 @@ export default function TeamsPage() {
                                 {regionCode != 'all' && <span className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px]`}>{regionCode} rank</span>}
                             </div>
                             {currentTeams.map((team, i) => (
-                                <div onClick={()=>setTeamHover(team.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${team.slug==teamHover && 'bg-glass-primary'}`} key={team.slug}>
+                                <div key={`${i}${team.slug}`} onClick={()=>setTeamHover(team.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${team.slug==teamHover && 'bg-glass-primary'}`}>
                                     <div className={`flex cursor-pointer items-center gap-3 py-[6px] transition w-full pl-3 hover:text-primary-600 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
                                         onClick={()=>handleNavigation(`/team/${team.slug}`)}
                                     >

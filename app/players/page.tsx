@@ -1,14 +1,14 @@
 'use client';
 
 import Icon from '@/components/icon';
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, JSX } from "react";
 import Select from "@/components/select";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import { useAppContext } from '@/context/context';
-// @ts-ignore
+// @ts-expect-error
 import Flag from 'react-world-flags';
 import Modal from '@/components/modal';
 import Fuse from "fuse.js";
@@ -146,8 +146,8 @@ export default function PlayersPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
     const [searchInput, setSearchInput] = useState('');
-    const [countries, setCountries] = useState<{ value: string; name: string, title: any }[]>([]);
-    const [teams, setTeams] = useState<{ value: string; name: string, title: any }[]>([]);
+    const [countries, setCountries] = useState<{ value: string; name: string, title: string | JSX.Element }[]>([]);
+    const [teams, setTeams] = useState<{ value: string; name: string,  title: string | JSX.Element }[]>([]);
     
     const [sortedBy, setSortedBy] = useState<NumericStatKeys>('avg_kills');
     const [desc, setDesc] = useState<boolean>(true);
@@ -200,7 +200,7 @@ export default function PlayersPage() {
         };
         getPlayers();
         setCurrentPage(1);
-    }, [period, gameCount]);
+    }, [period, gameCount, setLoading]);
     
     useEffect(() => {
         const sortedCountries = getUniqueCountries(playersStats).sort((a, b) => {
@@ -235,7 +235,7 @@ export default function PlayersPage() {
                 <span className='text-lg font-bold text-default-950'>Players</span>
             </div>
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>
-                <Input placeholder='Busca avançada' value={searchInput} onValueChange={setSearchInput}
+                <Input placeholder='Busca avançada' value={searchInput} onValueChange={(val) => setSearchInput(val as string)}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
                 <Button onClick={() => setIsModalFilterOpen(true)}>

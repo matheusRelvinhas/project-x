@@ -45,7 +45,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
         if (validValues.length !== value.length) {
             setValue(validValues);
         };
-    }, [options]);
+    }, [options, setValue]);
 
 	useEffect(() => {
 		if (query.trim() === "") {
@@ -104,7 +104,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
 
     const inputSS = (
         <div className="p-2 border-b border-default-300">
-            <Input size="lg" value={query} onValueChange={setQuery} placeholder="Buscar" />
+            <Input size="lg" value={query} onValueChange={(val => setQuery(val as string))} placeholder="Buscar" />
         </div>
     );
 

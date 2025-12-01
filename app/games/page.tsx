@@ -179,15 +179,15 @@ export default function GamesPage() {
 
     useEffect(() => {
         if (!periods.length) getPeriods();
-    }, [periods]);
+    }, [periods, getPeriods]);
     
     useEffect(() => {
         if (!leagues.length) getLeagues();
-    }, [leagues]);
+    }, [leagues, getLeagues]);
     
     useEffect(() => {
         if (!teams.length) getTeams();
-    }, [teams]);
+    }, [teams, getTeams]);
     
     useEffect(() => {
         getGames(period, league, status, filterStatus);
@@ -250,7 +250,7 @@ export default function GamesPage() {
             </div>
 
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>
-                <Input placeholder='Busca avançada' value={searchInput} onValueChange={setSearchInput}
+                <Input placeholder='Busca avançada' value={searchInput} onValueChange={(val) => setSearchInput(val as string)}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
                 <Button onClick={() => status=='current' ? null :  setIsModalFilterOpen(true)} isDisabled={status=='current'}>

@@ -60,7 +60,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         setIsConfirmEmail(validateEmail(confirmEmail) && email == confirmEmail);
-    }, [confirmEmail]);
+    }, [confirmEmail, email]);
 
     useEffect(() => {
         setIsPassword(validatePassword(password));
@@ -68,7 +68,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         setIsConfirmPassword(validatePassword(confirmPassword) && password == confirmPassword);
-    }, [confirmPassword]);
+    }, [confirmPassword, password]);
 
     useEffect(() => {
         setIsNewPassword(validatePassword(newPassword));
@@ -170,7 +170,7 @@ export default function LoginPage() {
                         <div className="flex items-center justify-center gap-2">
                             <Input
                                 value={email}
-                                onValueChange={setEmail}
+                                onValueChange={(val) => setEmail(val as string)}
                                 label="E-mail"
                                 typeInput="email"
                                 size="lg"
@@ -190,7 +190,7 @@ export default function LoginPage() {
                                 <div className="flex items-center justify-center gap-2 fadeIn">
                                     <Input
                                         value={confirmEmail}
-                                        onValueChange={setConfirmEmail}
+                                        onValueChange={(val) => setConfirmEmail(val as string)}
                                         label="Confirme seu e-mail"
                                         typeInput="email"
                                         size="lg"
@@ -225,7 +225,7 @@ export default function LoginPage() {
                             <div className="flex items-center justify-center gap-2">
                                 <Input
                                     value={newPassword}
-                                    onValueChange={setNewPassword}
+                                    onValueChange={(val) => setNewPassword(val as string)}
                                     label="Nova senha"
                                     typeInput={`${seeNewPassword ? 'text' : 'password'}`}
                                     size="lg"
@@ -250,7 +250,7 @@ export default function LoginPage() {
                             <div className="flex items-center justify-center gap-2">
                                 <Input
                                     value={confirmNewPassword}
-                                    onValueChange={setConfirmNewPassword}
+                                    onValueChange={(val) => setConfirmNewPassword(val as string)}
                                     label="Confirme nova senha"
                                     typeInput={`${seeConfirmNewPassword ? 'text' : 'password'}`}
                                     size="lg"
@@ -293,7 +293,7 @@ export default function LoginPage() {
                             <div className="flex items-center justify-center gap-2">
                                 <Input
                                     value={password}
-                                    onValueChange={setPassword}
+                                    onValueChange={(val) => setPassword(val as string)}
                                     label="Senha"
                                     typeInput={`${seePassword ? 'text' : 'password'}`}
                                     size="lg"
@@ -319,7 +319,7 @@ export default function LoginPage() {
                                 <div className="flex items-center justify-center gap-2 fadeIn">
                                     <Input
                                         value={confirmPassword}
-                                        onValueChange={setConfirmPassword}
+                                        onValueChange={(val) => setConfirmPassword(val as string)}
                                         label="Confirme sua senha"
                                         typeInput={`${seeConfirmPassword ? 'text' : 'password'}`}
                                         size="lg"
