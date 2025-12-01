@@ -1,7 +1,5 @@
-'use client';
-
 import Icon from '@/components/icon';
-import { useState, useMemo } from "react";
+import { useState, useMemo, ReactNode } from "react";
 import { useAppContext } from "@/context/context";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';
@@ -9,6 +7,7 @@ import { type GameScore, type GameStats } from "@/app/games/page";
 
 interface GamesStatsTableProps {
     gamesStats: GameStats[];
+    children?: ReactNode|null;
     currentPage: number;
     onPageChange: (n:number) => void;
     title?: string|null;
@@ -20,14 +19,13 @@ export default function GamesStatsTable({
     gamesStats,
     currentPage,
     onPageChange,
+    children=null,
     title = null,
-    gameMap = false,
+    gameMap = true,
     itemsPerPage = 8
 }: GamesStatsTableProps) {
 
     const { isMobile } = useAppContext();
-
-    const [gameHover, setGameHover] = useState<string | null>(null);
 
     const totalPages = Math.ceil(gamesStats.length / itemsPerPage);
     const currentGames = useMemo(() => {
@@ -53,8 +51,8 @@ export default function GamesStatsTable({
     const gameMapsScore = (gamesScore: GameScore[], game: GameStats) => {
         const sortedGames = [...gamesScore].sort((a, b) => a.order - b.order);
         return <div className='flex w-full h-full gap-3 items-center justify-end'>
-            {sortedGames.map(g =>
-                <div className='flex flex-col gap-1' key={game.id + g.map_name}>
+            {sortedGames.map((g, i) =>
+                <div className='flex flex-col gap-1' key={game.id + i + g.map_name}>
                     <div className='flex items-center justify-between px-1 gap-1'>
                         {g.winner_team == game.team1_slug && <TeamImage slug={game.team1_slug} extension={game.team1_img_extension} className='h-[17px] w-[17px]' />}
                         {g.winner_team == game.team2_slug && <TeamImage slug={game.team2_slug} extension={game.team2_img_extension} className='h-[17px] w-[17px]' />}
@@ -73,7 +71,7 @@ export default function GamesStatsTable({
     return (
         <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded-lg w-full h-full'>
             {title && (
-                <div className='flex gap-2 items-center'>
+                <div className='flex items-center'>
                     {title == 'Ao vivo' && <span className="relative flex h-[10px] w-[10px]">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-[10px] w-[10px] bg-danger"></span>
@@ -81,12 +79,13 @@ export default function GamesStatsTable({
                     <span className='text-default-800 font-semibold text-sm'>{title}</span>
                 </div>
             )}
+            {children}
             {currentGames.length ? <div className='flex w-full h-full flex-col gap-1'>
                 {currentGames.map((game, i) => (
-                    <div key={game.slug + i} onClick={() => setGameHover(game.slug)} className={`relative flex gap-2 overflow-x-auto overflow-y-hidden w-full h-[82px] min-h-[82px] max-h-[82px] transition border-1 border-default-400 hover:bg-glass-primary rounded-lg px-3 pt-[16px] pb-2 ${game.slug == gameHover ? 'bg-glass-primary' : 'bg-default-50'}`}>
+                    <div key={game.slug + i} className={`relative flex gap-2 overflow-x-auto overflow-y-hidden w-full h-[82px] min-h-[82px] max-h-[82px] transition border-1 border-default-400 hover:bg-glass-primary rounded-lg px-3 pt-[16px] pb-2 bg-default-50`}>
                         <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
-                            <span className='bg-primary-600 text-white text-[11px] rounded-sm px-2 h-[16px] flex text-center align-center justify-center'>{game.stage_round && game.stage_round.round}</span>
-                            <span className='bg-primary-600 text-white text-[11px] rounded-sm px-2 h-[16px] flex text-center align-center justify-center'>{game.bo_type && `Bo${game.bo_type}`}</span>
+                            <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>{game.stage_round && game.stage_round.round}</span>
+                            <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>{game.bo_type && `Bo${game.bo_type}`}</span>
                         </div>
                         <div className='flex flex-col w-[36px] gap-1 items-center text-center justify-center'>
                             <span className='text-default-800 text-xs'>{formatTimestamp(game.start_timestamp, 'date')}</span>
@@ -105,16 +104,20 @@ export default function GamesStatsTable({
                                     <span className='text-default-900 text-xs whitespace-nowrap'>
                                         { game.team1_name && game.team1_name.length > 17
                                             ? game.team1_name.slice(0, 17) + "..."
-                                            : game.team1_name
+                                            : game.team1_name ? game.team1_name : (
+                                                <span className='italic'>{'unknown team'}</span>
+                                            )
                                         }
                                     </span>
                                 </div>
                                 <div className='flex items-center gap-2'>
                                     <TeamImage slug={game.team2_slug} extension={game.team2_img_extension} className='h-[16px] w-[16px]' />
                                     <span className='text-default-900 text-xs whitespace-nowrap'>
-                                        { game.team2_name && game.team2_name.length > 17
+                                        { game.team2_name && game.team2_name.length > 17 
                                             ? game.team2_name.slice(0, 17) + "..."
-                                            : game.team2_name
+                                            : game.team2_name ? game.team2_name : (
+                                                <span className='italic'>{'unknown team'}</span>
+                                            )
                                         }
                                     </span>
                                 </div>

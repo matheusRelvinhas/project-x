@@ -13,7 +13,7 @@ body.modal-open {
 @layer base {
     [data-theme="light"] {
         --glass-effect: #a6a6a631;
-        --glass-primary: #fa60b025;
+        --glass-primary: #ff7a4525;
         --default-50: #ffffff;
         --default-100: #f7f7f7;
         --default-200: #eaeaea !important;
@@ -27,18 +27,18 @@ body.modal-open {
         --default-950: #1a1a1a;
         --default-1000: #000000;
 
-        --primary-50: #fcf9fa;
-        --primary-100: #fff0f6;
-        --primary-200: #ffd6e7;
-        --primary-300: #ffadd2;
-        --primary-400: #ff94c8;
-        --primary-500: #fa60b0;
-        --primary-600: #f33ea2;
-        --primary-700: #c41d7f;
-        --primary-800: #ac1d75;
-        --primary-900: #830c59;
-        --primary-950: #660a49;
-        --primary-1000: #310422;
+        --primary-50: #fdf7f5;
+        --primary-100: #fff5f0;
+        --primary-200: #fff1eb;
+        --primary-300: #ffd3c2;
+        --primary-400: #ffb399;
+        --primary-500: #ff8f70;
+        --primary-600: #fc6746;
+        --primary-700: #d64a31;
+        --primary-800: #b03120;
+        --primary-900: #8a1c12;
+        --primary-950: #63100c;
+        --primary-1000: #410805;
 
         --danger: #f5222d;
         --danger-hover :#cf1322;
@@ -48,7 +48,7 @@ body.modal-open {
 
     [data-theme="dark"] {
         --glass-effect: #52525231;
-        --glass-primary: #ffe9f525;
+        --glass-primary: #ffbb9625;
         --default-50: #0f0f0f;
         --default-100: #1a1a1a;
         --default-200: #262626 !important;
@@ -62,23 +62,24 @@ body.modal-open {
         --default-950: #e2e2e2;
         --default-1000: #ffffff;
 
-        --primary-50: #310422;
-        --primary-100: #660a49;
-        --primary-200: #830c59;
-        --primary-300: #ac1d75;
-        --primary-400: #c41d7f;
-        --primary-500: #f33ea2;
-        --primary-600: #fa60b0;
-        --primary-700: #ff94c8;
-        --primary-800: #ffadd2;
-        --primary-900: #ffd6e7;
-        --primary-950: #fff0f6;
-        --primary-1000: #fcf9fa;
+  
+        --primary-100: #440a00;
+        --primary-100: #871400;
+        --primary-200: #ad2102;
+        --primary-300: #d4380d;
+        --primary-400: #fa541c;
+        --primary-500: #ff7a45;
+        --primary-600: #ff9c6e;
+        --primary-700: #ffbb96;
+        --primary-800: #ffd8bf;
+        --primary-900: #fff2e8;
+        --primary-950: #fff2e8;
+         --primary-950: #fff9f4;
 
-        --danger: #ff4d4f;
-        --danger-hover: #ff7875;
-        --success: #73d13d;
-        --seccess-hover: #95de64;
+        --danger: #ff7875;
+        --danger-hover: #ffa39e;
+        --success: #b7eb8f;
+        --seccess-hover: #d9f7be;
     }
 }
 

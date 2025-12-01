@@ -21,6 +21,15 @@ export type GameScore = {
     winner_score: number;
     loser_score: number;
     winner_team: string;
+    start_timestamp: number;
+    team1_name: string|null;
+    team2_name: string|null;
+    team1_slug: string|null;
+    team2_slug: string|null;
+    team1_score: string|null;
+    team2_score: string|null;
+    team1_img_extension: string|null;
+    team2_img_extension: string|null;
 };
 
 export interface GameStats {
@@ -272,7 +281,7 @@ export default function GamesPage() {
                     currentPage={currentPage}
                     onPageChange={setCurrentPage} 
                     itemsPerPage={ 8 + (isMobile ? 0 : 4)}/> : null}
-                {<GamesStatsTable 
+                {<GamesStatsTable
                     gamesStats={filterGamesStats} 
                     title={status=='finished' ? 'Finalizados' : 'Futuros'}  
                     currentPage={periodCurrentPage} 

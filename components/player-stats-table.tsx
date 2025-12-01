@@ -1,5 +1,3 @@
-'use client';
-
 import { useState, useEffect, useMemo } from "react";
 import Icon from '@/components/icon';
 import Ripple from 'react-ripplejs';
@@ -36,7 +34,6 @@ export default function PlayerStatsTable({
     
     const ITEMS_PER_PAGE = 12;
     const { isMobile } = useAppContext();
-    const [playerHover, setPlayerHover] = useState<string|null>('');
     const [filteredPlayers, setFilteredPlayers] = useState<PlayerStats[]>([]);
 
     const totalPages = Math.ceil(filteredPlayers.length / ITEMS_PER_PAGE);
@@ -72,7 +69,7 @@ export default function PlayerStatsTable({
         if (statKey=='avg_kills') return 'Kills';
         else if (statKey=='avg_death') return 'Morte';
         else if (statKey=='avg_damage') return 'Danos';
-        else if (statKey=='games_count') return 'Jogos';
+        else if (statKey=='games_count') return 'Mapas';
         else if (statKey=='avg_first_kills') return 'Primeira kill';
         else if (statKey=='avg_first_death') return 'Primeira morte';
         else if (statKey=='avg_trade_kills') return 'Trade kills';
@@ -172,8 +169,7 @@ export default function PlayerStatsTable({
                             
                             {currentPlayers.map((player, i) => (
                                 <div 
-                                    onClick={() => setPlayerHover(player.slug)} 
-                                    className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${player.slug === playerHover && 'bg-glass-primary'}`} 
+                                    className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition`} 
                                     key={player.slug}
                                 >
                                     <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>

@@ -281,8 +281,8 @@ export default function PlayersPage() {
                         />
                     </div>
                     <div className='flex text-sm gap-1 flex-col'>
-                        <span className=''>Quantidade mínima de jogos:</span>
-                        <Select value={gameCount} setValue={setGameCount} placeholder='Selecione quantidade de jogos'
+                        <span className=''>Quantidade mínima de mapas:</span>
+                        <Select value={gameCount} setValue={setGameCount} placeholder='Selecione quantidade de mapas'
                             options={[
                                 {title:'5 jogos', value: '5'},
                                 {title:'10 jogos', value: '10'},

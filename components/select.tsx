@@ -77,7 +77,7 @@ const Select: React.FC<SelectProps> = ({
 			<div
 				ref={buttonRef}
 				onClick={toggleDropdown}
-				className={`p-2 min-h-[38px] flex items-center justify-between cursor-pointer transition ${borderClass} ${roundedClass} ${
+				className={`p-2 min-h-[38x] flex items-center justify-between cursor-pointer transition ${borderClass} ${roundedClass} ${
 					value ? "text-default-950" : "text-default-500"
 				} bg-default-100 hover:bg-default-200 border-default-400 hover:border-primary-600 ${
 					isOpen ? "border-primary-600" : ""

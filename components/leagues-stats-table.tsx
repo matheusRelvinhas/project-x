@@ -1,5 +1,3 @@
-'use client';
-
 import Icon from '@/components/icon';
 import { useState, useMemo } from "react";
 import { useAppContext } from "@/context/context";
@@ -29,8 +27,6 @@ export default function LeaguesStatsTable({
 
     const { isMobile } = useAppContext();
 
-    const [leagueHover, setLeagueHover] = useState<string|null>(null);
-
     const formatTimestampToStr = (timestamp: number): string => {
         const date = new Date(timestamp * 1000);
         const day = date.getDate();
@@ -58,7 +54,7 @@ export default function LeaguesStatsTable({
             )}
             <div className={`fadeIn overflow-y-hidden rounded-lg w-full ${leaguesStats.length && 'bg-default-50 border-1 border-default-400'} ${showTeam ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
                 <div className='min-w-max flex flex-col'>{(leaguesStats.length ? currentLeagues.map((l,i)=>
-                    <div key={l.slug+l.id} onClick={()=>setLeagueHover(l.slug)} className={`flex h-[84px] fadeIn border-default-400 px-2 py-[6px] gap-2 items-center transition hover:bg-glass-primary ${l.slug == leagueHover && 'bg-glass-primary'} ${i && 'border-t-1'}`}>
+                    <div key={l.slug+l.id} className={`flex h-[84px] fadeIn border-default-400 px-2 py-[6px] gap-2 items-center transition hover:bg-glass-primary ${i && 'border-t-1'}`}>
                         <LeagueImage slug={l.slug} extension={l.img_extension} className='min-w-[36px] w-[36px] max-h-[36px] mr-2' />
                         <div className={`flex flex-col gap-1 w-full ${isMobile && 'min-w-[180px] max-w-[180px]'}`}>
                             <span className='text-xs text-default-800'>{l.start_timestamp && formatTimestampToStr(l.start_timestamp)}</span>
@@ -102,19 +98,23 @@ export default function LeaguesStatsTable({
                             </div>
                         ) : (
                             <div className='flex flex-col w-full items-center justify-center gap-2'>
-                                <TeamImage
-                                    slug={findPositionTeam(l.tournament_prizes, showTeam)?.teams?.slug ?? null} 
-                                    extension={findPositionTeam(l.tournament_prizes, showTeam)?.teams?.img_extension ?? 'png'} 
-                                    className='w-[24px] h-[24px]' 
-                                />
-                                <span className='text-sm'>{findPositionTeam(l.tournament_prizes, showTeam)?.place}</span>
+                                {findPositionTeam(l.tournament_prizes, showTeam)?.teams?.slug && (
+                                    <>
+                                        <TeamImage
+                                            slug={findPositionTeam(l.tournament_prizes, showTeam)?.teams?.slug ?? null} 
+                                            extension={findPositionTeam(l.tournament_prizes, showTeam)?.teams?.img_extension ?? 'png'} 
+                                            className='w-[24px] h-[24px]' 
+                                        />
+                                        <span className='text-sm font-semibold'>{findPositionTeam(l.tournament_prizes, showTeam)?.place}</span>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
                     ) : (
                     <div className='flex px-2 fadeIn items-center justify-center text-default-800 pb-5 h-[70px] gap-3'>
-                        <Icon name='cuida:alert-outline' className='text-3xl'/>
-                        <span>Nenhum campeonato encontrado</span>
+                        <Icon name='cuida:alert-outline' className='text-2xl' />
+                        <span className='text-sm'>Nenhum jogo encontrado</span>
                     </div>))}
                 </div>
             </div>
