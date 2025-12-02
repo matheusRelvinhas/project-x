@@ -1,6 +1,6 @@
 'use client';
 
-// @ts-expect-error
+// @ts-expect-error not-error
 import Flag from 'react-world-flags';
 import { useParams, useRouter } from 'next/navigation';
 import Icon from '@/components/icon';
@@ -218,7 +218,7 @@ export default function TeamPage() {
             </div>
 
             <div className='flex text-sm'>
-                <Select value={period} setValue={setPeriod} placeholder='Selecione um período'
+                <Select value={period} setValue={(val) => setPeriod(val as Period)} placeholder='Selecione um período'
                     options={[
                         {title: periodText('last_month'), value: 'last_month'},
                         {title: periodText('3_months'), value: '3_months'},
@@ -251,7 +251,7 @@ export default function TeamPage() {
                             filteredMapsStats.length ? Math.round(filteredMapsStats.filter(m => m.winner_team == slug).length * 100 / filteredMapsStats.length) : 0
                         )}
                         <div className='flex text-sm'>
-                            <Select value={mapSelected} setValue={setMapSelected} placeholder='Selecione um mapa'
+                            <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
                                 options={[{title: 'Todos', value: ''}, ...mapsName]}
                             />
                         </div>

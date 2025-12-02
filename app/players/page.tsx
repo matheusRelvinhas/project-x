@@ -8,7 +8,7 @@ import Button from "@/components/button";
 import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import { useAppContext } from '@/context/context';
-// @ts-expect-error
+// @ts-expect-error not-error
 import Flag from 'react-world-flags';
 import Modal from '@/components/modal';
 import Fuse from "fuse.js";
@@ -271,7 +271,7 @@ export default function PlayersPage() {
                 <div className='flex flex-col gap-2'>
                     <div className='flex text-sm gap-1 flex-col'>
                         <span className=''>Período:</span>
-                        <Select value={period} setValue={setPeriod} placeholder='Selecione um período'
+                        <Select value={period} setValue={(val) => setPeriod(val as string)} placeholder='Selecione um período'
                             options={[
                                 {title: periodText('last_month'), value: 'last_month'},
                                 {title: periodText('3_months'), value: '3_months'},
@@ -282,7 +282,7 @@ export default function PlayersPage() {
                     </div>
                     <div className='flex text-sm gap-1 flex-col'>
                         <span className=''>Quantidade mínima de mapas:</span>
-                        <Select value={gameCount} setValue={setGameCount} placeholder='Selecione quantidade de mapas'
+                        <Select value={gameCount} setValue={(val) => setGameCount(val as string)} placeholder='Selecione quantidade de mapas'
                             options={[
                                 {title:'5 jogos', value: '5'},
                                 {title:'10 jogos', value: '10'},

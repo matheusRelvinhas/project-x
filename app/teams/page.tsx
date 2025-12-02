@@ -10,7 +10,7 @@ import { useAppContext } from "@/context/context";
 import Modal from '@/components/modal';
 import Fuse from "fuse.js";
 import SearchSelect from '@/components/searchSelect';
-// @ts-expect-error
+// @ts-expect-error not error
 import Flag from 'react-world-flags';
 import { FilterTag } from '@/components/filter-tag';
 import Ripple from 'react-ripplejs';

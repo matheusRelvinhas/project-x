@@ -4,7 +4,7 @@ import Ripple from 'react-ripplejs';
 import PlayerImage from '@/components/player-image';
 import { useAppContext } from '@/context/context';
 import Pagination from '@/components/pagination';
-// @ts-expect-error
+// @ts-expect-error not error
 import Flag from 'react-world-flags';
 import Button from "@/components/button";
 import { type PlayerStats, type NumericStatKeys } from "@/app/players/page"; 

@@ -170,7 +170,7 @@ export default function LeaguesPage() {
                 <div className='flex flex-col gap-2'>
                     <div className='flex text-sm gap-1 flex-col'>
                         <span>Tier</span>
-                        <Select value={tier} setValue={setTier} placeholder='Selecione um tier'
+                        <Select value={tier} setValue={(val) => setTier(val as 's'|'a'|'s-a')} placeholder='Selecione um tier'
                             options={tierGroup}
                         />
                     </div>

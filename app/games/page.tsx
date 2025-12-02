@@ -301,7 +301,7 @@ export default function GamesPage() {
                         <div className='flex text-sm max-h-[38px]'>
                             {filterStatus=='period' &&
                                 <div className='fadeIn'>
-                                    <Select value={period} setValue={setPeriod} placeholder='Selecione um periodo' options={periodsGroup}/>
+                                    <Select value={period} setValue={(val) => setPeriod(val as string)} placeholder='Selecione um periodo' options={periodsGroup}/>
                                 </div>
                             }
                             {filterStatus=='leagues' && 
