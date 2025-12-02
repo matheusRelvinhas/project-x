@@ -18,7 +18,7 @@ export default function Home() {
     const [n, setN] = useState<string|number|null>(null);
     const [checkbox, setCheckbox] = useState(false);
 
-    const [sValue, setSValue] = useState<string|number|null>('');
+    const [sValue, setSValue] = useState<string>('');
 
     const logout = () => {
         axiosGet(`/login/logout`, (data) => {
@@ -51,7 +51,7 @@ export default function Home() {
             
             <Switch checked={checkbox} onChange={setCheckbox}/>
             
-            <Select value={sValue} setValue={setSValue} 
+            <Select value={sValue} setValue={(val) => setSValue(val as string)} 
                 options={[
                     {title:'Test', value: 'test_1'}, 
                     {title:'Test_2', value: 'test_2'}
