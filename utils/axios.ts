@@ -15,8 +15,6 @@ export const axiosGet = async (
         if (errorCallback) {
             errorCallback(error.response ? error.response.data : error);
         }
-        if(error?.response?.data == 'error_token') {
-            localStorage.setItem("token_access", 'not_user');
-        }
+
     }
 };
