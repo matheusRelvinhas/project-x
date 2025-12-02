@@ -15,6 +15,7 @@ import Fuse from "fuse.js";
 import SearchSelect from '@/components/searchSelect';
 import { FilterTag } from '@/components/filter-tag';
 import PlayerStatsTable from '@/components/player-stats-table';
+import { periodText } from '@/utils/dateUtils';
 
 export interface PlayerStats {
     id: number;
@@ -123,14 +124,6 @@ export interface PlayerStats {
 export type NumericStatKeys = {
     [K in keyof PlayerStats]: PlayerStats[K] extends number | null ? K : never;
 }[keyof PlayerStats];
-
-export const periodText = (period:string) => {
-    if (period =='last_month') return 'Último mês';
-    else if (period =='3_months') return 'Últimos 3 meses';
-    else if (period =='6_months') return 'Últimos 6 meses';
-    else if (period =='12_months') return 'Últimos 12 meses';
-    else return period;
-};
 
 export default function PlayersPage() {
 
@@ -245,7 +238,6 @@ export default function PlayersPage() {
                     </div>
                 </Button>
             </div>
-
             <div className='flex flex-col gap-2 w-full max-w-5xl'>
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
                     <FilterTag items={periodText(period)} />

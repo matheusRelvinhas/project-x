@@ -13,12 +13,13 @@ import { type TeamStats } from "@/app/teams/page";
 import TeamImage from '@/components/team-image';
 import PlayerStatsTable from '@/components/player-stats-table';
 import { type GameStats, type GameScore } from "@/app/games/page";
-import { type PlayerStats, type NumericStatKeys, periodText } from "@/app/players/page"; 
+import { type PlayerStats, type NumericStatKeys } from "@/app/players/page"; 
 import Select from '@/components/select';
 import GamesStatsTable from '@/components/games-stats-table';
 import LeaguesStatsTable from '@/components/leagues-stats-table';
 import { type LeagueStats } from "@/app/leagues/page";
 import MapsStatsTable from '@/components/maps-stats-table';
+import { periodText } from '@/utils/dateUtils';
 
 export const mapsName = [
     {title: 'Dust 2', value: 'de_dust2'},
