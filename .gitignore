@@ -17,7 +17,7 @@
 /.next/
 /out/
 
-/public/img/imgs
+#/public/img/imgs
 
 # production
 /build
