@@ -15,7 +15,7 @@ import Fuse from "fuse.js";
 import SearchSelect from '@/components/searchSelect';
 import { FilterTag } from '@/components/filter-tag';
 import PlayerStatsTable from '@/components/player-stats-table';
-import { periodText } from '@/utils/dateUtils';
+import { periodText } from '@/utils/utils';
 
 export interface PlayerStats {
     id: number;

@@ -3,7 +3,7 @@ import { useMemo, ReactNode } from "react";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';
 import { type GameScore } from "@/app/games/page";
-import { mapsName } from '@/app/team/[slug]/page';
+import { mapsName } from '@/utils/utils';
 
 interface MapsStatsTableProps {
     mapsStats: GameScore[];

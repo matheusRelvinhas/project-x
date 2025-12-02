@@ -19,19 +19,7 @@ import GamesStatsTable from '@/components/games-stats-table';
 import LeaguesStatsTable from '@/components/leagues-stats-table';
 import { type LeagueStats } from "@/app/leagues/page";
 import MapsStatsTable from '@/components/maps-stats-table';
-import { periodText } from '@/utils/dateUtils';
-
-export const mapsName = [
-    {title: 'Dust 2', value: 'de_dust2'},
-    {title: 'Mirage', value: 'de_mirage'},
-    {title: 'Inferno', value: 'de_inferno'},
-    {title: 'Nuke', value: 'de_nuke'},
-    {title: 'Train', value: 'de_train'},
-    {title: 'Overpass', value: 'de_overpass'},
-    {title: 'Ancient', value: 'de_ancient'},
-    {title: 'Anubis', value: 'de_anubis'},
-    {title: 'Vertigo', value: 'de_vertigo'}
-];
+import { mapsName, periodText } from '@/utils/utils';
 
 type Period = "12_months" | "6_months" | "3_months" | "last_month";
 type PeriodPlayerStats = {
