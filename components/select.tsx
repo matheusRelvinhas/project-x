@@ -12,7 +12,7 @@ interface SelectProps {
 	rounded?: boolean;
 	size?: "md" | "lg" | "sm";
 	value: string | JSX.Element;
-	setValue: (value: any) => void;
+	setValue: (value: string | JSX.Element) => void;
 	options: Option[];
 	disabledDefault?: boolean;
 	placeholder?: string;
