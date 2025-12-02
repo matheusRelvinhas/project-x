@@ -34,7 +34,7 @@ export interface TeamStats {
 
 type NumericKeys<T> = {
     [K in keyof T]: T[K] extends number | null ? K : never
-  }[keyof T];
+}[keyof T];
 
 export default function TeamsPage() {
     
@@ -101,7 +101,8 @@ export default function TeamsPage() {
             await axiosGet(
                 `/teams_stats?region_code=${regionCode}`,
                 (data) => {
-                    setTeamsStats(data.teams);
+                    // Otimização: A API retorna { teams: [] }. Garante que 'data' não é undefined.
+                    setTeamsStats(data?.teams || []); 
                 },
                 () => toast.error('Erro inesperado, tente novamente.'), true
             );
@@ -127,9 +128,19 @@ export default function TeamsPage() {
             keys: ['team_name', 'slug', 'country_name'],
             threshold: 0.4,
         });
-        const searchFilter = searchInput ? fuse.search(searchInput).map(result => result.item) : teamsStats;
-        const countryFilter = countrySelect.length ? searchFilter.filter(t => countrySelect.includes(t.country_code)) : searchFilter;
+        
+        // APLICAÇÃO DE DEFESA: Garante que fuse.search() retorna um array antes de mapear
+        const searchResults = fuse.search(searchInput);
+        const searchFilter = searchInput 
+            ? (searchResults || []).map(result => result.item) 
+            : teamsStats;
+            
+        const countryFilter = countrySelect.length 
+            ? searchFilter.filter(t => countrySelect.includes(t.country_code)) 
+            : searchFilter;
+            
         const sortedFilter = [...countryFilter].sort((a, b) => desc ? (b[sortedBy] ?? 0) - (a[sortedBy] ?? 0) : (a[sortedBy] ?? 0) - (b[sortedBy] ?? 0));
+        
         setFilterTeams(sortedFilter);
         setCurrentPage(1);
     }, [teamsStats, searchInput, countrySelect, desc, sortedBy]);
@@ -145,6 +156,14 @@ export default function TeamsPage() {
     const handleNavigation = (href: string) => {
         router.push(href);
     };
+
+    // CORREÇÃO 1: Preparar os itens do FilterTag de forma defensiva
+    const countryTags = (countrySelect || []).map((c) => (
+        <div key={c} className="flex gap-[6px] items-center"> 
+             <Flag code={c} className="h-[14px] w-[28px]" />
+             <span className="text-default-900 text-[10px]">{c}</span>
+        </div>
+    ));
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
@@ -165,15 +184,12 @@ export default function TeamsPage() {
 
             <div className='flex flex-col gap-2 w-full max-w-5xl'>
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
+                    {/* Tag de Região (Passa uma string) */}
                     <FilterTag items={regionGroup.find(r => r.region_code === regionCode)?.title ?? ''} />
-                    <FilterTag
-                        items={countrySelect.map((c) => (
-                            <>
-                                <Flag code={c} className="h-[14px] w-[28px]" />
-                                <span className="text-default-900 text-[10px]">{c}</span>
-                            </>
-                        ))}
-                    />
+                    
+                    {/* Tag de País (Passa um array de elementos) - AGORA USANDO A VARIÁVEL countryTags */}
+                    {/* Se countryTags for um array vazio, o FilterTag deve tratar isso. */}
+                    {countryTags.length > 0 && <FilterTag items={countryTags} />}
                 </div>
 
                 <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
@@ -226,8 +242,8 @@ export default function TeamsPage() {
                                             />
                                         </div>
                                         <div className='flex items-center h-full w-full gap-2'>
-                                            <span className='flex font-bold whitespace-nowrap'>{team.team_name}</span>  
-                                            <span className='flex text-[10px] text-default-800 whitespace-nowrap'>{team.region_code}</span>                             
+                                            <span className='flex font-bold whitespace-nowrap'>{team.team_name}</span> 
+                                            <span className='flex text-[10px] text-default-800 whitespace-nowrap'>{team.region_code}</span>                             
                                         </div>
                                     </div>
                                     <span className="flex fadeIn font-semibold text-[12px] w-full items-center justify-center min-w-[88px]">{team.points}</span>
@@ -246,7 +262,7 @@ export default function TeamsPage() {
                 <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded-lg h-[100px] gap-3'>
                     <Icon name='cuida:alert-outline' className='text-3xl'/>
                     <span>Nenhum time encontrado</span>
-                </div>}    
+                </div>}    
             </div>
             <span className='flex transition text-default-800 text-sm'>Tabela de times classificados pelo rank da Valve.</span>
             <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
