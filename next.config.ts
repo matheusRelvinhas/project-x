@@ -38,14 +38,6 @@ const nextConfig = {
             },
         ];
     },
-    experimental: {
-        optimizeCss: true,
-        turbo: {
-            rules: {
-                "*.ts,*.tsx": ["babel-loader"],
-            }
-        }
-    },
     modularizeImports: {
         lodash: {
             transform: "lodash/{{member}}",
