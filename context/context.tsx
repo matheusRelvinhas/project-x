@@ -42,31 +42,25 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User>(defaultUser);
 
     useEffect(() => {
-        if (!accessToken) {
-            if (localStorage.getItem("token_access")) setAccessToken(localStorage.getItem("token_access"));
-            else {
-                localStorage.setItem("token_access", 'not_user');
-                setAccessToken('not_user');
-            }
-        } else if (localStorage.getItem("token_access") == 'not_user' || accessToken == 'not_user') {
+        const storedToken = localStorage.getItem("token_access");
+        if (!storedToken && !accessToken) return;
+        if (accessToken && accessToken !== storedToken) {
+            localStorage.setItem("token_access", accessToken);
+        };
+        const finalToken = accessToken ?? storedToken;
+        if (!finalToken || finalToken === "not_user") {
             setUser(defaultUser);
             return;
-        } else {
-            const getUser = () => {
-                axiosGet(`/login/check_auth?token=${accessToken}`, (data) => {
-                    setUser( 
-                        {
-                            id: data.user_id,
-                            name: data.name,
-                            email: data.email,
-                            logged: data.logged,
-                            premium: data.premium
-                        }
-                    );
-                });
-            }
-            getUser();
-        }
+        };
+        axiosGet(`/login/check_auth?token=${finalToken}`, (data) => {
+            setUser({
+                id: data.user_id,
+                name: data.name,
+                email: data.email,
+                logged: data.logged,
+                premium: data.premium
+            });
+        });
     }, [accessToken]);
 
     useEffect(() => {
