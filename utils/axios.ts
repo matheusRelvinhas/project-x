@@ -10,7 +10,7 @@ export const axiosGet = async (
 ) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/api${endpoint}${accessToken ? `${endpoint.includes('?') ? '&' : '?'}token=${localStorage.getItem("token_access")}` : ''}`,
-            {timeout: 2000}
+            {timeout: 2000,  headers: {"ngrok-skip-browser-warning": "true"}}
         );
         callback(response.data);
     } catch (error: any) {
