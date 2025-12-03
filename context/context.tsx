@@ -52,7 +52,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             setUser(defaultUser);
             return;
         };
-        axiosGet(`/login/check_auth?token=${finalToken}`, (data) => {
+        axiosGet(`/login/check_auth`, (data) => {
             setUser({
                 id: data.user_id,
                 name: data.name,
@@ -60,7 +60,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 logged: data.logged,
                 premium: data.premium
             });
-        });
+        }, ()=>{}, true);
     }, [accessToken]);
 
     useEffect(() => {

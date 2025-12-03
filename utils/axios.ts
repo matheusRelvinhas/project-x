@@ -9,16 +9,24 @@ export const axiosGet = async (
     accessToken?: boolean,
 ) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api${endpoint}${accessToken ? `${endpoint.includes('?') ? '&' : '?'}token=${localStorage.getItem("token_access")}` : ''}`,
-            {timeout: 2000,  headers: {"ngrok-skip-browser-warning": "true"}}
+        const token = localStorage.getItem("token_access");
+        const headers: any = {
+            "ngrok-skip-browser-warning": "true",
+        };
+        if (accessToken && token && token !== "not_user") {
+            headers["Authorization"] = `Bearer ${token}`;
+        };
+        const response = await axios.get(
+            `${API_BASE_URL}/api${endpoint}`,
+            { timeout: 2000, headers }
         );
         callback(response.data);
     } catch (error: any) {
         if (errorCallback) {
             errorCallback(error.response ? error.response.data : error);
-        }
-        if(error?.response?.data == 'error_token') {
+        };
+        if (error?.response?.data === 'error_token') {
             localStorage.setItem("token_access", 'not_user');
-        }
+        };
     }
 };
