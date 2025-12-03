@@ -111,7 +111,7 @@ export default function TeamsPage() {
         setCountrySelect([]);
         setCurrentPage(1);
         setDesc(true);
-    }, [regionCode, setLoading]);
+    }, [regionCode]);
 
     useEffect(() => {
         const sortedCountries = getUniqueCountries(teamsStats).sort((a, b) => {
@@ -120,7 +120,7 @@ export default function TeamsPage() {
             return nameA.localeCompare(nameB);
         });
         setCountries(sortedCountries);
-    }, [teamsStats, setCountries]);
+    }, [teamsStats]);
 
     useEffect(() => {
         const fuse = new Fuse(teamsStats, {

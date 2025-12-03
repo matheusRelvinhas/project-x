@@ -193,7 +193,7 @@ export default function PlayersPage() {
         };
         getPlayers();
         setCurrentPage(1);
-    }, [period, gameCount, setLoading]);
+    }, [period, gameCount]);
     
     useEffect(() => {
         const sortedCountries = getUniqueCountries(playersStats).sort((a, b) => {

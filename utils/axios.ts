@@ -9,7 +9,9 @@ export const axiosGet = async (
     accessToken?: boolean,
 ) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/api${endpoint}${accessToken ? `${endpoint.includes('?') ? '&' : '?'}token=${localStorage.getItem("token_access")}` : ''}`);
+        const response = await axios.get(`${API_BASE_URL}/api${endpoint}${accessToken ? `${endpoint.includes('?') ? '&' : '?'}token=${localStorage.getItem("token_access")}` : ''}`,
+            {timeout: 2000}
+        );
         callback(response.data);
     } catch (error: any) {
         if (errorCallback) {

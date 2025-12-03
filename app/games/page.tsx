@@ -179,15 +179,15 @@ export default function GamesPage() {
 
     useEffect(() => {
         if (!periods.length) getPeriods();
-    }, [periods, getPeriods]);
+    }, [periods]);
     
     useEffect(() => {
         if (!leagues.length) getLeagues();
-    }, [leagues, getLeagues]);
+    }, [leagues]);
     
     useEffect(() => {
         if (!teams.length) getTeams();
-    }, [teams, getTeams]);
+    }, [teams]);
     
     useEffect(() => {
         getGames(period, league, status, filterStatus);

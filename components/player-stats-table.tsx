@@ -122,7 +122,7 @@ export default function PlayerStatsTable({
     useEffect(() => {
         setSortedBy(showStats[0] as NumericStatKeys);
         setDesc(true);
-    }, [showStats, setDesc, setSortedBy]);
+    }, [showStats]);
 
     useEffect(() => {
         const sortedFilter = [...filterPlayers].sort((a, b) => desc ? (b[sortedBy] ?? 0) - (a[sortedBy] ?? 0) : (a[sortedBy] ?? 0) - (b[sortedBy] ?? 0));

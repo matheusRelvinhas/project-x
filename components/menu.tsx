@@ -41,7 +41,7 @@ const Menu = ({ children }: MenuProps) => {
         } else if (!user.logged && pathname === '/profile') {
             handleNavigation('/login');
         }
-    }, [pathname, user.logged, handleNavigation]);
+    }, [pathname, user.logged]);
 
     const menuButton = (
         <div className='fadeIn fixed top-4 right-4 z-100'>

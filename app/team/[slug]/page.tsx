@@ -89,7 +89,7 @@ export default function TeamPage() {
         if (slug) {
             getTeam(slug);
         };
-    }, [slug, setLoading]);
+    }, [slug]);
 
     const handleBack = () => {
         router.back();

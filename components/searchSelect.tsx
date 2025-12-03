@@ -45,7 +45,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
         if (validValues.length !== value.length) {
             setValue(validValues);
         };
-    }, [options, setValue]);
+    }, [options]);
 
 	useEffect(() => {
 		if (query.trim() === "") {
