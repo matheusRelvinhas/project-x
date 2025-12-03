@@ -60,7 +60,7 @@ export default function Login() {
 
     useEffect(() => {
         setIsConfirmEmail(validateEmail(confirmEmail) && email == confirmEmail);
-    }, [confirmEmail, email]);
+    }, [confirmEmail]);
 
     useEffect(() => {
         setIsPassword(validatePassword(password));
@@ -68,7 +68,7 @@ export default function Login() {
 
     useEffect(() => {
         setIsConfirmPassword(validatePassword(confirmPassword) && password == confirmPassword);
-    }, [confirmPassword, password]);
+    }, [confirmPassword]);
 
     useEffect(() => {
         setIsNewPassword(validatePassword(newPassword));
