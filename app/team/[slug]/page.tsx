@@ -23,9 +23,9 @@ import { mapsName, periodText } from '@/utils/utils';
 
 type Period = "12_months" | "6_months" | "3_months" | "last_month";
 type PeriodPlayerStats = {
-  slug: string;
+    slug: string;
 } & {
-  [key in Period]: PlayerStats;
+    [key in Period]: PlayerStats;
 };
 
 interface WinLoseCount {
@@ -134,7 +134,7 @@ export default function TeamPage() {
             .sort((a, b) => b.start_timestamp - a.start_timestamp);
         setFilteredGamesStats(filteredGames);
         setGamesCurrentPage(1);
-    }, [period, gamesStats, isMobile, now, period]);
+    }, [period, gamesStats, isMobile]);
 
     useEffect(() => {
         if (!mapsStats || mapsStats.length === 0) return;
@@ -147,7 +147,7 @@ export default function TeamPage() {
         };
         setFilteredMapsStats(filteredMaps);
         setMapsCurrentPage(1);
-    }, [period, mapSelected, mapsStats, isMobile, now, period]);
+    }, [period, mapSelected, mapsStats, isMobile]);
 
     useEffect(() => {
         if (!leaguesStats || leaguesStats.length === 0) return;
@@ -157,7 +157,7 @@ export default function TeamPage() {
             .sort((a, b) => b.start_timestamp - a.start_timestamp);
         setFilteredLeaguesStats(filteredLeagues);
         setLeagueCurrentPage(1);
-    }, [period, leaguesStats, isMobile, now, period]);
+    }, [period, leaguesStats, isMobile]);
 
     useEffect(() => {
         if (!playersStats || playersStats.length === 0) return;
