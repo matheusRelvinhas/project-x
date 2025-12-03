@@ -87,8 +87,19 @@ export default function MapsStatsTable({
 
     return (
         <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded-lg w-full h-full'>
-            <div className='flex items-center'>
+            <div className='flex items-center justify-between'>
                 <span className='text-default-800 font-semibold text-sm'>{'Mapas'}</span>
+                {slug && (
+                    <div className='flex justify-start items-center px-1 gap-1'>
+                        {mapsStats.slice(0, 10).map((m, i) => (
+                            <div 
+                                key={i+m.map_name}
+                                className={`h-[12px] w-[12px] fadeIn rounded-full ${(m.winner_team === slug ? 'bg-success' : 'bg-danger')} shadow-md transition duration-150 ease-in-out`}
+                            >
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
             {children}
             {gameMapsScore(currentMaps)}

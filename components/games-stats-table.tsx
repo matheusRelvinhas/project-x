@@ -73,12 +73,23 @@ export default function GamesStatsTable({
     return (
         <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded-lg w-full h-full'>
             {title && (
-                <div className='flex items-center'>
+                <div className='flex items-center justify-between'>
                     {title == 'Ao vivo' && <span className="relative flex h-[10px] w-[10px]">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
                         <span className="relative inline-flex rounded-full h-[10px] w-[10px] bg-danger"></span>
                     </span>}
                     <span className='text-default-800 font-semibold text-sm'>{title}</span>
+                    {slug && (
+                        <div className='flex justify-start items-center px-1 gap-1'>
+                            {gamesStats.slice(0, 5).map((g, i) => (
+                                <div 
+                                    key={i+g.slug+g.id}
+                                    className={`h-[12px] w-[12px] fadeIn rounded-full ${(g.winner_team_slug === slug ? 'bg-success' : 'bg-danger')} shadow-md transition duration-150 ease-in-out`}
+                                >
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
             {children}
