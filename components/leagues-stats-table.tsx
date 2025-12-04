@@ -1,5 +1,5 @@
 import Icon from '@/components/icon';
-import { useMemo } from "react";
+import { useMemo, ReactNode } from "react";
 import { useAppContext } from "@/context/context";
 import { FilterTag } from '@/components/filter-tag';
 import LeagueImage from '@/components/league-image';
@@ -9,6 +9,7 @@ import Pagination from './pagination';
 
 interface LeaguesStatsTableProps {
     leaguesStats: LeagueStats[];
+    children?: ReactNode|null;
     currentPage: number;
     onPageChange: (n:number) => void;
     title?: string|null;
@@ -18,6 +19,7 @@ interface LeaguesStatsTableProps {
 
 export default function LeaguesStatsTable({
     leaguesStats,
+    children,
     currentPage,
     onPageChange,
     title = null,
@@ -52,6 +54,7 @@ export default function LeaguesStatsTable({
             {title && (
                 <span className='text-default-800 font-semibold text-sm'>{title}</span>
             )}
+            {children}
             <div className={`fadeIn overflow-y-hidden rounded-lg w-full ${leaguesStats.length && 'bg-default-50 border-1 border-default-400'} ${showTeam ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
                 <div className='min-w-max flex flex-col'>{(leaguesStats.length ? currentLeagues.map((l,i)=>
                     <div key={l.slug+l.id} className={`flex h-[84px] fadeIn border-default-400 px-2 py-[6px] gap-2 items-center transition hover:bg-glass-primary ${i && 'border-t-1'}`}>

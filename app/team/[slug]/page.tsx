@@ -249,7 +249,20 @@ export default function TeamPage() {
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
                     <LeaguesStatsTable leaguesStats={filteredLeaguesStats} title='Campeonatos' showTeam={slug} 
                         currentPage={leagueCurrentPage} onPageChange={setLeagueCurrentPage} 
-                        itemsPerPage={ 3 + (isMobile ? 0 : 1)} />
+                        itemsPerPage={ 3 + (isMobile ? 0 : 1)} >
+                        <div className='grid grid-cols-2 gap-1 w-full justify-center'>
+                            {filteredLeaguesStats?.filter((league) => league.tournament_prizes?.some((prize) => 
+                                prize.place === "1st" && prize.teams.slug === slug
+                            )).map((l, i) => (
+                                <div key={`${i}${l.slug}`} className='flex fadeIn gap-1 bg-default-100 w-full items-center justify-between px-2 rounded py-[2px]'>
+                                    <span className='text-[11px] flex w-full text-default-800'>
+                                        {l.name.length > 36 ? `${l.name.slice(0, 36)}...` : l.name}
+                                    </span>
+                                    <Icon className="text-sm text-default-900" name="mdi:crown" />
+                                </div>
+                            ))}
+                        </div>
+                    </LeaguesStatsTable>
                 </div>
             </div>
             

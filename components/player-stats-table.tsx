@@ -8,7 +8,7 @@ import Pagination from '@/components/pagination';
 import Flag from 'react-world-flags';
 import Button from "@/components/button";
 import { type PlayerStats, type NumericStatKeys } from "@/app/players/page"; 
-
+import { useRouter } from 'next/navigation';
 
 interface PlayerStatsTableProps {
     filterPlayers: PlayerStats[];
@@ -42,6 +42,11 @@ export default function PlayerStatsTable({
         const end = start + ITEMS_PER_PAGE;
         return filteredPlayers.slice(start, end);
     }, [filteredPlayers, currentPage]);
+
+    const router = useRouter();
+    const handleNavigation = (href: string) => {
+        router.push(href);
+    };
 
     const [showStats, setShowStats] = useState<string[]>([]);
     const statsGroup = [
@@ -172,7 +177,8 @@ export default function PlayerStatsTable({
                                     className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition`} 
                                     key={player.slug}
                                 >
-                                    <div className={`flex items-center gap-3 py-[6px] w-full pl-3 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>
+                                    <div className={`flex items-center transition cursor-pointer gap-3 py-[6px] w-full pl-3 min-w-[200px] hover:text-primary-600 ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
+                                        onClick={()=>handleNavigation(`/player/${player.slug}`)}>
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
                                                 <PlayerImage slug={player.slug} extension={player.img_extension} className='h-[35px] min-w-[30px]' />

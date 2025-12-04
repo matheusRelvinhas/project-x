@@ -276,11 +276,11 @@ export default function PlayersPage() {
                         <span className=''>Quantidade mínima de mapas:</span>
                         <Select value={gameCount} setValue={(val) => setGameCount(val as string)} placeholder='Selecione quantidade de mapas'
                             options={[
-                                {title:'5 jogos', value: '5'},
-                                {title:'10 jogos', value: '10'},
-                                {title:'25 jogos', value: '25'},
-                                {title:'50 jogos', value: '50'},
-                                {title:'100 jogos', value: '100'},
+                                {title:'5 mapas', value: '5'},
+                                {title:'10 mapas', value: '10'},
+                                {title:'25 mapas', value: '25'},
+                                {title:'50 mapas', value: '50'},
+                                {title:'100 mapas', value: '100'},
                             ]}
                         />
                     </div>

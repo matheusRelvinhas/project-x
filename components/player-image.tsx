@@ -32,16 +32,13 @@ const PlayerImage = ({
 
 	return (
 		<div
-			className={`flex items-center p-[3px] ${className}`}
-			style={{
-				filter: "drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)",
-			}}
+			className={`relative bg-default-200 rounded-4xl shadow-sm overflow-hidden flex items-center p-[3px] flex w-full h-full`}
 		>
 			{isLoaded && (
 				<img
 					src={imageUrl}
 					alt={slug || "player_image"}
-					className={`${className} fadeIn`}
+					className={`${className} absolute scale-250 right-[1px] top-[27px] fadeIn`}
 					onError={() => setHasError(true)}
 					onLoad={() => setIsLoaded(true)}
 					loading="lazy"
