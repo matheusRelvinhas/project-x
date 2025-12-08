@@ -96,7 +96,7 @@ export default function LeaguesPage() {
                 if (status=='upcoming') {setUpcomingLeagues(data.leagues);return};
                 setLeaguesStats(data.leagues);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #9'), true
         );
         setLoading(false);
     };
@@ -155,8 +155,8 @@ export default function LeaguesPage() {
                     <FilterTag items={tierGroup.find(t => t.value === tier)?.title ?? ''} />
                     <FilterTag items={years} />   
                 </div>
-                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
-                    <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
+                    <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                         {buttonGroup('finished')}
                         {buttonGroup('current')} 
                     </div>

@@ -21,6 +21,7 @@ export interface PlayerStats {
     id: number;
     slug: string | null;
     nickname: string;
+    period: number;
     first_name: string;
     last_name: string;
     team_slug: string|null;
@@ -187,7 +188,7 @@ export default function PlayersPage() {
                 (data) => {
                     setPlayersStats(data.players);
                 },
-                () => toast.error('Erro inesperado, tente novamente.'), true
+                () => toast.error('Erro inesperado, tente novamente. #11'), true
             );
             setLoading(false);
         };

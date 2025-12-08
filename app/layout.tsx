@@ -14,7 +14,7 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const classFull = 'transition bg-default-100 text-default-950';
+    const classFull = 'transition flex min-h-full w-full bg-default-100 text-default-950';
     return (
         <html lang="pt" className={classFull}>
             <AppProvider>

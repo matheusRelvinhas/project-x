@@ -19,6 +19,7 @@ interface PlayerStatsTableProps {
     currentPage: number;
     onPageChange: (page: number) => void;
     title?: string|null;
+    periods?: boolean;
 }
 
 export default function PlayerStatsTable({
@@ -29,7 +30,8 @@ export default function PlayerStatsTable({
     setDesc,
     currentPage,
     onPageChange,
-    title=null
+    title=null,
+    periods=false
 }: PlayerStatsTableProps) {
     
     const ITEMS_PER_PAGE = 12;
@@ -60,6 +62,13 @@ export default function PlayerStatsTable({
         { title: 'Multikills', stats: ['multikills_vs_5', 'multikills_vs_4', 'multikills_vs_3', 'multikills_vs_2']},
         { title: 'Clutches', stats: ['clutches_vs_5', 'clutches_vs_4', 'clutches_vs_3', 'clutches_vs_2', 'clutches_vs_1']},
     ];
+    if (periods) {
+        statsGroup.forEach(group => {
+            group.stats.unshift("period");
+        });
+    };
+
+    
     if (!showStats.length) setShowStats(statsGroup[0].stats);
 
     const selectStat = (stat:string) => {
@@ -72,6 +81,7 @@ export default function PlayerStatsTable({
 
     const statText = (statKey:string) => {
         if (statKey=='avg_kills') return 'Kills';
+        else if (statKey=='period') return 'Período';
         else if (statKey=='avg_death') return 'Morte';
         else if (statKey=='avg_damage') return 'Danos';
         else if (statKey=='games_count') return 'Mapas';
@@ -115,18 +125,28 @@ export default function PlayerStatsTable({
         else return statKey;
     };
 
+    const periodText = (statValue:number) => {
+        if (statValue==1) return 'Último mês';
+        else if (statValue==3) return 'Últimos 3 meses';
+        else if (statValue==6) return 'Últimos 6 meses';
+        else if (statValue==12) return 'Últimos 12 meses';
+        else return statValue;
+    };
+
     const formatStat = (statKey:string, statValue:number) => {
         if (['games_count', 'multikills_vs_5', 'multikills_vs_4', 'multikills_vs_3', 'multikills_vs_2', 'clutches_vs_5', 'clutches_vs_4', 'clutches_vs_3', 'clutches_vs_2', 'clutches_vs_1'].includes(statKey)) return statValue.toFixed(0);
         else if (['avg_first_kills', 'avg_first_death', 'avg_trade_kills', 'avg_assists', 'avg_flash_assists', 'avg_ak47_kills', 'avg_awp_kills', 'avg_m4a1_kills', 'avg_desert_eagle_kills', 'avg_glock_kills', 'avg_usp_s_kills'].includes(statKey)) return statValue.toFixed(3);
         else if (['avg_headshot_kills_accuracy', 'avg_shots_accuracy'].includes(statKey)) return `${(statValue*100).toFixed(1)}%`;
         else if (['avg_flash_duration'].includes(statKey)) return (statValue/1000000000).toFixed(2);
         else if (['avg_kill_cost', 'avg_hundred_damage_cost', 'avg_saved'].includes(statKey)) return `${(statValue/1000).toFixed(2)}K`;
+        else if (['period'].includes(statKey)) return periodText(Number(statValue));
         else return statValue.toFixed(2);
     };
 
     useEffect(() => {
         setSortedBy(showStats[0] as NumericStatKeys);
-        setDesc(true);
+        if (!periods) setDesc(true);
+        else setDesc(false)
     }, [showStats]);
 
     useEffect(() => {
@@ -136,14 +156,14 @@ export default function PlayerStatsTable({
 
     return (
         <div className='flex flex-col gap-2 w-full max-w-5xl'>
-            <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
-                <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
+            <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
+                <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                     {statsGroup.map(g => (
                         <Button
                             key={g.title}
                             onClick={() => setShowStats(g.stats)}
                             padding='px-[6px] py-0'
-                            typeButton={g.stats.includes(showStats[0]) ? 'primary' : 'default'}
+                            typeButton={g.stats.includes(showStats[1]) ? 'primary' : 'default'}
                         >
                             <div className='flex gap-2 items-center'>
                                 <span className='text-sm'>{g.title}</span>
@@ -154,16 +174,16 @@ export default function PlayerStatsTable({
             </div>
 
             {currentPlayers.length ? (
-                <div className='flex flex-col gap-2 p-2 bg-default-200 rounded-lg'>
+                <div className='flex flex-col gap-2 p-2 bg-default-200 rounded'>
                     {title && (
                         <div className='flex gap-2 items-center'>
                             <span className='text-default-800 font-semibold text-sm'>{title}</span>
                         </div>
                     )}
-                    <div className='overflow-x-auto fadeIn bg-default-50 border-1 border-default-400 rounded-lg w-full'>
+                    <div className='overflow-x-auto fadeIn bg-default-50 rounded w-full'>
                         <div className='min-w-max'>
-                            <div className='flex text-xs font-bold bg-default-100 text-default-800 items-center select-none rounded-t-lg'>
-                                <span className={`flex w-full pl-3 py-2 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>Jogador</span>
+                            <div className='flex text-xs font-bold bg-default-100 text-default-800 items-center select-none border-b border-default-200'>
+                                {!periods && <span className={`flex w-full pl-3 py-2 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>{'Jogador'}</span>}
                                 {showStats.map(s => (
                                     <Ripple key={s} onClick={() => selectStat(s)} className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px] cursor-pointer ${sortedBy === s && 'text-default-1000'}`}>
                                         <span className='flex'>{statText(s)}</span>
@@ -174,36 +194,38 @@ export default function PlayerStatsTable({
                             
                             {currentPlayers.map((player, i) => (
                                 <div 
-                                    className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition`} 
-                                    key={player.slug}
-                                >
-                                    <div className={`flex items-center transition cursor-pointer gap-3 py-[6px] w-full pl-3 min-w-[200px] hover:text-primary-600 ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
-                                        onClick={()=>handleNavigation(`/player/${player.slug}`)}>
-                                        <div className='relative'>
-                                            <div className='flex h-[35px] w-[35px] items-center'>
-                                                <PlayerImage slug={player.slug} extension={player.img_extension} className='h-[35px] min-w-[30px]' />
+                                    className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary transition ${i ? 'short-top-border' : ''}`} 
+                                    key={player.slug ? player.slug+i : i}
+                                >   
+                                    {!periods && (
+                                        <div className={`flex items-center transition cursor-pointer gap-3 py-[6px] w-full pl-3 min-w-[200px] hover:text-primary-600 ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
+                                            onClick={()=>handleNavigation(`/player/${player.slug}`)}>
+                                            <div className='relative'>
+                                                <div className='flex h-[35px] w-[35px] items-center'>
+                                                    <PlayerImage slug={player.slug} extension={player.img_extension} className='h-[35px] min-w-[30px]' />
+                                                </div>
+                                                <Flag code={player.country_code}
+                                                    style={{
+                                                        width: '14px',
+                                                        position: 'absolute',
+                                                        bottom: '-2px',
+                                                        right: '-4px',
+                                                        borderRadius: '2px',
+                                                        filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
+                                                    }}
+                                                />
                                             </div>
-                                            <Flag code={player.country_code}
-                                                style={{
-                                                    width: '14px',
-                                                    position: 'absolute',
-                                                    bottom: '-2px',
-                                                    right: '-4px',
-                                                    borderRadius: '2px',
-                                                    filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
-                                                }}
-                                            />
-                                        </div>
-                                        <div className='flex h-full w-full flex-col'>
-                                            <div className='flex gap-2 items-center'>
-                                                <span className='flex font-bold whitespace-nowrap'>{player.nickname}</span>
-                                                <span className='flex w-full text-[10px] text-default-800 whitespace-nowrap overflow-hidden'>{player.team_name && player.team_name}</span>
+                                            <div className='flex h-full w-full flex-col'>
+                                                <div className='flex gap-2 items-center'>
+                                                    <span className='flex font-bold whitespace-nowrap'>{player.nickname}</span>
+                                                    <span className='flex w-full text-[10px] text-default-800 whitespace-nowrap overflow-hidden'>{player.team_name && player.team_name}</span>
+                                                </div>
+                                                <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${player.first_name} ${player.last_name}`}</span>
                                             </div>
-                                            <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${player.first_name} ${player.last_name}`}</span>
                                         </div>
-                                    </div>
+                                    )}
                                     {showStats.map((s) => (
-                                        <span key={i + s} className="flex fadeIn font-semibold text-[12px] w-full items-center justify-center min-w-[88px]">
+                                        <span key={i + s} className="flex fadeIn font-semibold text-center text-[12px] w-full items-center h-[40px] justify-center min-w-[88px]">
                                             {(player[s as keyof PlayerStats] !== undefined && player[s as keyof PlayerStats] !== null)
                                                 ? formatStat(s, (player[s as keyof PlayerStats] as number)) : '-'
                                             }
@@ -222,7 +244,7 @@ export default function PlayerStatsTable({
                     )}
                 </div>
             ) : (
-                <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded-lg h-[100px] gap-3'>
+                <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded h-[100px] gap-3'>
                     <Icon name='cuida:alert-outline' className='text-2xl' />
                     <span className='text-sm'>Nenhum jogador encontrado</span>
                 </div>

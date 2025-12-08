@@ -163,7 +163,7 @@ export default function Login() {
 
     return (
         <div className="flex h-full w-full flex-row justify-center items-center fadeIn select-none">
-            <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded-lg">
+            <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded">
                 <span className="text-lg font-bold text-default-950">{isRegister ? 'Registrar' : forgotPassword  ? 'Recuperar senha' : recoverPassword ? 'Recuperar senha' : 'Login'}</span>
                 <form className="flex gap-3 flex-col mt-4" onSubmit={(e) => {e.preventDefault(); handleSubmit('default')}}>
                     {!recoverPassword && (

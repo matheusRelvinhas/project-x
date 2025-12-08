@@ -80,7 +80,7 @@ export default function GamesPage() {
     const [currentGamesStats, setCurrentGamesStats] = useState<GameStats[]>([]);
     const [filterGamesStats, setFilterGamesStats] = useState<GameStats[]>([]);
     const [searchInput, setSearchInput] = useState('');
-    const [status, setStatus] = useState<'finished'|'current'>('current');
+    const [status, setStatus] = useState<'finished'|'upcoming'>('upcoming');
     const [filterStatus, setFilterStatus] = useState<'period'|'leagues'>('period');
     const [period, setPeriod] = useState<string>('last_7');
     const [periods, setPeriods] = useState<string[]>([]);
@@ -112,7 +112,7 @@ export default function GamesPage() {
         ...periods.map(p => ({ title: formatDate(p), value: p }))
     ];
 
-    const getGames = async (period:string, league:string[], status:'finished'|'current', filterStatus:'period'|'leagues') => {
+    const getGames = async (period:string, league:string[], status:'finished'|'upcoming', filterStatus:'period'|'leagues') => {
         setLoading(true);
         await axiosGet(
             `/games_stats${status=='finished' ? `${filterStatus=='period' ? `?period=${period}` : `?league=${league.length?`${league[0]}`:'not_league'}` }` : '/upcoming'}`,
@@ -122,7 +122,7 @@ export default function GamesPage() {
                     : [...data.games].sort((a, b) => a.start_timestamp - b.start_timestamp)
                 setGamesStats(sortedGames);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #1'), true
         );
         setLoading(false);
     };
@@ -134,7 +134,7 @@ export default function GamesPage() {
             (data) => {
                 setCurrentGamesStats(data.games);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #2'), true
         );
         setLoading(false);
     };
@@ -146,7 +146,7 @@ export default function GamesPage() {
             (data) => {
                 setPeriods(data);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #3'), true
         );
         setLoading(false);
     };
@@ -159,7 +159,7 @@ export default function GamesPage() {
                 const sortedData = data.sort((a:Leagues, b:Leagues) => b.start_timestamp - a.start_timestamp);
                 setLeagues(sortedData);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #4'), true
         );
         setLoading(false);
     };
@@ -172,7 +172,7 @@ export default function GamesPage() {
                 const sortedData = data.sort((a: Teams, b: Teams) => a.slug.localeCompare(b.slug));
                 setTeams(sortedData);
             },
-            () => toast.error('Erro inesperado, tente novamente.'), true
+            () => toast.error('Erro inesperado, tente novamente. #5'), true
         );
         setLoading(false);
     };
@@ -215,7 +215,7 @@ export default function GamesPage() {
         setFilterGamesStats(setFilter(gamesStats));
     }, [gamesStats, searchInput, team]);
 
-    const buttonGroup = (statusValue:'current'|'finished') => {
+    const buttonGroup = (statusValue:'upcoming'|'finished') => {
         return (
             <Button
                 onClick={() => setStatus(statusValue)}
@@ -223,7 +223,7 @@ export default function GamesPage() {
                 typeButton={status == statusValue ? 'primary' : 'default'}
             >
                 <div className='flex gap-2 items-center'>
-                    <span className='text-sm'>{statusValue=='current' ? 'Atual' : statusValue=='finished' && 'Finalizado'}</span>
+                    <span className='text-sm'>{statusValue=='upcoming' ? 'Futuro' : statusValue=='finished' && 'Finalizado'}</span>
                 </div>
             </Button>
         );
@@ -253,7 +253,7 @@ export default function GamesPage() {
                 <Input placeholder='Busca avançada' value={searchInput} onValueChange={(val) => setSearchInput(val as string)}
                     startContent={<Icon name='mingcute:search-ai-line' className='text-lg'/>}
                 />
-                <Button onClick={() => status=='current' ? null :  setIsModalFilterOpen(true)} isDisabled={status=='current'}>
+                <Button onClick={() => status=='upcoming' ? null :  setIsModalFilterOpen(true)} isDisabled={status=='upcoming'}>
                     <div className='flex gap-2'>
                         <Icon name='mdi:filter-cog-outline' className='text-lg'/>
                         <span>Filtros</span>
@@ -265,13 +265,13 @@ export default function GamesPage() {
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
                     {status=='finished' && <FilterTag items={filterStatus=='period' ? formatDate(period) : leagues.find(l => league.includes(l.slug))?.name ?? 'Ligas'} />}
                     {(status=='finished' && team.length) ? <FilterTag items={teams.find(t => team.includes(t.slug))?.name ?? ''} /> : null}
-                    {status=='current' && <FilterTag items={'Atual'} />}
+                    {status=='upcoming' && <FilterTag items={'Futuros'} />}
                 </div>
 
-                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
-                    <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
+                    <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                         {buttonGroup('finished')}
-                        {buttonGroup('current')} 
+                        {buttonGroup('upcoming')} 
                     </div>
                 </div>
 
@@ -292,8 +292,8 @@ export default function GamesPage() {
             <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
                 <div className='flex flex-col gap-2'>
                     <div className='flex flex-col gap-2'>
-                        <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
-                            <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
+                        <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
+                            <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                                 {buttonFilter('period')}
                                 {buttonFilter('leagues')} 
                             </div>

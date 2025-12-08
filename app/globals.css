@@ -44,6 +44,8 @@ body.modal-open {
         --danger-hover :#cf1322;
         --success: #389e0d;
         --seccess-hover: #237804;
+
+        --logo-border: #2c2c2c;
     }
 
     [data-theme="dark"] {
@@ -80,6 +82,8 @@ body.modal-open {
         --danger-hover: #ffa39e;
         --success: #b7eb8f;
         --seccess-hover: #d9f7be;
+
+        --logo-border: #52525280;
     }
 }
 
@@ -527,6 +531,18 @@ input:placeholder-shown {
     animation: float 30s ease-in-out infinite;
 }
 
+.short-top-border {
+    position: relative;
+}
+
+.short-top-border::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 4px;
+    right: 4px;
+    border-top: 1px solid var(--default-200);
+}
 
 html, body {
     overflow-x: hidden;

@@ -41,7 +41,7 @@ interface TeamWinLoseStats {
     "last_month": WinLoseCount;
 };
 
-export default function TeamPage() {
+export default function Team() {
     const { isMobile, setLoading } = useAppContext();
     const router = useRouter();
     const params = useParams();
@@ -57,7 +57,6 @@ export default function TeamPage() {
     const [gamesStats, setGamesStats] = useState<GameStats[]>([]);
     const [gamesCurrentPage, setGamesCurrentPage] = useState(1);
     const [filteredGamesStats, setFilteredGamesStats] = useState<GameStats[]>([]);
-    const [wlGames, setWlGames] = useState<TeamWinLoseStats|null>(null);
 
     const [mapsStats, setMapsStats] = useState<GameScore[]>([]);
     const [mapsCurrentPage, setMapsCurrentPage] = useState(1);
@@ -67,6 +66,8 @@ export default function TeamPage() {
     const [desc, setDesc] = useState<boolean>(true);
     const [period, setPeriod] = useState<Period>('6_months');
     const [mapSelected, setMapSelected] = useState<string>('');
+    const [bestOfSelected, setBestOfSelected] = useState<string>('');
+    const [ctTrSelected, setCtTrSelected] = useState<string>('');
 
     useEffect(() => {
         const getTeam = async (slug:string|string[]) => {
@@ -76,13 +77,12 @@ export default function TeamPage() {
                 (data) => {
                     setTeamInfo(data.team);
                     setGamesStats(data.games);
-                    setWlGames(data.wl_games);
                     setMapsStats(data.maps);
                     setPlayersStats(data.players);
                     setLeaguesStats(data.leagues);
                     console.log(data);
                 },
-                () => toast.error('Erro inesperado, tente novamente.'), true
+                () => toast.error('Erro inesperado, tente novamente. #12'), true
             );
             setLoading(false);
         };
@@ -129,12 +129,15 @@ export default function TeamPage() {
     useEffect(() => {
         if (!gamesStats || gamesStats.length === 0) return;
         const minTimestamp = now - periodToSeconds[period];
-        const filteredGames = gamesStats
+        let filteredGames = gamesStats
             .filter(game => game.start_timestamp >= minTimestamp)
             .sort((a, b) => b.start_timestamp - a.start_timestamp);
+        if (bestOfSelected) {
+            filteredGames = filteredGames.filter(game => game.bo_type == Number(bestOfSelected))
+        }
         setFilteredGamesStats(filteredGames);
         setGamesCurrentPage(1);
-    }, [period, gamesStats, isMobile]);
+    }, [period, gamesStats, bestOfSelected, isMobile]);
 
     useEffect(() => {
         if (!mapsStats || mapsStats.length === 0) return;
@@ -221,28 +224,43 @@ export default function TeamPage() {
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
                     <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'} slug={slug}
                         onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 3 + (isMobile ? 0 : 1)} >
-                        {wlGames && performanceGrid(
-                                wlGames[period]?.win + wlGames[period]?.lose,
-                                wlGames[period]?.win,
-                                wlGames[period]?.lose,
-                                wlGames[period]?.performance
+                        {performanceGrid(
+                                filteredGamesStats.length, 
+                                filteredGamesStats.filter(m=>m.winner_team_slug==slug).length, 
+                                filteredGamesStats.filter(m=>m.winner_team_slug!=slug).length, 
+                                filteredGamesStats.length ? Math.round(filteredGamesStats.filter(m => m.winner_team_slug == slug).length * 100 / filteredGamesStats.length) : 0
                             )
                         }
+                        <div className='flex text-sm max-w-[50%]'>
+                            <Select value={bestOfSelected} setValue={(val) => setBestOfSelected(val as string)} placeholder='Selecione'
+                                options={[
+                                    {title: 'Todos', value: ''}, {title: 'Bo1', value: '1'}, 
+                                    {title: 'Bo3', value: '3'}, {title: 'Bo5', value: '5'}
+                                ]}
+                            />
+                        </div>
                     </GamesStatsTable>
                 </div>
                 <div className={`flex max-w-sm ${isMobile ? 'w-full' : 'w-1/2'}`}>
                     <MapsStatsTable mapsStats={filteredMapsStats} currentPage={mapsCurrentPage} onPageChange={setMapsCurrentPage}
-                        itemsPerPage={ 3 + (isMobile ? 0 : 1)} slug={slug}>
+                        itemsPerPage={ 4 + (isMobile ? 0 : 1)} slug={slug}>
                         {performanceGrid(
                             filteredMapsStats.length, 
                             filteredMapsStats.filter(m=>m.winner_team==slug).length, 
                             filteredMapsStats.filter(m=>m.winner_team!=slug).length, 
                             filteredMapsStats.length ? Math.round(filteredMapsStats.filter(m => m.winner_team == slug).length * 100 / filteredMapsStats.length) : 0
                         )}
-                        <div className='flex text-sm'>
-                            <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
-                                options={[{title: 'Todos', value: ''}, ...mapsName]}
-                            />
+                        <div className='flex items-center justify-between w-full gap-1'>
+                            <div className='flex text-sm max-w-[calc(50%-2px)]'>
+                                <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
+                                    options={[{title: 'Todos', value: ''}, ...mapsName]}
+                                />
+                            </div>
+                            <div className='flex text-sm max-w-[calc(50%-2px)]'>
+                                <Select value={ctTrSelected} setValue={(val) => setCtTrSelected(val as string)} placeholder='Selecione um mapa'
+                                    options={[{title: 'CT e TR', value: ''}, {title: 'Counter-terrorist', value: 'ct'}, {title: 'Terrorist', value: 'tr'}]}
+                                />
+                            </div>
                         </div>
                     </MapsStatsTable>
                 </div>

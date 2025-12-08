@@ -41,7 +41,7 @@ export default function MapsStatsTable({
     const gameMapsScore = (gamesScore: GameScore[]) => {
         return <div className='flex flex-col w-full h-full gap-1'>
             {gamesScore.length ? gamesScore.map((g, i) =>
-                <div className='flex relative overflow-x-auto overflow-y-hidden justify-between bg-default-50 rounded-lg px-2 py-1 h-[64px] transition border-1 border-default-400 hover:bg-glass-primary gap-1' key={i + g.map_name}>
+                <div className='flex relative overflow-x-auto overflow-y-hidden justify-between bg-default-50 rounded px-2 py-1 h-[64px] transition border-1 border-default-400 hover:bg-glass-primary gap-1' key={i + g.map_name}>
                     <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                         <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
                             {mapsName.find(m => m.value === g.map_name)?.title}
@@ -55,7 +55,7 @@ export default function MapsStatsTable({
                             <span className='text-default-800 text-xs'>{formatTimestamp(g.start_timestamp)}</span>
                         </div>
                         <div className='flex items-center pt-1 pe-2 border-e-1 border-default-400'>
-                            <img className="h-[30px] min-w-[60px] border-1 border-default-400 rounded-lg" src={`/img/maps/${g.map_name}.jpg`} />
+                            <img className="h-[30px] min-w-[60px] border-1 border-default-400 rounded" src={`/img/maps/${g.map_name}.jpg`} />
                         </div>
                     </div>
 
@@ -63,14 +63,14 @@ export default function MapsStatsTable({
                         <div className='flex gap-2 items-center'>
                             <TeamImage slug={g.team1_slug} extension={g.team1_img_extension} className='flex w-full h-[16px] max-w-[16px]' />
                             <span className='text-default-900 text-xs w-full max-w-[130px]'>{g.team1_name}</span>
-                            <span className={`rounded-lg transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team1_slug ? 'text-success' : 'text-danger'}`}>
+                            <span className={`rounded transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team1_slug ? 'text-success' : 'text-danger'}`}>
                                 {g.winner_team==g.team1_slug ? g.winner_score : g.loser_score}
                             </span>
                         </div>
                         <div className='flex gap-2 items-center'>
                             <TeamImage slug={g.team2_slug} extension={g.team2_img_extension} className='flex w-full h-[16px] max-w-[16px]' />
                             <span className='text-default-900 text-xs w-full max-w-[130px]'>{g.team2_name}</span>
-                            <span className={`rounded-lg transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team2_slug ? 'text-success' : 'text-danger'}`}>
+                            <span className={`rounded transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team2_slug ? 'text-success' : 'text-danger'}`}>
                                 {g.winner_team==g.team2_slug ? g.winner_score : g.loser_score}
                             </span>
                         </div>
@@ -86,7 +86,7 @@ export default function MapsStatsTable({
     };
 
     return (
-        <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded-lg w-full h-full'>
+        <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded w-full h-full'>
             <div className='flex items-center justify-between'>
                 <span className='text-default-800 font-semibold text-sm'>{'Mapas'}</span>
                 {slug && (

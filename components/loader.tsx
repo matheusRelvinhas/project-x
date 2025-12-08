@@ -7,7 +7,7 @@ const Loader: React.FC = () => {
     if (!loading) return null;
 
     return (
-        <div className="fixed z-[9999] bg-glass-effect m-4 flex  justify-center p-4 rounded-lg items-start pt-4">
+        <div className="fixed z-[9999] bg-glass-effect m-4 flex justify-center p-4 rounded items-start pt-4">
             <div className="loader" />
         </div>
     );

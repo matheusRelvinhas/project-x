@@ -103,7 +103,7 @@ export default function TeamsPage() {
                 (data) => {
                     setTeamsStats(data.teams);
                 },
-                () => toast.error('Erro inesperado, tente novamente.'), true
+                () => toast.error('Erro inesperado, tente novamente. #13'), true
             );
             setLoading(false);
         };
@@ -176,8 +176,8 @@ export default function TeamsPage() {
                     />
                 </div>
 
-                <div className="w-full overflow-x-auto overflow-y-hidden rounded-lg min-h-[40px]">
-                    <div className="flex w-max py-1 px-2 rounded-lg gap-2 bg-default-200 text-default-700">
+                <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
+                    <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                         {regionGroup.map(g => (
                             <Button
                                 key={g.title}
@@ -193,10 +193,10 @@ export default function TeamsPage() {
                     </div>
                 </div>
 
-                {currentTeams.length ? <div className='flex flex-col gap-2 p-2 bg-default-200 rounded-lg'>
-                    <div className='overflow-x-auto fadeIn bg-default-50 border-1 border-default-400 rounded-lg w-full'>
+                {currentTeams.length ? <div className='flex flex-col gap-2 p-2 bg-default-200 rounded'>
+                    <div className='overflow-x-auto fadeIn bg-default-50 rounded w-full'>
                         <div className='min-w-max'>
-                            <div className='flex text-xs font-bold bg-default-100 text-default-800 items-center select-none rounded-t-lg'>
+                            <div className='flex text-xs font-bold bg-default-100 text-default-800 items-center border-b border-default-200 select-none'>
                                 <span className={`flex w-full pl-3 py-2 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>Time</span>
                                 <Ripple onClick={()=>selectStat('points')} className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px] cursor-pointer ${sortedBy=='points' && 'text-default-1000'}`}>
                                     <span className='flex'>Pontuação</span>
@@ -206,7 +206,7 @@ export default function TeamsPage() {
                                 {regionCode != 'all' && <span className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px]`}>{regionCode} rank</span>}
                             </div>
                             {currentTeams.map((team, i) => (
-                                <div key={`${i}${team.slug}`} onClick={()=>setTeamHover(team.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary border-default-400 border-t-1 transition ${team.slug==teamHover && 'bg-glass-primary'}`}>
+                                <div key={`${i}${team.slug}`} onClick={()=>setTeamHover(team.slug)} className={`text-sm flex justify-between w-full text-default-950 hover:bg-glass-primary transition ${team.slug==teamHover && 'bg-glass-primary'} ${i ? 'short-top-border' : ''}`}>
                                     <div className={`flex cursor-pointer items-center gap-3 py-[6px] transition w-full pl-3 hover:text-primary-600 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}
                                         onClick={()=>handleNavigation(`/team/${team.slug}`)}
                                     >
@@ -243,7 +243,7 @@ export default function TeamsPage() {
                         onPageChange={(page:number) => setCurrentPage(page)}
                     />
                 </div> : 
-                <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded-lg h-[100px] gap-3'>
+                <div className='flex fadeIn items-center justify-center fadeIn text-default-800 bg-default-200 rounded h-[100px] gap-3'>
                     <Icon name='cuida:alert-outline' className='text-3xl'/>
                     <span>Nenhum time encontrado</span>
                 </div>}    

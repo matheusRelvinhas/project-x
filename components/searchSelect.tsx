@@ -98,7 +98,7 @@ const SearchSelect: React.FC<SearchSelectProps> = ({
 		size === "lg" ? "w-full" : "";
 
 	const borderClass = border ? "border-1" : "";
-	const roundedClass = rounded ? "rounded-lg" : "";
+	const roundedClass = rounded ? "rounded" : "";
 	const defaultClass =
 		"relative min-h-[38px] flex items-center justify-between transition bg-default-100 border border-default-400 hover:bg-default-200 hover:border-primary-600";
 

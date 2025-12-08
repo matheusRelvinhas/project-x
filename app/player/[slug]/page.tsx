@@ -9,26 +9,40 @@ import { useEffect, useState } from 'react';
 import { useAppContext } from "@/context/context";
 import { axiosGet } from '@/utils/axios';
 import { toast } from "react-toastify";
-import { type PlayerStats } from "@/app/players/page"; 
+import { type PlayerStats, type NumericStatKeys } from "@/app/players/page"; 
 import PlayerImage from '@/components/player-image';
+import PlayerStatsTable from '@/components/player-stats-table';
+import TeamImage from '@/components/team-image';
 
-export interface PeriodPlayerStats {
-    slug: string;
-    periods: {
-        "last_month"?: PlayerStats;
-        "3_months"?: PlayerStats;
-        "6_months"?: PlayerStats;
-        "12_months"?: PlayerStats;
-    };
-}
+interface PlayerInfo {
+    slug: string | null;
+    nickname: string;
+    first_name: string;
+    last_name: string;
+    team_slug: string|null;
+    team_name: string|null;
+    country_code: string;
+    img_extension: string|null;
+    team_img_extension: string|null;
+    team_points: number|null;
+    team_rank: number|null;
+    stats: PlayerStats[]|[];
+};
 
-export default function TeamPage() {
+export default function Player() {
     const { isMobile, setLoading } = useAppContext();
     const router = useRouter();
+    const handleNavigation = (href: string) => {
+        router.push(href);
+    };
     const params = useParams();
     const { slug } = params;
 
-    const [playerInfo, setPlayerInfo] = useState<PeriodPlayerStats|null>(null);
+    const [playerInfo, setPlayerInfo] = useState<PlayerInfo|null>(null);
+
+    const [sortedBy, setSortedBy] = useState<NumericStatKeys>('period');
+    const [desc, setDesc] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const getPlayer = async (slug:string|string[]) => {
@@ -36,10 +50,9 @@ export default function TeamPage() {
             await axiosGet(
                 `/player_stats/player?slug=${slug}`,
                 (data) => {
-                    console.log(data);
                     setPlayerInfo(data)
                 },
-                () => toast.error('Erro inesperado, tente novamente.'), true
+                () => toast.error('Erro inesperado, tente novamente. #10'), true
             );
             setLoading(false);
         };
@@ -59,9 +72,9 @@ export default function TeamPage() {
                     <>  
                         <div className='relative'>
                             <div className='flex h-[35px] w-[35px] items-center'>
-                                <PlayerImage slug={playerInfo.slug} extension={playerInfo.periods["12_months"]?.img_extension} className='h-[35px] min-w-[30px]' />
+                                <PlayerImage slug={playerInfo.slug||''} extension={playerInfo.img_extension} className='h-[35px] min-w-[30px]' />
                             </div>
-                            <Flag code={playerInfo.periods["12_months"]?.country_code}
+                            <Flag code={playerInfo.country_code}
                                 style={{
                                     width: '14px',
                                     position: 'absolute',
@@ -73,18 +86,40 @@ export default function TeamPage() {
                             />
                         </div>
                         <div className='flex h-full w-full items-center gap-2'>
-                            <span className='flex font-bold whitespace-nowrap'>{playerInfo.periods["12_months"]?.nickname}</span>
-                            <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${playerInfo.periods["12_months"]?.first_name} ${playerInfo.periods["12_months"]?.last_name}`}</span>
-                            <span className='flex text-[10px] text-default-800'>{playerInfo.periods["12_months"]?.team_name && playerInfo.periods["12_months"]?.team_name}</span>
+                            <span className='flex font-bold whitespace-nowrap'>{playerInfo.nickname}</span>
+                            <span className='flex whitespace-nowrap text-[10px] text-default-800'>{`${playerInfo.first_name} ${playerInfo.last_name}`}</span>
+                            <span className='flex text-[10px] cursor-pointer text-default-800 hover:text-primary-600'
+                                onClick={()=>handleNavigation(`/team/${playerInfo.team_slug}`)}>
+                                {playerInfo.team_name && playerInfo.team_name}
+                            </span>
                         </div>
                     </>
                 )}
             </div>
+
             <div className='flex w-full items-center justify-between'>
                 <Button onClick={handleBack} typeButton="default" padding="p-0">
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
+                {playerInfo && (
+                    <div className='flex gap-2 cursor-pointer px-2 items-center bg-default-200 rounded-sm hover:text-primary-600'
+                        onClick={()=>handleNavigation(`/team/${playerInfo.team_slug}`)}>
+                        <TeamImage slug={playerInfo.team_slug} extension={playerInfo.team_img_extension} className='h-[20px] min-w-[20px] text-default-950' />
+                        <div className='flex flex-col min-w-[78px] h-[32px]'>
+                            <span className='text-default-900' style={{fontSize: 'x-small'}}>valve rank</span>
+                            <div className='flex w-full items-center justify-between'>
+                                <span className='text-xs font-bold'>{`${playerInfo.team_rank}º`}</span>
+                                <span style={{fontSize: 'x-small'}}>{`${playerInfo.team_points}pts`}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+
+            <PlayerStatsTable filterPlayers={playerInfo ? playerInfo.stats : []} sortedBy={sortedBy}
+                setSortedBy={setSortedBy} desc={desc} setDesc={setDesc} periods={true}
+                currentPage={currentPage} onPageChange={setCurrentPage}
+            />
         </div>
     );
 }

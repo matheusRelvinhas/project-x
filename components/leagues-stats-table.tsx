@@ -6,6 +6,7 @@ import LeagueImage from '@/components/league-image';
 import TeamImage from '@/components/team-image';
 import { type LeagueStats, type TournamentPrize } from "@/app/leagues/page";
 import Pagination from './pagination';
+import { useRouter } from 'next/navigation';
 
 interface LeaguesStatsTableProps {
     leaguesStats: LeagueStats[];
@@ -29,6 +30,11 @@ export default function LeaguesStatsTable({
 
     const { isMobile } = useAppContext();
 
+    const router = useRouter();
+    const handleNavigation = (href: string) => {
+        router.push(href);
+    };
+
     const formatTimestampToStr = (timestamp: number): string => {
         const date = new Date(timestamp * 1000);
         const day = date.getDate();
@@ -50,16 +56,17 @@ export default function LeaguesStatsTable({
     }, [leaguesStats, currentPage, itemsPerPage]);
 
     return (
-        Array.isArray(leaguesStats) ? <div className='flex w-full flex-col p-2 bg-default-200 gap-2 rounded-lg'>
+        Array.isArray(leaguesStats) ? <div className='flex w-full flex-col p-2 bg-default-200 gap-2 rounded'>
             {title && (
                 <span className='text-default-800 font-semibold text-sm'>{title}</span>
             )}
             {children}
-            <div className={`fadeIn overflow-y-hidden rounded-lg w-full ${leaguesStats.length && 'bg-default-50 border-1 border-default-400'} ${showTeam ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
+            <div className={`fadeIn overflow-y-hidden rounded w-full ${leaguesStats.length && 'bg-default-50'} ${showTeam ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
                 <div className='min-w-max flex flex-col'>{(leaguesStats.length ? currentLeagues.map((l,i)=>
-                    <div key={l.slug+l.id} className={`flex h-[84px] fadeIn border-default-400 px-2 py-[6px] gap-2 items-center transition hover:bg-glass-primary ${i && 'border-t-1'}`}>
+                    <div key={l.slug+l.id} className={`flex h-[84px] fadeIn px-2 py-[6px] gap-2 items-center transition hover:bg-glass-primary ${i && 'short-top-border'}`}>
                         <LeagueImage slug={l.slug} extension={l.img_extension} className='min-w-[36px] w-[36px] max-h-[36px] mr-2' />
-                        <div className={`flex flex-col gap-1 w-full ${isMobile && 'min-w-[180px] max-w-[180px]'}`}>
+                        <div className={`flex cursor-pointer flex-col gap-1 w-full hover:text-primary-600 ${isMobile && 'min-w-[180px] max-w-[180px]'}`}
+                            onClick={()=>handleNavigation(`/league/${l.slug}`)}>
                             <span className='text-xs text-default-800'>{l.start_timestamp && formatTimestampToStr(l.start_timestamp)}</span>
                             <span className='font-semibold text-xs'>{l.name}</span>
                             <div className='flex items-center gap-1 h-[20px]'>
@@ -70,7 +77,7 @@ export default function LeaguesStatsTable({
                                 {l.prize ? (
                                     <div className='flex'>
                                         <Icon className='text-success text-sm' name={`mdi:dollar`}/>
-                                        <span className="text-xs">{l.prize.toLocaleString('fr-FR')}</span>
+                                        <span className="text-xs text-default-950">{l.prize.toLocaleString('fr-FR')}</span>
                                     </div>
                                 ):null}
                             </div>

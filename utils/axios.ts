@@ -18,7 +18,7 @@ export const axiosGet = async (
         };
         const response = await axios.get(
             `${API_BASE_URL}/api${endpoint}`,
-            { timeout: 2000, headers }
+            { timeout: 20000, headers }
         );
         callback(response.data);
     } catch (error: any) {

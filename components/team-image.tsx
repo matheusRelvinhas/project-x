@@ -29,7 +29,7 @@ const TeamImage = ({
 		<div
 			className={`flex items-center ${className}`}
 			style={{
-				filter: "drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)",
+				filter: "drop-shadow(var(--logo-border) 1px 0px 0px) drop-shadow(var(--logo-border) 0px 1px 0px) drop-shadow(var(--logo-border) -1px 0px 0px) drop-shadow(var(--logo-border) 0px -1px 0px)",
 			}}
 		>
 			{isLoaded && (
