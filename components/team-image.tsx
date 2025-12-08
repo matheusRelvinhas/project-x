@@ -4,18 +4,18 @@ import { Icon } from "@iconify/react";
 type TeamImageProps = {
 	slug: string | null;
 	className?: string;
-	extension?: string | null;
+	img_url?: string | null;
 };
 
 const TeamImage = ({
 	slug = "Team",
 	className = "",
-	extension = null,
+    img_url = null
 }: TeamImageProps) => {
 	const [hasError, setHasError] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	if (!slug || !extension || hasError) {
+	if (!img_url || hasError) {
 		return (
 			<div className={`rounded-4xl ${className}`}>
 				<Icon icon="solar:shield-minus-bold" className={className} />
@@ -23,7 +23,7 @@ const TeamImage = ({
 		);
 	}
 
-	const imageUrl = `/img/imgs/teams/${slug}.${extension}`;
+	const imageUrl = `/img/imgs/teams/${img_url}`;
 
 	return (
 		<div

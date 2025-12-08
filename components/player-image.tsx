@@ -4,18 +4,18 @@ import { Icon } from "@iconify/react";
 type PlayerImageProps = {
 	slug: string | null;
 	className?: string;
-	extension?: string | null;
+	img_url?: string | null;
 };
 
 const PlayerImage = ({
 	slug = "Player",
 	className = "",
-	extension = null,
+	img_url = null,
 }: PlayerImageProps) => {
 	const [hasError, setHasError] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	if (!slug || !extension || hasError) {
+	if (!img_url || hasError) {
 		return (
 			<div
 				className={`rounded-4xl p-[3px] ${className}`}
@@ -28,7 +28,7 @@ const PlayerImage = ({
 		);
 	}
 
-	const imageUrl = `/img/imgs/players/${slug}.${extension}`;
+	const imageUrl = `/img/imgs/players/${img_url}`;
 
 	return (
 		<div

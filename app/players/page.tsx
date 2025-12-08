@@ -30,7 +30,7 @@ export interface PlayerStats {
     country_code: string;
     country: string;
     total_prize: number | null;
-    img_extension: string | null;
+    img_url: string | null;
     games_count: number | null;
     rounds_count: number | null;
     rounds_win: number | null;

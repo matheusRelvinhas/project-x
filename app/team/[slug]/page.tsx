@@ -28,19 +28,6 @@ type PeriodPlayerStats = {
     [key in Period]: PlayerStats;
 };
 
-interface WinLoseCount {
-    win: number;
-    lose: number;
-    performance: number;
-};
-
-interface TeamWinLoseStats {
-    "12_months": WinLoseCount;
-    "6_months": WinLoseCount;
-    "3_months": WinLoseCount;
-    "last_month": WinLoseCount;
-};
-
 export default function Team() {
     const { isMobile, setLoading } = useAppContext();
     const router = useRouter();
@@ -178,7 +165,7 @@ export default function Team() {
             <div className='flex items-center gap-3 transition border-default-400 border-b-1 pb-2 h-[38px]'>
                 {teamInfo && (
                     <>
-                        <TeamImage slug={teamInfo?.slug} extension={teamInfo?.img_extension} className='h-[30px] min-w-[30px] text-default-950' />
+                        <TeamImage slug={teamInfo?.slug} img_url={teamInfo?.img_url} className='h-[30px] min-w-[30px] text-default-950' />
                         <span className='text-lg font-bold text-default-950'>{teamInfo?.team_name}</span>
                         <div className='flex gap-2'>
                             <Flag code={teamInfo?.country_code}
@@ -223,7 +210,7 @@ export default function Team() {
             <div className={`flex items-start flex-wrap gap-2 w-full`}>
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
                     <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'} slug={slug}
-                        onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 3 + (isMobile ? 0 : 1)} >
+                        onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 4 + (isMobile ? 0 : 1)} >
                         {performanceGrid(
                                 filteredGamesStats.length, 
                                 filteredGamesStats.filter(m=>m.winner_team_slug==slug).length, 

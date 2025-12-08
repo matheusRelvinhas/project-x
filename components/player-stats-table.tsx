@@ -202,7 +202,7 @@ export default function PlayerStatsTable({
                                             onClick={()=>handleNavigation(`/player/${player.slug}`)}>
                                             <div className='relative'>
                                                 <div className='flex h-[35px] w-[35px] items-center'>
-                                                    <PlayerImage slug={player.slug} extension={player.img_extension} className='h-[35px] min-w-[30px]' />
+                                                    <PlayerImage slug={player.slug} img_url={player.img_url} className='h-[35px] min-w-[30px]' />
                                                 </div>
                                                 <Flag code={player.country_code}
                                                     style={{

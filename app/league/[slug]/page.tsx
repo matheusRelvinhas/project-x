@@ -44,6 +44,7 @@ export default function League() {
                 `/leagues_stats/league?slug=${slug}`,
                 (data) => {
                     setLeagueInfo(data);
+                    console.log(data)
                 },
                 () => toast.error('Erro inesperado, tente novamente. #6'), true
             );
@@ -157,8 +158,8 @@ export default function League() {
                     <>  
                         <div className='flex items-center w-full gap-2'>
                             <LeagueImage
-                                slug={leagueInfo.slug} 
-                                extension={leagueInfo.img_extension} 
+                                slug={leagueInfo.slug}
+                                img_url={leagueInfo.img_url}  
                                 className='min-w-[36px] h-[36px]' 
                             />
                             <span className={`flex items-center text-sm font-semibold ${isMobile && 'max-w-[calc(100%-94px)]'}`}>{leagueInfo.name}</span>
@@ -183,15 +184,21 @@ export default function League() {
                         </div>
                     )}
                     {leagueInfo && (
-                        <>
+                        <>  
                             <div className='flex items-center h-[30px]'>
-                                <div className='flex items-center bg-default-50 border-1 border-default-400 rounded px-2 py-1 w-fit'>
+                                <div className='flex items-center h-[24px] bg-default-50 rounded pl-2 py-1 w-fit'>
+                                    <span className='italic font-semibold text-xs'>tier</span>
+                                    <Icon className='text-3xl text-primary-600' name={`mdi:letter-${leagueInfo.tier}`}/>
+                                </div>
+                            </div>
+                            <div className='flex items-center h-[30px]'>
+                                <div className='flex items-center bg-default-50 rounded px-2 py-1 w-fit'>
                                     <span className='font-semibold text-xs'>{formatTimestampToStr(leagueInfo.start_timestamp)}</span>
                                 </div>
                             </div>
                             {leagueInfo.prize ? (
                                 <div className='flex items-center h-[30px]'>
-                                    <div className='flex items-center bg-default-50 font-semibold border-1 border-default-400 rounded px-2 py-1 gap-2 text-xs w-fit'>
+                                    <div className='flex items-center bg-default-50 font-semibold rounded px-2 py-1 gap-2 text-xs w-fit'>
                                         <span className='text-default-900'>{'Premiação'}</span>
                                         <div className='flex'>
                                             <Icon className='text-success text-sm' name={`mdi:dollar`}/>
@@ -246,7 +253,7 @@ export default function League() {
                                     <div key={`${t.teams.slug}${i}`} className='flex w-full items-center justify-between gap-2 cursor-pointer rounded bg-default-50 px-2 py-1 hover:text-primary-600'
                                         onClick={()=>handleNavigation(`/team/${t.teams.slug}`)}>
                                         <div className='flex items-center gap-2'>
-                                            <TeamImage slug={t.teams.slug} extension={t.teams.img_extension} className='h-[20px] w-[20px]' />
+                                            <TeamImage slug={t.teams.slug} img_url={t.teams.img_url} className='h-[20px] w-[20px]' />
                                             <span className='text-xs'>{t.teams.name}</span>
                                         </div>
                                         <div className='flex gap-1 items-center'>
@@ -261,8 +268,8 @@ export default function League() {
                                 leagueInfo.teams.map((t,i)=> (
                                     <div key={`${t.slug}${i}`} className='flex w-full items-center gap-2 cursor-pointer rounded bg-default-50 px-2 py-1 hover:text-primary-600'
                                         onClick={()=>handleNavigation(`/team/${t.slug}`)}>
-                                        <TeamImage slug={t.slug} extension={t.img_extension} className='h-[20px] w-[20px]' />
-                                        <span className='text-xs'>{t.name}</span>
+                                        <TeamImage slug={t.slug} img_url={t.img_url} className='h-[20px] w-[20px]' />
+                                        <span className='text-xs font-semibold'>{t.name}</span>
                                     </div>
                                 ))
                             ) : null}

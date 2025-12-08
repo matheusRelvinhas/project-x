@@ -4,18 +4,18 @@ import { Icon } from "@iconify/react";
 type LeagueImageProps = {
 	slug: string | null;
 	className?: string;
-	extension?: string|null;
+	img_url?: string|null;
 };
 
 const LeagueImage = ({
 	slug = "League",
 	className = "",
-	extension = null,
+	img_url = null
 }: LeagueImageProps) => {
 	const [hasError, setHasError] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
-	if (!slug || !extension || hasError) {
+	if (!img_url || hasError) {
 		return (
 			<div className={`rounded-4xl p-[3px] ${className}`}>
 				<Icon icon="solar:shield-minus-bold" className={className} />
@@ -23,7 +23,7 @@ const LeagueImage = ({
 		);
 	}
 
-	const imageUrl = `/img/imgs/leagues/${slug}.${extension}`;
+	const imageUrl = `/img/imgs/leagues/${img_url}`;
 
 	return (
 		<div

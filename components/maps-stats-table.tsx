@@ -61,14 +61,14 @@ export default function MapsStatsTable({
 
                     <div className='flex flex-col w-full px-1 justify-center gap-1'>
                         <div className='flex gap-2 items-center'>
-                            <TeamImage slug={g.team1_slug} extension={g.team1_img_extension} className='flex w-full h-[16px] max-w-[16px]' />
+                            <TeamImage slug={g.team1_slug} img_url={g.team1_img_url} className='flex w-full h-[16px] max-w-[16px]' />
                             <span className='text-default-900 text-xs w-full max-w-[130px]'>{g.team1_name}</span>
                             <span className={`rounded transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team1_slug ? 'text-success' : 'text-danger'}`}>
                                 {g.winner_team==g.team1_slug ? g.winner_score : g.loser_score}
                             </span>
                         </div>
                         <div className='flex gap-2 items-center'>
-                            <TeamImage slug={g.team2_slug} extension={g.team2_img_extension} className='flex w-full h-[16px] max-w-[16px]' />
+                            <TeamImage slug={g.team2_slug} img_url={g.team2_img_url} className='flex w-full h-[16px] max-w-[16px]' />
                             <span className='text-default-900 text-xs w-full max-w-[130px]'>{g.team2_name}</span>
                             <span className={`rounded transition flex items-center justify-center bg-default-200 py-1 px-2 h-[23x] w-[25px] text-xs font-semibold ${g.winner_team==g.team2_slug ? 'text-success' : 'text-danger'}`}>
                                 {g.winner_team==g.team2_slug ? g.winner_score : g.loser_score}

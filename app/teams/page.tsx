@@ -22,7 +22,7 @@ export interface TeamStats {
     id: number;
     slug: string;
     team_name: string;
-    img_extension: string | null;
+    img_url: string | null;
     country_code: string;
     country_name: string;
     region_code: string;
@@ -212,7 +212,7 @@ export default function TeamsPage() {
                                     >
                                         <div className='relative'>
                                             <div className='flex h-[35px] w-[35px] items-center'>
-                                                <TeamImage slug={team.slug} extension={team.img_extension} className='h-[27px] min-w-[27px] text-default-950' />
+                                                <TeamImage slug={team.slug} img_url={team.img_url} className='h-[27px] min-w-[27px] text-default-950' />
                                             </div>
                                             <Flag code={team.country_code}
                                                 style={{

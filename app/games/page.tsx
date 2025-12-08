@@ -28,8 +28,8 @@ export type GameScore = {
     team2_slug: string|null;
     team1_score: string|null;
     team2_score: string|null;
-    team1_img_extension: string|null;
-    team2_img_extension: string|null;
+    team1_img_url: string|null;
+    team2_img_url: string|null;
 };
 
 export interface GameStats {
@@ -38,15 +38,14 @@ export interface GameStats {
     name: string;
     league_name: string|null;
     league_slug: string|null;
-    slug_img_extension: string|null;
     team1_name: string|null;
     team2_name: string|null;
     team1_slug: string|null;
     team2_slug: string|null;
     team1_score: number|null;
     team2_score: number|null;
-    team1_img_extension: string|null;
-    team2_img_extension: string|null;
+    team1_img_url: string|null;
+    team2_img_url: string|null;
     stage_round: {
         stage: string
         round: string;

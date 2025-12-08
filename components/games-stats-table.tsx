@@ -63,7 +63,7 @@ export default function GamesStatsTable({
         return <div className='flex h-full gap-1 items-center'>
             {sortedGames.map((g, i) =>
                 <div
-                    className="relative flex flex-col rounded gap-1 cursor-pointer overflow-hidden border-1 transition border-default-200 hover:border-primary-600"
+                    className="relative flex flex-col rounded gap-1 cursor-pointer overflow-hidden border-1 border-default-200 hover:border-primary-600"
                     key={game.id + i + g.map_name}
                 >
                     <div
@@ -74,24 +74,20 @@ export default function GamesStatsTable({
                         {mapsName.find(m => m.value === g.map_name)?.title || g.map_name}
                     </span>
                     <div className="h-[58px] w-[64px] z-10 flex flex-col gap-[1px] justify-center pt-[14px] px-1">
-                        
                         <div className='flex w-full justify-center items-center gap-2'>
                             <TeamImage
                                 slug={game.team1_slug}
-                                extension={game.team1_img_extension}
+                                img_url={game.team1_img_url}
                                 className="h-[13px] w-[13px] min-w-[13px] max-[13px]"
                             />
                             <span className={`flex bg-default-200 rounded text-xs font-semibold items-center justify-center w-[22px] ${g.winner_team == game.team1_slug ? 'text-success' : 'text-danger' }`}>
                                 {g.winner_team == game.team1_slug ? g.winner_score : g.loser_score }
                             </span>
                         </div>
-                    
-
-                    
                         <div className='flex w-full justify-center items-center gap-2'>
                             <TeamImage
                                 slug={game.team2_slug}
-                                extension={game.team2_img_extension}
+                                img_url={game.team2_img_url}
                                 className="h-[13px] w-[13px] min-w-[13px] max-[13px]"
                             />
                             <span className={`flex bg-default-200 rounded text-xs font-semibold items-center justify-center w-[22px] ${g.winner_team == game.team2_slug ? 'text-success' : 'text-danger' }`}>
@@ -168,12 +164,12 @@ export default function GamesStatsTable({
                                         )
                                     }
                                 </span>
-                                <TeamImage slug={game.team1_slug} extension={game.team1_img_extension} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
+                                <TeamImage slug={game.team1_slug} img_url={game.team1_img_url} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                                 <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team1_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.team1_score ? game.team1_score : '0'}</span>
                             </div>
                             <div className='flex w-full min-w-[130px] items-center gap-2'>
                                 <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team2_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.team2_score ? game.team2_score : '0'}</span>
-                                <TeamImage slug={game.team2_slug} extension={game.team2_img_extension} className='h-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
+                                <TeamImage slug={game.team2_slug} img_url={game.team2_img_url} className='h-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                                 <span className={`font-semibold whitespace-nowrap ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
                                     { game.team2_name && game.team2_name.length > teamLetterLen
                                         ? game.team2_name.slice(0, teamLetterLen) + "..."

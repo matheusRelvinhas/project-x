@@ -22,8 +22,8 @@ interface PlayerInfo {
     team_slug: string|null;
     team_name: string|null;
     country_code: string;
-    img_extension: string|null;
-    team_img_extension: string|null;
+    img_url: string|null;
+    team_img_url: string|null;
     team_points: number|null;
     team_rank: number|null;
     stats: PlayerStats[]|[];
@@ -50,7 +50,8 @@ export default function Player() {
             await axiosGet(
                 `/player_stats/player?slug=${slug}`,
                 (data) => {
-                    setPlayerInfo(data)
+                    console.log(data)
+                    setPlayerInfo(data);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #10'), true
             );
@@ -72,7 +73,7 @@ export default function Player() {
                     <>  
                         <div className='relative'>
                             <div className='flex h-[35px] w-[35px] items-center'>
-                                <PlayerImage slug={playerInfo.slug||''} extension={playerInfo.img_extension} className='h-[35px] min-w-[30px]' />
+                                <PlayerImage slug={playerInfo.slug||''} img_url={playerInfo.img_url} className='h-[35px] min-w-[30px]' />
                             </div>
                             <Flag code={playerInfo.country_code}
                                 style={{
@@ -104,7 +105,7 @@ export default function Player() {
                 {playerInfo && (
                     <div className='flex gap-2 cursor-pointer px-2 items-center bg-default-200 rounded-sm hover:text-primary-600'
                         onClick={()=>handleNavigation(`/team/${playerInfo.team_slug}`)}>
-                        <TeamImage slug={playerInfo.team_slug} extension={playerInfo.team_img_extension} className='h-[20px] min-w-[20px] text-default-950' />
+                        <TeamImage slug={playerInfo.team_slug} img_url={playerInfo.team_img_url} className='h-[20px] min-w-[20px] text-default-950' />
                         <div className='flex flex-col min-w-[78px] h-[32px]'>
                             <span className='text-default-900' style={{fontSize: 'x-small'}}>valve rank</span>
                             <div className='flex w-full items-center justify-between'>

@@ -19,21 +19,21 @@ export type TournamentPrize = {
     teams: {
         slug: string|null;
         name: string|null;
-        img_extension: string|null;
+        img_url: string|null;
     };
 };
 
 type TournamentTeams = {
     slug: string|null;
     name: string|null;
-    img_extension: string|null; 
+    img_url: string|null; 
 };
 
 export interface LeagueStats {
     id: number;
     slug: string;
     name: string;
-    img_extension: string|null; 
+    img_url: string|null; 
     status: string|null;
     prize: number|null;
     start_date: string|null;
