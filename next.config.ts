@@ -5,7 +5,6 @@ const nextConfig = {
     images: {
         formats: ["image/webp", "image/avif"],
         minimumCacheTTL: 86400,
-        domains: ["localhost", "yourcdn.com"],
         dangerouslyAllowSVG: false,
     },
     // 🔐 Cabeçalhos de segurança e cache (descomentados se necessário)

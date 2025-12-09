@@ -186,8 +186,8 @@ export default function Team() {
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
                 {teamInfo && (
-                    <div className='flex flex-col w-[78px] h-[32px] px-2 py-[1px] bg-default-200 rounded-sm'>
-                        <span className='text-default-900' style={{fontSize: 'x-small'}}>valve rank</span>
+                    <div className='flex flex-col w-[78px] h-[32px] px-2 py-[1px] bg-default-50 rounded-sm'>
+                        <span style={{fontSize: 'x-small'}}>valve rank</span>
                         <div className='flex w-full items-center justify-between'>
                             <span className='text-xs font-bold'>{`${teamInfo.rank}º`}</span>
                             <span style={{fontSize: 'x-small'}}>{`${teamInfo.points}pts`}</span>

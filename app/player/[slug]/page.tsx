@@ -103,11 +103,11 @@ export default function Player() {
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
                 {playerInfo && (
-                    <div className='flex gap-2 cursor-pointer px-2 items-center bg-default-200 rounded-sm hover:text-primary-600'
+                    <div className='flex gap-2 cursor-pointer px-2 items-center bg-default-50 rounded-sm hover:text-primary-600'
                         onClick={()=>handleNavigation(`/team/${playerInfo.team_slug}`)}>
                         <TeamImage slug={playerInfo.team_slug} img_url={playerInfo.team_img_url} className='h-[20px] min-w-[20px] text-default-950' />
                         <div className='flex flex-col min-w-[78px] h-[32px]'>
-                            <span className='text-default-900' style={{fontSize: 'x-small'}}>valve rank</span>
+                            <span style={{fontSize: 'x-small'}}>valve rank</span>
                             <div className='flex w-full items-center justify-between'>
                                 <span className='text-xs font-bold'>{`${playerInfo.team_rank}º`}</span>
                                 <span style={{fontSize: 'x-small'}}>{`${playerInfo.team_points}pts`}</span>

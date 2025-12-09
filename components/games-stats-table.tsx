@@ -31,7 +31,7 @@ export default function GamesStatsTable({
     rounterLeague=true
 }: GamesStatsTableProps) {
 
-    const { isMobile } = useAppContext();
+    const { isMobile, theme } = useAppContext();
     const router = useRouter()
     const handleNavigation = (href: string) => {
         router.push(href);
@@ -67,8 +67,8 @@ export default function GamesStatsTable({
                     key={game.id + i + g.map_name}
                 >
                     <div
-                        className={`absolute inset-0 bg-cover bg-center blur-[2px] opacity-70`}
-                        style={{ backgroundImage: `url(/img/maps/${g.map_name}.jpg)` }}
+                        className={`absolute inset-0 bg-cover bg-center blur-[1px] ${theme=='light' ? 'opacity-60 brightness-80' : 'opacity-40 brightness-120' }`}
+                        style={{ backgroundImage: `url(/img/maps/${g.map_name}.webp)` }}
                     />
                     <span className='bg-primary-600 top-[2px] left-[2px] absolute text-default-100 font-semibold text-[10px] rounded px-2 h-[16px] flex text-center items-center justify-center'>
                         {mapsName.find(m => m.value === g.map_name)?.title || g.map_name}
