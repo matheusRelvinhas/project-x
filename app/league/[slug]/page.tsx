@@ -160,7 +160,7 @@ export default function League() {
                             <LeagueImage
                                 slug={leagueInfo.slug}
                                 img_url={leagueInfo.img_url}  
-                                className='min-w-[36px] h-[36px]' 
+                                className='w-[36px] min-w-[36px] max-w-[36px] h-[36px]' 
                             />
                             <span className={`flex items-center text-sm font-semibold ${isMobile && 'max-w-[calc(100%-94px)]'}`}>{leagueInfo.name}</span>
                         </div>

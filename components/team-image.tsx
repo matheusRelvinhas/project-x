@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Image from "next/image";
 import { Icon } from "@iconify/react";
 
 type TeamImageProps = {
@@ -8,16 +9,16 @@ type TeamImageProps = {
 };
 
 const TeamImage = ({
-	slug = "Team",
+	slug = "team",
 	className = "",
-    img_url = null
+	img_url = null,
 }: TeamImageProps) => {
 	const [hasError, setHasError] = useState(false);
 	const [isLoaded, setIsLoaded] = useState(false);
 
 	if (!img_url || hasError) {
 		return (
-			<div className={`rounded-4xl ${className}`}>
+			<div className={`flex items-center justify-center ${className}`}>
 				<Icon icon="solar:shield-minus-bold" className={className} />
 			</div>
 		);
@@ -27,28 +28,22 @@ const TeamImage = ({
 
 	return (
 		<div
-			className={`flex items-center ${className}`}
+			className={`relative flex items-center justify-center ${className}`}
 			style={{
-				filter: "drop-shadow(var(--logo-border) 1px 0px 0px) drop-shadow(var(--logo-border) 0px 1px 0px) drop-shadow(var(--logo-border) -1px 0px 0px) drop-shadow(var(--logo-border) 0px -1px 0px)",
+				filter:
+					"drop-shadow(var(--logo-border) 1px 0px 0px) drop-shadow(var(--logo-border) 0px 1px 0px) drop-shadow(var(--logo-border) -1px 0px 0px) drop-shadow(var(--logo-border) 0px -1px 0px)",
 			}}
 		>
-			{isLoaded && (
-				<img
-					src={imageUrl}
-					alt={slug || "team_image"}
-					className={`${className} fadeIn`}
-					onError={() => setHasError(true)}
-					onLoad={() => setIsLoaded(true)}
-					loading="lazy"
-				/>
-			)}
-			{/* Preload invisível */}
-			<img
+			<Image
 				src={imageUrl}
-				alt=""
-				className="hidden"
-				onError={() => setHasError(true)}
+				alt={slug ?? ''}
+				fill
+				sizes="(max-width: 100px) 100px, 50vw"
+				className={`object-contain transition-opacity duration-300 ${
+					isLoaded ? "opacity-100" : "opacity-0"
+				}`}
 				onLoad={() => setIsLoaded(true)}
+				onError={() => setHasError(true)}
 			/>
 		</div>
 	);
