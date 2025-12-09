@@ -122,7 +122,7 @@ export default function LeaguesStatsTable({
                         )}
                     </div>
                     ) : (
-                    <div className='flex px-2 fadeIn items-center justify-center text-default-800 pb-5 h-[70px] gap-3'>
+                    <div className='flex px-2 fadeIn items-center justify-center text-default-800 h-[70px] gap-3'>
                         <Icon name='cuida:alert-outline' className='text-2xl' />
                         <span className='text-sm'>Nenhum campeonato encontrado</span>
                     </div>))}

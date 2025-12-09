@@ -44,9 +44,9 @@ export default function MapsStatsTable({
     const teamLetterLen = isMobile ? 14 : 30; 
 
     const gameMapsScore = (gamesScore: GameScore[]) => {
-        return <div className='flex fadeIn bg-default-50 overflow-y-hidden rounded w-full'>
+        return <div className='flex fadeIn overflow-y-hidden rounded w-full'>
             <div className='min-w-max w-full flex flex-col'>{gamesScore.length ? gamesScore.map((g, i) =>
-                <div key={i + g.map_name} className={`relative flex gap-2 overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
+                <div key={i + g.map_name} className={`relative flex gap-2 bg-default-50 overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
                     <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                         <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
                             {mapsName.find(m => m.value === g.map_name)?.title}
@@ -97,7 +97,7 @@ export default function MapsStatsTable({
                     </div>
                 </div>
             ) : (
-                <div className='flex px-2 fadeIn items-center justify-center text-default-800 pb-5 h-[70px] gap-3'>
+                <div className='flex px-2 fadeIn items-center justify-center bg-default-200 text-default-800 h-[70px] gap-3'>
                     <Icon name='cuida:alert-outline' className='text-2xl' />
                     <span className='text-sm'>Nenhum mapa encontrado</span>
                 </div>
