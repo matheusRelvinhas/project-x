@@ -44,9 +44,9 @@ export default function MapsStatsTable({
     const teamLetterLen = isMobile ? 14 : 30; 
 
     const gameMapsScore = (gamesScore: GameScore[]) => {
-        return <div className='flex fadeIn overflow-y-hidden rounded w-full'>
+        return <div className='flex fadeIn bg-default-50 overflow-y-hidden rounded w-full'>
             <div className='min-w-max w-full flex flex-col'>{gamesScore.length ? gamesScore.map((g, i) =>
-                <div key={i + g.map_name} className={`relative flex gap-2 bg-default-50 overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
+                <div key={i + g.map_name} className={`relative flex gap-2  overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
                     <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                         <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
                             {mapsName.find(m => m.value === g.map_name)?.title}
@@ -59,14 +59,6 @@ export default function MapsStatsTable({
                     <div className='flex flex-col pt-3 w-[36px] min-w-[36px] max-w-[36px] gap-1 font-semibold items-center text-center justify-center'>
                         <span className='text-default-800 text-[11px]'>{formatTimestamp(g.start_timestamp)}</span>
                     </div>
-
-                    <div
-                        className={`
-                            absolute inset-0 bg-cover bg-center blur-[1px] fade-out-right
-                            ${theme=='light' ? 'opacity-30' : 'opacity-10 brightness-105'}
-                        `}
-                        style={{ backgroundImage: `url(/img/maps/${g.map_name}.webp)` }}
-                    />
 
                     <div className={`flex gap-2 z-10 pt-1 items-center justify-center w-full hover:text-primary-600 cursor-pointer max-w-[40%] min-w-[260px]`}
                         >

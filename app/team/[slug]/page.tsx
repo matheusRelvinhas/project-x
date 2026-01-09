@@ -54,7 +54,6 @@ export default function Team() {
     const [period, setPeriod] = useState<Period>('6_months');
     const [mapSelected, setMapSelected] = useState<string>('');
     const [bestOfSelected, setBestOfSelected] = useState<string>('');
-    const [ctTrSelected, setCtTrSelected] = useState<string>('');
 
     useEffect(() => {
         const getTeam = async (slug:string|string[]) => {
@@ -241,11 +240,6 @@ export default function Team() {
                             <div className='flex text-sm max-w-[calc(50%-2px)]'>
                                 <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
                                     options={[{title: 'Todos', value: ''}, ...mapsName]}
-                                />
-                            </div>
-                            <div className='flex text-sm max-w-[calc(50%-2px)]'>
-                                <Select value={ctTrSelected} setValue={(val) => setCtTrSelected(val as string)} placeholder='Selecione um mapa'
-                                    options={[{title: 'CT e TR', value: ''}, {title: 'Counter-terrorist', value: 'ct'}, {title: 'Terrorist', value: 'tr'}]}
                                 />
                             </div>
                         </div>

@@ -30,6 +30,18 @@ export type GameScore = {
     team2_score: string|null;
     team1_img_url: string|null;
     team2_img_url: string|null;
+    game_side: {
+        loser_clan_name: string|null;
+        loser_clan_slug: string|null;
+        loser_clan_score: number|null;
+        loser_clan_side: 'CT' | 'T' | string | null;
+        order: number;
+        overtime: boolean;
+        winner_clan_name: string|null;
+        winner_clan_slug: string|null;
+        winner_clan_score: number|null;
+        winner_clan_side: 'CT' | 'T' | string | null;
+    }[];
 };
 
 export interface GameStats {
