@@ -91,9 +91,19 @@ export default function GamesPage() {
     const [currentGamesStats, setCurrentGamesStats] = useState<GameStats[]>([]);
     const [filterGamesStats, setFilterGamesStats] = useState<GameStats[]>([]);
     const [searchInput, setSearchInput] = useState('');
-    const [status, setStatus] = useState<'finished'|'upcoming'>('upcoming');
+    const [status, setStatus] = useState<'finished' | 'upcoming' | null>(null);
+
+    useEffect(() => {
+        const saved = localStorage.getItem('games_status');
+        if (saved === 'finished' || saved === 'upcoming') {
+            setStatus(saved);
+        } else {
+            setStatus('finished');
+        }
+    }, []);
+
     const [filterStatus, setFilterStatus] = useState<'period'|'leagues'>('period');
-    const [period, setPeriod] = useState<string>('last_7');
+    const [period, setPeriod] = useState<string>('last_15');
     const [periods, setPeriods] = useState<string[]>([]);
     const [league, setLeague] = useState<string[]>([]);
     const [leagues, setLeagues] = useState<Leagues[]>([]);
@@ -105,7 +115,7 @@ export default function GamesPage() {
     const [periodCurrentPage, setPeriodCurrentPage] = useState(1);
     
     const formatDate = (data: string) => {
-        if (data=='last_7') return 'Últimos 7 dias'
+        if (data=='last_15') return 'Últimos 15 dias'
         const [ano, mes] = data.split('-');
         const nomesMeses = [
             'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -119,7 +129,7 @@ export default function GamesPage() {
     };
 
     const periodsGroup = [
-        { title: formatDate('last_7'), value: 'last_7' },
+        { title: formatDate('last_15'), value: 'last_15' },
         ...periods.map(p => ({ title: formatDate(p), value: p }))
     ];
 
@@ -199,9 +209,12 @@ export default function GamesPage() {
     useEffect(() => {
         if (!teams.length) getTeams();
     }, [teams]);
-    
+
     useEffect(() => {
-        getGames(period, league, status, filterStatus);
+        if (status) {
+            getGames(period, league, status, filterStatus);
+            localStorage.setItem('games_status', status);
+        }
     }, [period, league, status, filterStatus]);
 
     useEffect(() => {
@@ -234,7 +247,7 @@ export default function GamesPage() {
                 typeButton={status == statusValue ? 'primary' : 'default'}
             >
                 <div className='flex gap-2 items-center'>
-                    <span className='text-sm'>{statusValue=='upcoming' ? 'Futuro' : statusValue=='finished' && 'Finalizado'}</span>
+                    <span className='text-sm'>{statusValue=='upcoming' ? 'Próximos' : statusValue=='finished' && 'Finalizados'}</span>
                 </div>
             </Button>
         );
@@ -276,7 +289,7 @@ export default function GamesPage() {
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
                     {status=='finished' && <FilterTag items={filterStatus=='period' ? formatDate(period) : leagues.find(l => league.includes(l.slug))?.name ?? 'Ligas'} />}
                     {(status=='finished' && team.length) ? <FilterTag items={teams.find(t => team.includes(t.slug))?.name ?? ''} /> : null}
-                    {status=='upcoming' && <FilterTag items={'Futuros'} />}
+                    {status=='upcoming' && <FilterTag items={'Próximos jogos'} />}
                 </div>
 
                 <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
@@ -292,9 +305,9 @@ export default function GamesPage() {
                     currentPage={currentPage}
                     onPageChange={setCurrentPage} 
                     itemsPerPage={ 8 + (isMobile ? 0 : 4)}/> : null}
-                {<GamesStatsTable
+                {status && <GamesStatsTable
                     gamesStats={filterGamesStats} 
-                    title={status=='finished' ? 'Finalizados' : 'Futuros'}  
+                    title={status=='finished' ? 'Jogos finalizados' : 'Próximos jogos'}  
                     currentPage={periodCurrentPage} 
                     onPageChange={setPeriodCurrentPage}
                     itemsPerPage={ 8 + (isMobile ? 0 : 4)} />}

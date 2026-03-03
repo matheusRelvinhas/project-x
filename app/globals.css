@@ -46,6 +46,8 @@ body.modal-open {
         --seccess-hover: #237804;
 
         --logo-border: #2c2c2c;
+        --ct-color: #597ef7;
+        --tr-color: #ffa940;
     }
 
     [data-theme="dark"] {
@@ -76,7 +78,7 @@ body.modal-open {
         --primary-800: #ffd8bf;
         --primary-900: #fff2e8;
         --primary-950: #fff2e8;
-         --primary-950: #fff9f4;
+        --primary-1000: #fff9f4;
 
         --danger: #ff7875;
         --danger-hover: #ffa39e;
@@ -84,6 +86,8 @@ body.modal-open {
         --seccess-hover: #d9f7be;
 
         --logo-border: #2c2c2c;
+        --ct-color: #85a5ff;
+        --tr-color: #ffd666;
     }
 }
 
@@ -247,6 +251,20 @@ body.modal-open {
 .hover\:text-success:hover {color: var(--success-hover);}
 .hover\:bg-success:hover {background-color: var(--success-hover);}
 .hover\:border-success:hover {border-color: var(--success-hover);}
+
+.text-ct {color: var(--ct-color);}
+.bg-ct {background-color: var(--ct-color);}
+.border-ct {border-color: var(--ct-color);}
+.hover\:text-ct:hover {color: var(--ct-color-hover);}
+.hover\:bg-ct:hover {background-color: var(--ct-color-hover);}
+.hover\:border-ct:hover {border-color: var(--ct-color-hover);}
+
+.text-tr {color: var(--tr-color);}
+.bg-tr {background-color: var(--tr-color);}
+.border-tr {border-color: var(--tr-color);}
+.hover\:text-tr:hover {color: var(--tr-color-hover);}
+.hover\:bg-tr:hover {background-color: var(--tr-color-hover);}
+.hover\:border-tr:hover {border-color: var(--tr-color-hover);}
 
 .glass {
     backdrop-filter: blur(5px);

@@ -63,13 +63,10 @@ export default function MapsStatsTable({
                     <div className={`flex gap-2 z-10 pt-1 items-center justify-center w-full hover:text-primary-600 cursor-pointer max-w-[40%] min-w-[260px]`}
                         >
                         <div className='flex w-full min-w-[130px] items-center justify-end gap-2'>
-                            <span className={`font-semibold whitespace-nowrap ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
-                                { g.team1_name && g.team1_name.length > teamLetterLen
-                                    ? g.team1_name.slice(0, teamLetterLen) + "..."
-                                    : g.team1_name ? g.team1_name : (
-                                        <span className='italic'>{'unknown team'}</span>
-                                    )
-                                }
+                            <span className={`font-semibold whitespace-nowrap overflow-hidden text-end text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
+                                { g.team1_name ? g.team1_name : (
+                                    <span className='italic'>{'unknown team'}</span>
+                                )}
                             </span>
                             <TeamImage slug={g.team1_slug} img_url={g.team1_img_url} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                             <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${g.winner_team==g.team1_slug ? 'text-success' : 'text-danger'}`}>{g.winner_team==g.team1_slug ? g.winner_score : g.loser_score}</span>
@@ -77,13 +74,10 @@ export default function MapsStatsTable({
                         <div className='flex w-full min-w-[130px] items-center gap-2'>
                             <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${g.winner_team==g.team2_slug ? 'text-success' : 'text-danger'}`}>{g.winner_team==g.team2_slug ? g.winner_score : g.loser_score}</span>
                             <TeamImage slug={g.team2_slug} img_url={g.team2_img_url} className='h-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
-                            <span className={`font-semibold whitespace-nowrap ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
-                                { g.team2_name && g.team2_name.length > teamLetterLen
-                                    ? g.team2_name.slice(0, teamLetterLen) + "..."
-                                    : g.team2_name ? g.team2_name : (
-                                        <span className='italic'>{'unknown team'}</span>
-                                    )
-                                }
+                            <span className={`font-semibold whitespace-nowrap overflow-hidden text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
+                                { g.team2_name ? g.team2_name : (
+                                    <span className='italic'>{'unknown team'}</span>
+                                )}
                             </span>
                         </div>
                     </div>

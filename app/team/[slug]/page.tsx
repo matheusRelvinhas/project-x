@@ -66,7 +66,6 @@ export default function Team() {
                     setMapsStats(data.maps);
                     setPlayersStats(data.players);
                     setLeaguesStats(data.leagues);
-                    console.log(data);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #12'), true
             );

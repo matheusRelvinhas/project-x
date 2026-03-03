@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
 import { AppProvider } from "@/context/context";
 import Menu from "@/components/menu";
 import Toast from "@/components/toast";
+import "./globals.css";
 
 export const metadata: Metadata = {
     title: "project-x",

@@ -20,7 +20,7 @@ interface PlayerStatsTableProps {
     onPageChange: (page: number) => void;
     title?: string|null;
     periods?: boolean;
-}
+};
 
 export default function PlayerStatsTable({
     filterPlayers,
@@ -76,7 +76,7 @@ export default function PlayerStatsTable({
         else {
             setSortedBy(stat as NumericStatKeys);
             setDesc(true);
-        }
+        };
     };
 
     const statText = (statKey:string) => {
@@ -225,7 +225,7 @@ export default function PlayerStatsTable({
                                         </div>
                                     )}
                                     {showStats.map((s) => (
-                                        <span key={i + s} className="flex fadeIn font-semibold text-center text-[12px] w-full items-center h-[40px] justify-center min-w-[88px]">
+                                        <span key={i + s} className="flex py-3 fadeIn font-semibold text-center text-[12px] w-full items-center justify-center min-w-[88px]">
                                             {(player[s as keyof PlayerStats] !== undefined && player[s as keyof PlayerStats] !== null)
                                                 ? formatStat(s, (player[s as keyof PlayerStats] as number)) : '-'
                                             }

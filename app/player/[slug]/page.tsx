@@ -50,7 +50,6 @@ export default function Player() {
             await axiosGet(
                 `/player_stats/player?slug=${slug}`,
                 (data) => {
-                    console.log(data)
                     setPlayerInfo(data);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #10'), true

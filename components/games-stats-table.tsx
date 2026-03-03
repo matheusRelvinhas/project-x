@@ -6,6 +6,7 @@ import Pagination from '@/components/pagination';
 import { type GameScore, type GameStats } from "@/app/games/page";
 import { useRouter } from 'next/navigation';
 import { mapsName } from '@/utils/utils';
+import GameMapsScore from '@/components/game-maps-score';
 
 interface GamesStatsTableProps {
     gamesStats: GameStats[];
@@ -58,40 +59,6 @@ export default function GamesStatsTable({
         }
     };
 
-    const gameMapsScore = (gamesScore: GameScore[], game: GameStats) => {
-        const sortedGames = [...gamesScore].sort((a, b) => a.order - b.order);
-        return <div className='flex h-full gap-1 items-center'>
-            {sortedGames.map((g, i) => g.map_name &&
-                <div
-                    className="relative flex flex-col h-[48px] pb-2 w-[64px] justify-between gap-1 rounded cursor-pointer overflow-hidden border-1 border-default-200 hover:border-primary-600"
-                    key={game.id + i + g.map_name}
-                >
-                    <div
-                        className={`absolute inset-0 bg-cover bg-center blur-[1px] ${theme=='light' ? 'opacity-60 brightness-80' : 'opacity-40 brightness-120' }`}
-                        style={{ backgroundImage: `url(/img/maps/${g.map_name}.webp)` }}
-                    />
-                    <span className='bg-primary-600 z-0 text-default-100 font-semibold text-[10px] px-2 h-[16px] flex text-center items-center justify-center'>
-                        {mapsName.find(m => m.value === g.map_name)?.title || g.map_name}
-                    </span>
-                    <div className="z-0 flex gap-[1px] justify-center px-1">
-                        <div className='flex w-full justify-center items-center gap-2'>
-                            <span className={`flex bg-default-200 rounded text-xs font-semibold items-center px-1 py-[2px] justify-center w-[22px] ${g.winner_team == game.team1_slug ? 'text-success' : 'text-danger' }`}>
-                                {g.winner_team == game.team1_slug ? g.winner_score : g.loser_score }
-                            </span>
-                        </div>
-                        <div className='flex w-full justify-center items-center gap-2'>
-                            <span className={`flex bg-default-200 rounded text-xs font-semibold items-center px-1 py-[2px] justify-center w-[22px] ${g.winner_team == game.team2_slug ? 'text-success' : 'text-danger' }`}>
-                                {g.winner_team == game.team2_slug ? g.winner_score : g.loser_score }
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
-    };
-
-    const teamLetterLen = isMobile ? 14 : 30; 
-
     return (
         <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded w-full'>
             {title && (
@@ -143,8 +110,8 @@ export default function GamesStatsTable({
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'date')}</span>
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'hour')}</span>
                         </div>
-                        <div className={`flex gap-2 pt-4 items-center justify-center w-full hover:text-primary-600 cursor-pointer max-w-[40%] min-w-[260px]`}
-                            >
+                        <div className={`flex gap-2 pt-4 items-center justify-center w-full max-w-[40%] min-w-[260px] ${title!='Ao vivo' && 'hover:text-primary-600 cursor-pointer'}`}
+                            onClick={()=>title!='Ao vivo' && handleNavigation(`/game/${game.slug}`)}>
                             <div className='flex w-full min-w-[136px] items-center justify-end gap-2'>
                                 <span className={`font-semibold whitespace-nowrap overflow-hidden text-end text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
                                     { game.team1_name ? game.team1_name : (
@@ -166,8 +133,8 @@ export default function GamesStatsTable({
                             </div>
                         </div>
                         {gameMap && (
-                            <div className={`pl-3 flex flex-1 max-w-[40%] md:max-w-[40%] w-full md:w-auto`}>
-                                {(game.status == 'finished' && game.games_score) ? gameMapsScore(game.games_score, game) : null}
+                            <div className={`pl-4 flex flex-1 max-w-[100%] w-full flex-nowrap md:w-auto`}>
+                                {(game.status == 'finished' && game.games_score) ? <GameMapsScore gamesScore={game.games_score} game={game} navigateToMap={true} /> : null}
                             </div>
                         )}
                     </div>

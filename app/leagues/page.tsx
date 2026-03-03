@@ -54,11 +54,27 @@ export default function LeaguesPage() {
     const [upcomingLeagues, setUpcomingLeagues] = useState<LeagueStats[]>([]);
     const [filterLeagues, setFilterLeagues] = useState<LeagueStats[]>([]);
     const [filterUpcomingLeagues, setFilterUpcomingLeagues] = useState<LeagueStats[]>([]);
-    const [status, setStatus] = useState<'finished'|'current'>('current');
+        const [status, setStatus] = useState<'finished' | 'current' | null>(null);
+
+    useEffect(() => {
+        const saved = localStorage.getItem('leagues_status');
+        if (saved === 'finished' || saved === 'current') {
+            setStatus(saved);
+        } else {
+            setStatus('finished');
+        }
+    }, []);
+
+
     const [tier, setTier] = useState<'s'|'a'|'s-a'>('s-a');
     const [years, setYears] = useState<string[]>([String(new Date().getFullYear())]);
     const [searchInput, setSearchInput] = useState('');
     const [isModalFilterOpen, setIsModalFilterOpen] = useState(false);
+
+    useEffect(() => {
+        const saved = localStorage.getItem('leagues_status');
+        if (saved === 'finished' || saved === 'current') setStatus(saved);
+    }, []);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [currentUpcomingPage, setCurrentUpcomingPage] = useState(1);
@@ -69,7 +85,7 @@ export default function LeaguesPage() {
         {title: 'Tier A', value: 'a'},
     ];
 
-    const yearGroup = ['2025', '2024', '2023', '2022', '2021', '2020'].map(y => ({ value: y, name: y, title: y }));
+    const yearGroup = ['2026','2025', '2024', '2023', '2022', '2021', '2020'].map(y => ({ value: y, name: y, title: y }));
 
     const buttonGroup = (statusValue:'current'|'finished') => {
         return (
@@ -105,7 +121,7 @@ export default function LeaguesPage() {
         setLeaguesStats([]);
         setUpcomingLeagues([]);
         if (status=='current') getTeams('upcoming', years);
-        getTeams(status, years);
+        if (status) getTeams(status, years);
     }, [status, years]);
 
     const setFilter = (leagues:LeagueStats[]) => {
@@ -131,6 +147,7 @@ export default function LeaguesPage() {
         if (status === 'current') setYears([String(new Date().getFullYear())]);
         setCurrentPage(1);
         setCurrentUpcomingPage(1);
+        if (status) localStorage.setItem('leagues_status', status);
     }, [status]);
 
     return (
@@ -163,7 +180,7 @@ export default function LeaguesPage() {
                 </div>
                 {status=='finished' && <LeaguesStatsTable leaguesStats={filterLeagues} title='Campeonatos finalizados' currentPage={currentPage} onPageChange={setCurrentPage} />}
                 {status=='current' && <LeaguesStatsTable leaguesStats={filterLeagues} title='Campeonatos em andamento' currentPage={currentPage} onPageChange={setCurrentPage} />}
-                {(status=='current' && filterUpcomingLeagues.length) ? <LeaguesStatsTable leaguesStats={filterUpcomingLeagues} title='Campeonatos futuros' currentPage={currentUpcomingPage} onPageChange={setCurrentUpcomingPage} /> : null}
+                {(status=='current' && filterUpcomingLeagues.length) ? <LeaguesStatsTable leaguesStats={filterUpcomingLeagues} title='Campeonatos próximos' currentPage={currentUpcomingPage} onPageChange={setCurrentUpcomingPage} /> : null}
             </div>
 
             <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>

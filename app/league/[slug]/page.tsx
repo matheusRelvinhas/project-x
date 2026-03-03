@@ -44,7 +44,6 @@ export default function League() {
                 `/leagues_stats/league?slug=${slug}`,
                 (data) => {
                     setLeagueInfo(data);
-                    console.log(data)
                 },
                 () => toast.error('Erro inesperado, tente novamente. #6'), true
             );
@@ -101,7 +100,7 @@ export default function League() {
                 typeButton={status == statusValue ? 'primary' : 'default'}
             >
                 <div className='flex gap-2 items-center'>
-                    <span className='text-sm'>{statusValue=='upcoming' ? 'Futuro' : statusValue=='finished' && 'Finalizado'}</span>
+                    <span className='text-sm'>{statusValue=='upcoming' ? 'Próximos' : statusValue=='finished' && 'Finalizados'}</span>
                 </div>
             </Button>
         );
