@@ -5,6 +5,7 @@ import Pagination from '@/components/pagination';
 import { type GameScore } from "@/app/games/page";
 import { mapsName } from '@/utils/utils';
 import { useAppContext } from '@/context/context';
+import { useRouter } from 'next/navigation';
 
 interface MapsStatsTableProps {
     mapsStats: GameScore[];
@@ -25,6 +26,7 @@ export default function MapsStatsTable({
 }: MapsStatsTableProps) {
 
     const { isMobile, theme } = useAppContext();
+    const router = useRouter();
 
     const totalPages = Math.ceil(mapsStats.length / itemsPerPage);
     const currentMaps = useMemo(() => {
@@ -41,12 +43,17 @@ export default function MapsStatsTable({
         return `${dia}/${mes}`;
     };
 
-    const teamLetterLen = isMobile ? 14 : 30; 
+    const teamLetterLen = isMobile ? 14 : 30;
+
+    const handleNavigation = (href: string) => {
+        router.push(href);
+    };
 
     const gameMapsScore = (gamesScore: GameScore[]) => {
         return <div className='flex fadeIn bg-default-50 overflow-y-hidden rounded w-full'>
             <div className='min-w-max w-full flex flex-col'>{gamesScore.length ? gamesScore.map((g, i) =>
-                <div key={i + g.map_name} className={`relative flex gap-2  overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
+                <div key={i + g.map_name} onClick={() => handleNavigation(`/game/${g.game_slug}?map=${g.map_name}`)}
+                    className={`relative flex gap-2  overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
                     <div className='absolute top-[3px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                         <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
                             {mapsName.find(m => m.value === g.map_name)?.title}

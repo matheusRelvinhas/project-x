@@ -160,7 +160,7 @@ export default function Team() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-            <div className='flex items-center gap-3 transition border-default-400 border-b-1 pb-2 h-[38px]'>
+            <div className='flex items-center gap-3 transition border-default-400 pb-2 h-[38px]'>
                 {teamInfo && (
                     <>
                         <TeamImage slug={teamInfo?.slug} img_url={teamInfo?.img_url} className='h-[30px] min-w-[30px] text-default-950' />

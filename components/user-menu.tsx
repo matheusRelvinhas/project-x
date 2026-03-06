@@ -23,7 +23,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
                 className={`flex flex-row w-full transition items-center min-h-[48px] max-h-[48px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
                     (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
                 }`}
-                onClick={() => handleNavigation(`${user.logged ? '/profile' : '/login'}`)}
+                onClick={() => handleNavigation(`${user.logged ? '/' : '/login'}`)}
             >   
                 {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
                 <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />

@@ -225,7 +225,7 @@ export default function PlayersPage() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-            <div className='flex transition border-default-400 border-b-1'>
+            <div className='flex transition border-default-400 pb-1 '>
                 <span className='text-lg font-bold text-default-950'>Players</span>
             </div>
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>
@@ -259,7 +259,6 @@ export default function PlayersPage() {
                     currentPage={currentPage} onPageChange={setCurrentPage}
                 />
             </div>
-            <span className='flex transition text-default-800 text-sm'>Utilizando nossas estatísticas é possível analisar o desempenho dos jogadores e chegar a conclusões através de diversas métricas. Estatísticas acima é baseado na média de cada jogador por cada partida.</span>
             <Modal isOpen={isModalFilterOpen} setIsOpen={setIsModalFilterOpen} title='Filtros' icon='mdi:filter-cog-outline'>
                 <div className='flex flex-col gap-2'>
                     <div className='flex text-sm gap-1 flex-col'>

@@ -2,7 +2,7 @@
 
 // @ts-expect-error not-error
 import Flag from 'react-world-flags';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Icon from '@/components/icon';
 import Button from "@/components/button";
 import { useEffect, useMemo, useState } from 'react';
@@ -28,6 +28,7 @@ export type GamePlayerStats = {
     country_code: string;
     damage: number;
     death: number;
+    deaths: number;
     enemy_team_name: string;
     first_death: number;
     first_kills: number;
@@ -65,14 +66,13 @@ export default function Game() {
     const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const { slug } = params;
 
     const [gameInfo, setGameInfo] = useState<GameStats|null>(null);
 
     const [gamePlayerStats, setGamePlayerStats] = useState<GamePlayerStats[]|null>(null);
-    const [gameShortPlayerStats, setGameShortPlayerStats] = useState<GamePlayerStats[]|null>(null);
     const [mapPlayerStats, setMapPlayerStats] = useState<GameMapsPlayerStats[]|null>(null);
-    const [mapShortPlayerStats, setMapShortPlayerStats] = useState<GameMapsPlayerStats[]|null>(null);
     const [playerStatsInfo, setPlayerStatsInfo] = useState<PlayerStats[]|null>(null);
     const [gameSideStats, setGameSideStats] = useState<GameSideInfo[]>([]);
 
@@ -81,6 +81,7 @@ export default function Game() {
     const [selectedStat, setSelectedStat] = useState<string>('name');
     const [sortAsc, setSortAsc] = useState<boolean>(true);
     const [mobileSelectedTab, setMobileSelectedTab] = useState<'overall'|'performance'>('overall');
+    const [isShortStats, setIsShortStats] = useState<boolean>(false);
 
     const statsTable = useMemo(() => {
         const base = [{ title: 'Jogador', key: 'name', tooltip: 'Jogador' }];
@@ -89,6 +90,7 @@ export default function Game() {
             { title: 'Mortes', key: 'death', tooltip: 'Mortes' },
             { title: 'Assist.', key: 'assists', tooltip: 'Assistências' }
         ];
+        if (isShortStats) return [...base, ...overallStats]
         const performanceStats = [
             { title: 'ADR', key: 'adr', tooltip: 'Média de Dano por Round' },
             { title: 'Duelos', key: 'trade_kills', tooltip: 'Duelos Kills/Mortes' },
@@ -112,7 +114,7 @@ export default function Game() {
             ...base,
             ...performanceStats
         ];
-    }, [mobileSelectedTab, isMobile]);
+    }, [mobileSelectedTab, isShortStats, isMobile]);
 
     const selectStatAndOrder = (statKey: string) => {
         if (selectedStat === statKey) {
@@ -127,6 +129,9 @@ export default function Game() {
         const mapParam = searchParams.get("map");
         if (mapParam) {
             setSelectedMap(mapParam);
+            const params = new URLSearchParams(searchParams.toString());
+            params.delete("map");
+            router.replace(`${pathname}?${params.toString()}`);
         };
     }, [searchParams]);
 
@@ -157,7 +162,6 @@ export default function Game() {
             type_stats: string, 
             type_short_stats: string, 
             setStat: any,
-            setShortStat: any,
         ) => {
             setLoading(true);
             await axiosGet(
@@ -168,8 +172,8 @@ export default function Game() {
                         axiosGet(
                             `/games_stats/game_info?slug=${slug}&game_stat=${type_short_stats}`,
                             (data) => {
-                                console.log(data)
-                                setShortStat(data[type_short_stats] ? data[type_short_stats] : []);
+                                setStat(data[type_short_stats] ? data[type_short_stats] : []);
+                                setIsShortStats(true);
                             },
                             () => toast.error('Erro inesperado, tente novamente. #16'), true
                         );
@@ -180,14 +184,12 @@ export default function Game() {
             setLoading(false);
         };
         if (slug && gameInfo?.status == 'finished') {
-            getStats(slug, 'players_stats', 'short_players_stats', setGamePlayerStats, setGameShortPlayerStats);
-            getStats(slug, 'maps_players_stats', 'short_maps_players_stats', setMapPlayerStats, setMapShortPlayerStats);
+            getStats(slug, 'players_stats', 'short_players_stats', setGamePlayerStats);
+            getStats(slug, 'maps_players_stats', 'short_maps_players_stats', setMapPlayerStats);
             axiosGet(
                 `/games_stats/game_info?slug=${slug}&game_stat=game_side_stats`,
                 (data) => {
-                    console.log(data.game_side_stats);
                     setGameSideStats(data.game_side_stats);
-
                 },
                 () => toast.error('Erro inesperado, tente novamente. #17'), true
             );
@@ -223,14 +225,16 @@ export default function Game() {
                 ? Object.values(player.multikills).reduce(
                     (total, value) => total + value, 0
                 ) : 0;
+        } else if (sortKey == 'death') { 
+            return player.death || player.deaths;
         } else if (sortKey === 'trade_kills') {
             return player.trade_kills - player.trade_death;
-        } else if ( sortKey === 'kills' || sortKey === 'death' || 
-            sortKey === 'assists' || sortKey === 'adr' || sortKey === 'clutches'
+        } else if ( sortKey === 'kills' || sortKey === 'assists' 
+            || sortKey === 'adr' || sortKey === 'clutches'
         ) {
             return Number(player[sortKey as keyof GamePlayerStats]);
         } else if (sortKey == 'name') { 
-            return player.kills - player.death;
+            return player.kills - (player.death||player.deaths);
         } else {
             return player[sortKey as keyof GamePlayerStats] as any;
         };
@@ -314,54 +318,48 @@ export default function Game() {
                     </div>
                     <div className='flex w-full min-w-max items-center bg-default-50 flex-col'>
                         {filterPlayerStats && filterPlayerStats.length ? (
-                            <>
-                                {filterPlayerStats.map((player, i) => {
-                                    if (player.team_slug !== gameInfo[`team${teamNum}_slug`]) return null;
-                                    return (
-                                        <div key={`${player.slug}-${i}`} className={`flex border-default-200 text-default-800 w-full pt-1 pb-[6px] items-center fadeIn hover:bg-glass-primary hover:text-default-950 transition ${i > 0 ? 'border-t' : ''}`}>
-                                            {statsTable.map(s => {
-                                                return (['name'].includes(s.key) ? (
-                                                        <div onClick={()=>handleNavigation(`/player/${player.slug}`)} 
-                                                            className={`flex px-2 w-full relative items-center gap-3 w-full hover:text-primary-600 cursor-pointer transition ${isMobile ? 'min-w-[100px] max-w-[100px]' : 'min-w-[200px] max-w-[200px]'}`} key={`stat-${s.key}-${player.slug}`}>
-                                                            <div className='relative'>
-                                                                <div className='flex h-[32px] w-[32px] items-center justify-center'>
-                                                                    <PlayerImage slug={player.slug} img_url={playerStatsInfo?.find(p => p.slug === player.slug)?.img_url || ''} className='h-[35px] w-[32px]' />
-                                                                </div>
-                                                                <Flag code={player.country_code}
-                                                                    style={{
-                                                                        width: '14px',
-                                                                        position: 'absolute',
-                                                                        bottom: '-2px',
-                                                                        right: '-12px',
-                                                                        borderRadius: '2px',
-                                                                        filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
-                                                                    }}
-                                                                />
+                            filterPlayerStats.map((player, i) => {
+                                if (player.team_slug !== gameInfo[`team${teamNum}_slug`]) return null;
+                                return (
+                                    <div key={`${player.slug}-${i}`} className={`flex border-default-200 text-default-800 w-full pt-1 pb-[6px] items-center fadeIn hover:bg-glass-primary hover:text-default-950 transition ${i > 0 ? 'border-t' : ''}`}>
+                                        {statsTable.map(s => {
+                                            return (['name'].includes(s.key) ? (
+                                                    <div onClick={()=>handleNavigation(`/player/${player.slug}`)} 
+                                                        className={`flex px-2 w-full relative items-center gap-3 w-full hover:text-primary-600 cursor-pointer transition ${isMobile ? 'min-w-[100px] max-w-[100px]' : 'min-w-[200px] max-w-[200px]'}`} key={`stat-${s.key}-${player.slug}`}>
+                                                        <div className='relative'>
+                                                            <div className='flex h-[32px] w-[32px] items-center justify-center'>
+                                                                <PlayerImage slug={player.slug} img_url={playerStatsInfo?.find(p => p.slug === player.slug)?.img_url || ''} className='h-[35px] w-[32px]' />
                                                             </div>
-                                                            <span className={`absolute top-[-3px] right-0 h-[14px] w-[18px] rounded flex items-center justify-center text-[9px] font-bold bg-default-200 ${Number(getStatValue(player, s.key)) > 0 ? 'text-success' : 'text-danger'}`}>{`${Number(getStatValue(player, s.key)) > 0 ? '+' : ''}${Number(getStatValue(player, s.key)).toFixed(0)}`}</span>
-                                                            <span className={`font-semibold pt-[2px] truncate ${isMobile ? 'text-[11px]' : 'text-xs'}`}>{player.name}</span>
+                                                            <Flag code={player.country_code}
+                                                                style={{
+                                                                    width: '14px',
+                                                                    position: 'absolute',
+                                                                    bottom: '-2px',
+                                                                    right: '-12px',
+                                                                    borderRadius: '2px',
+                                                                    filter: 'drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)',
+                                                                }}
+                                                            />
                                                         </div>
-                                                    ) :
-                                                    <div key={`stat-${s.key}-${player.slug}`} className='flex px-2 w-full min-w-[70px] items-center justify-center'>
-                                                        <span className={`font-semibold ${isMobile ? 'text-[10px]' : 'text-xs'}`}>
-                                                            {['trade_kills'].includes(s.key) ? (
-                                                                <span className={`${Number(getStatValue(player, s.key)) == 0 ? '' : Number(getStatValue(player, s.key)) > 0 ?  'text-success' : 'text-danger'}`}>
-                                                                    {`${player.trade_kills} / ${player.trade_death}`}
-                                                                </span>
-                                                            ) : Number(getStatValue(player, s.key)).toFixed(0)}
-                                                        </span>
+                                                        <span className={`absolute top-[-3px] right-0 h-[14px] w-[18px] rounded flex items-center justify-center text-[9px] font-bold bg-default-200 ${Number(getStatValue(player, s.key)) > 0 ? 'text-success' : 'text-danger'}`}>{`${Number(getStatValue(player, s.key)) > 0 ? '+' : ''}${Number(getStatValue(player, s.key)).toFixed(0)}`}</span>
+                                                        <span className={`font-semibold pt-[2px] truncate ${isMobile ? 'text-[11px]' : 'text-xs'}`}>{player.name}</span>
                                                     </div>
-                                                )
-                                            })}
-                                        </div>
-                                    )
-                                })}
-                            </>
-                        ) : (
-                            <>
-                                {'Short'}
-                            </>
-                        )}
+                                                ) :
+                                                <div key={`stat-${s.key}-${player.slug}`} className='flex px-2 w-full min-w-[70px] items-center justify-center'>
+                                                    <span className={`font-semibold ${isMobile ? 'text-[10px]' : 'text-xs'}`}>
+                                                        {['trade_kills'].includes(s.key) ? (
+                                                            <span className={`${Number(getStatValue(player, s.key)) == 0 ? '' : Number(getStatValue(player, s.key)) > 0 ?  'text-success' : 'text-danger'}`}>
+                                                                {`${player.trade_kills} / ${player.trade_death}`}
+                                                            </span>
+                                                        ) : Number(getStatValue(player, s.key)).toFixed(0)}
+                                                    </span>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )
+                            })
+                        ) : null}
                     </div>
                 </div>
             </div>
@@ -370,7 +368,7 @@ export default function Game() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-            <div className='flex items-center gap-3 transition border-default-400 border-b-1 pb-2 h-[38px]'>
+            <div className='flex items-center gap-3 transition border-default-400 pb-2 h-[38px]'>
                 {gameInfo && (
                     <div className='fadeIn flex flex-col'>
                         <div className='flex items-center gap-2'>
@@ -440,7 +438,7 @@ export default function Game() {
             
             {gameInfo && gameInfo.status == "finished" && gameInfo.parsed_status == "done" && (
                 <div className='flex flex-wrap justify-between gap-2 items-center max-w-5xl'>
-                    {isMobile ? (
+                    {(isMobile && !isShortStats) ? (
                         <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700 fadeIn">
                             {buttonGroup('overall')}
                             {buttonGroup('performance')}
@@ -451,7 +449,7 @@ export default function Game() {
                     </div>
                 </div>
             )}
-            {gameInfo && gameInfo.status == "finished" && gameInfo.parsed_status == "done" ? (
+            {gameInfo && gameInfo.status == "finished" && filterPlayerStats?.length ? (
                 <div key={`${gameInfo.slug}-finished`} className='flex flex-col gap-2 fadeIn'>
                     {scoreboardDiv(gameInfo, '1')}
                     {scoreboardDiv(gameInfo, '2')}
@@ -459,7 +457,7 @@ export default function Game() {
             ) : (
                 <div className='fadeIn flex w-full items-center justify-center max-w-5xl gap-3 p-4'>
                     <Icon name="streamline-sharp:share-time-solid" className='text-2xl text-default-700' />
-                    <span className='text-sm text-default-700'>{'Nenhum resultado disponível'}</span>
+                    <span className='text-sm text-default-700'>{'Aguarde, nenhum resultado disponível'}</span>
                 </div>
             )} 
            

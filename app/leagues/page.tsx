@@ -152,7 +152,7 @@ export default function LeaguesPage() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-            <div className='flex transition border-default-400 border-b-1'>
+            <div className='flex transition border-default-400 pb-1 '>
                 <span className='text-lg font-bold text-default-950'>Campeonatos</span>
             </div>
             <div className='flex flex-wrap gap-2 w-full items-center text-sm'>

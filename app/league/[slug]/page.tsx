@@ -152,7 +152,7 @@ export default function League() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-            <div className='flex items-center gap-2 transition border-default-400 border-b-1 pb-2 h-[38px]'>
+            <div className='flex items-center gap-2 transition border-default-400 pb-2 h-[38px]'>
                 {leagueInfo && (
                     <>  
                         <div className='flex items-center w-full gap-2'>

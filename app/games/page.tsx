@@ -15,6 +15,7 @@ import Fuse from "fuse.js";
 import GamesStatsTable from '@/components/games-stats-table';
 
 export type GameScore = {
+    game_slug: string;
     map_name: string;
     order: number;
     rounds_count: number;
@@ -84,7 +85,6 @@ interface Teams {
 };
 
 export default function GamesPage() {
-
     const { setLoading, isMobile } = useAppContext();
 
     const [gamesStats, setGamesStats] = useState<GameStats[]>([]);
@@ -269,7 +269,7 @@ export default function GamesPage() {
 
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
-             <div className='flex transition border-default-400 border-b-1'>
+             <div className='flex transition border-default-400 pb-1'>
                 <span className='text-lg font-bold text-default-950'>Jogos</span>
             </div>
 

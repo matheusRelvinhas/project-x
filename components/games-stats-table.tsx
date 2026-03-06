@@ -110,8 +110,8 @@ export default function GamesStatsTable({
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'date')}</span>
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'hour')}</span>
                         </div>
-                        <div className={`flex gap-2 pt-4 items-center justify-center w-full max-w-[40%] min-w-[260px] ${title!='Ao vivo' && 'hover:text-primary-600 cursor-pointer'}`}
-                            onClick={()=>title!='Ao vivo' && handleNavigation(`/game/${game.slug}`)}>
+                        <div className={`flex gap-2 pt-4 items-center justify-center w-full max-w-[40%] min-w-[260px] ${game.status=='finished' && 'hover:text-primary-600 cursor-pointer'}`}
+                            onClick={()=>game.status=='finished' && handleNavigation(`/game/${game.slug}`)}>
                             <div className='flex w-full min-w-[136px] items-center justify-end gap-2'>
                                 <span className={`font-semibold whitespace-nowrap overflow-hidden text-end text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
                                     { game.team1_name ? game.team1_name : (
