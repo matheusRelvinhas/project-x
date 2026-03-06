@@ -54,7 +54,7 @@ export const GameSide: React.FC<GameSideProps> = ({ gamesSide, filterMap, gameIn
     const { isMobile } = useAppContext();
 
     const filteredGamesSide = useMemo(() => {
-        return filterMap ? gamesSide.filter(g => g.map_name === filterMap) : gamesSide;
+        return filterMap ? gamesSide?.filter(g => g.map_name === filterMap) : gamesSide;
     }, [gamesSide, filterMap]);
 
     const iconRound = (endReason: string) => {
@@ -68,7 +68,7 @@ export const GameSide: React.FC<GameSideProps> = ({ gamesSide, filterMap, gameIn
 
     return (
         <div className={`flex w-full max-w-5xl`}>
-            {filteredGamesSide.map((gameSide, i) => {
+            {filteredGamesSide?.map((gameSide, i) => {
                 let roundPointer = 0;
                 return (
                     <div key={`game-side-${i}-${gameSide.map_name}`} className="flex w-full flex-wrap gap-2 fadeIn">

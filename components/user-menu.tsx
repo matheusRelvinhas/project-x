@@ -20,7 +20,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
             <Button
                 rounded={false}
                 border={false}
-                className={`flex flex-row w-full transition items-center min-h-[48px] max-h-[48px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
+                className={`flex flex-row w-full transition items-center min-h-[64px] max-h-[64px] gap-4 border-t-1 border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${
                     (isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'
                 }`}
                 onClick={() => handleNavigation(`${user.logged ? '/' : '/login'}`)}

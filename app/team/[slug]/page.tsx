@@ -179,7 +179,7 @@ export default function Team() {
                 )}
             </div>
             
-            <div className='flex w-full items-center justify-between'>
+            <div className='flex w-full items-center justify-between max-w-7xl'>
                 <Button onClick={handleBack} typeButton="default" padding="p-0">
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
@@ -205,7 +205,7 @@ export default function Team() {
                 />
             </div>
 
-            <div className={`flex items-start flex-wrap gap-2 w-full`}>
+            <div className={`flex items-start flex-wrap gap-2 w-full  max-w-7xl`}>
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
                     <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'} slug={slug}
                         onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 4 + (isMobile ? 0 : 1)} >

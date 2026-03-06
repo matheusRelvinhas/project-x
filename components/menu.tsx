@@ -52,14 +52,14 @@ const Menu = ({ children }: MenuProps) => {
     }, [pathname, user.logged]);
 
     const menuButton = (
-        <div className={`fadeIn fixed flex w-full justify-between min-h-[48px] max-h-[48px] z-100 ${!isOpen ? 'bg-default-100' : 'bg-transparent'}`}>
+        <div className={`fadeIn fixed flex w-full justify-between min-h-[64px] max-h-[64px] z-100 ${!isOpen ? 'bg-default-100' : 'bg-transparent'}`}>
             <LogoButton isExpanded={isExpanded} isMobile={isMobile} handleNavigation={handleNavigation} />
             <Ripple
-                className='flex flex-col transition select-none cursor-pointer items-center justify-center py-1 border-b-1 border-l-1  border-default-400 min-h-[48px] max-h-[48px] min-w-[48px] text-default-900 hover:text-default-1000 hover:bg-glass-effect'
+                className='flex flex-col transition select-none cursor-pointer items-center justify-center py-1 border-b-1 border-l-1  border-default-400 min-h-[64px] max-h-[64px] min-w-[64px] text-default-900 hover:text-default-1000 hover:bg-glass-effect'
                 onClick={() => setIsOpen(!isOpen)}
             >  
-                {isOpen && <Icon name="mdi:close" className="text-3xl fadeIn" />}
-                {!isOpen && <Icon name="mdi:menu" className="text-3xl fadeIn" />}
+                {isOpen && <Icon name="mdi:close" className="text-4xl fadeIn" />}
+                {!isOpen && <Icon name="mdi:menu" className="text-4xl fadeIn" />}
             </Ripple>
 
         </div>
@@ -100,7 +100,7 @@ const Menu = ({ children }: MenuProps) => {
                                 key={item.name}
                                 rounded={false}
                                 border={false}
-                                className={`flex flex-row transition items-center min-h-[48px] max-h-[48px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${(isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'}`}
+                                className={`flex flex-row transition items-center min-h-[64px] max-h-[64px] gap-4 border-b border-default-400 text-default-900 hover:text-default-1000 hover:bg-glass-effect font-medium cursor-pointer transition ${(isExpanded || isMobile) ? 'pl-6 px-2 py-3' : 'justify-center px-2 py-3'}`}
                                 onClick={() => handleNavigation(item.href)}
                             >
                                 {pathname.startsWith(item.navId) && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
@@ -124,7 +124,7 @@ const Menu = ({ children }: MenuProps) => {
             >
                 <Loader />
                 <div className='flex w-full flex-col flex-1'>
-                    <div className={`flex w-full h-full mx-auto container ${isMobile ? 'pt-15 pb-4 px-4' : 'px-6 py-8'}`}>
+                    <div className={`flex w-full h-full mx-auto container ${isMobile ? 'pt-20 pb-4 px-4' : 'px-6 py-8'}`}>
                         {children}
                     </div>
                     {!isLoginPage && <Footer handleNavigation={handleNavigation} />}

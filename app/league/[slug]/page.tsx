@@ -167,7 +167,7 @@ export default function League() {
                 )}
             </div>
 
-            <div className='flex w-full items-start gap-2 justify-between'>
+            <div className='flex w-full items-start gap-2 justify-between max-w-5xl'>
                 <Button onClick={handleBack} typeButton="default" padding="p-0">
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>

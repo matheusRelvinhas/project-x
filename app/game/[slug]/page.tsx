@@ -93,7 +93,7 @@ export default function Game() {
         if (isShortStats) return [...base, ...overallStats]
         const performanceStats = [
             { title: 'ADR', key: 'adr', tooltip: 'Média de Dano por Round' },
-            { title: 'Duelos', key: 'trade_kills', tooltip: 'Duelos Kills/Mortes' },
+            { title: 'Trades', key: 'trade_kills', tooltip: 'Duelos Kills/Mortes' },
             { title: 'Multikills', key: 'multikills', tooltip: 'Multikills' },
             { title: 'Clutches', key: 'clutches', tooltip: 'Clutches' }
         ];
@@ -383,7 +383,7 @@ export default function Game() {
                 )}
             </div>
 
-            <div className='flex w-full items-start justify-between gap-2'>
+            <div className='flex w-full items-start justify-between gap-2 max-w-5xl'>
                 <Button onClick={handleBack} typeButton="default" padding="p-0">
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>

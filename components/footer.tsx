@@ -13,7 +13,7 @@ const Footer = ({ handleNavigation }: FooterProps) => {
 
     return (
         <footer className={`flex flex-col w-full border-t border-default-400 transition ${isOpen && isMobile ? 'bg-default-50' : 'bg-[#0f0f0f]'}`}>
-            <div className="max-w-7xl mx-auto container p-6 flex flex-wrap gap-6 justify-between items-center">
+            <div className="max-w-7xl mx-auto container px-6 py-3 flex flex-wrap gap-6 justify-between items-center">
                 {/* LOGO + DESCRIÇÃO */}
                 <div className="flex flex-col gap-3 max-w-md">
                     <LogoButton
