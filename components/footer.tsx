@@ -43,7 +43,7 @@ const Footer = ({ handleNavigation }: FooterProps) => {
                     <a
                         href="mailto:contact@redondo.gg"
                         className="text-default-600 hover:text-primary-600 transition"
-                    >{'contact@redondo.gg'}</a>
+                    >{'contato.redondo.gg@gmail.com'}</a>
 
                     <span className="text-default-600 text-xs">{'Respondemos em até 48h'}</span>
                 </div>

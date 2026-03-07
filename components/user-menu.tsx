@@ -26,7 +26,7 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
                 onClick={() => handleNavigation(`${user.logged ? '/' : '/login'}`)}
             >   
                 {(pathname === '/login' || pathname === '/profile') && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
-                <Icon name="mdi:account-circle" className="text-3xl fadeIn rounded-full" />
+                <Icon name="mdi:account-circle" className="text-4xl fadeIn rounded-full" />
                 {(isExpanded || isMobile) && (
                     <span className="flex fadeIn-menu text-xs font-medium">
                     {user?.logged

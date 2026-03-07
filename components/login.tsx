@@ -18,6 +18,8 @@ export default function Login() {
 
     const router = useRouter();
     const searchParams = useSearchParams();
+    const [loading, setLoading] = useState<boolean>(false);
+
     const [forgotPassword, setForgotPassword] = useState<boolean>(false);
     const [isRegister, setIsRegister] = useState<boolean>(false);
     const [recoverPassword, setRecoverPassword] = useState<string|null>(null);
@@ -109,17 +111,22 @@ export default function Login() {
     };
 
     const handleRecoverPassword = () => {
+        setLoading(true);
         toast.dismiss();
         if (!isEmail) return toast.error("Email inválido.");
         if (!isConfirmEmail) return toast.error("Confirme seu email.");
         axiosGet(`/login/recover_password?email=${email}`, (data) => {
-            if (data.message == 'email_send') {
+            if (data.message == 'email_sent') {
                 toast.success("Email enviado, verifique seu email.");
-            }
+            };
+            setLoading(false);
+            handleParam('');
         }, (error) => {
             if (error.error == 'invalid_email') toast.error('Email inválido.');
             if (error.error == 'error_recover_password') toast.error('Error ao enviar email.');
+            setLoading(false);
         });
+        
     };
 
     const handleAttPassword = () => {
@@ -208,7 +215,7 @@ export default function Login() {
                                 <Button
                                     typeButton="primary"
                                     onClick={() => handleRecoverPassword()}
-                                    isDisabled={!isEmail || !isConfirmEmail}
+                                    isDisabled={!isEmail || !isConfirmEmail || loading}
                                     
                                 >
                                     Recuperar senha
@@ -333,7 +340,8 @@ export default function Login() {
                                     <Button
                                         border={false}
                                         rounded={false}
-                                        className="rounded-full cursor-pointer mt-3 min-w-[24px]"
+                                        className="rounded-full cursor-pointer mt-3 min-w-[24px] max-w-[24px]"
+                                        padding='p-0'
                                         onClick={() => setSeeConfirmPassword(!seeConfirmPassword)}
                                     >
                                         {seeConfirmPassword && <Icon name="lsicon:view-filled" className="text-2xl fadeIn text-default-950" />}
