@@ -1,4 +1,29 @@
 /** @type {import('next').NextConfig} */
+
+const securityHeaders = [
+    {
+        key: "X-DNS-Prefetch-Control",
+        value: "on",
+    },
+    {
+        key: "X-Frame-Options",
+        value: "SAMEORIGIN",
+    },
+    {
+        key: "X-Content-Type-Options",
+        value: "nosniff",
+    },
+    {
+        key: "Referrer-Policy",
+        value: "strict-origin-when-cross-origin",
+    },
+    {
+        key: "X-XSS-Protection",
+        value: "1; mode=block",
+    },
+];
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 const nextConfig = {
     devIndicators: false,
     reactStrictMode: false,
@@ -7,33 +32,19 @@ const nextConfig = {
         minimumCacheTTL: 86400,
         dangerouslyAllowSVG: false,
     },
-    // 🔐 Cabeçalhos de segurança e cache (descomentados se necessário)
-    // async headers() {
-    //     return [
-    //         {
-    //             source: "/(.*)",
-    //             headers: [
-    //                 { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=86400' },
-    //                 { key: "X-DNS-Prefetch-Control", value: "on" },
-    //                 { key: "X-Content-Type-Options", value: "nosniff" },
-    //                 { key: "X-Frame-Options", value: "SAMEORIGIN" },
-    //                 {
-    //                   key: "Referrer-Policy",
-    //                   value: "strict-origin-when-cross-origin",
-    //                 },
-    //                 {
-    //                   key: "Permissions-Policy",
-    //                   value: "camera=(), microphone=(), geolocation=()",
-    //                 },
-    //             ],
-    //         },
-    //     ];
-    // },
+    async headers() {
+        return [
+            {
+                source: "/(.*)",
+                headers: securityHeaders,
+            },
+        ];
+    },
     async rewrites() {
         return [
             {
                 source: "/api/:path*",
-                destination: "http://localhost:3001/:path*",
+                destination: `${API_BASE_URL}/api/:path*`,
             },
         ];
     },

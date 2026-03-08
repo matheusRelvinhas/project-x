@@ -19,13 +19,9 @@ const PlayerImage = ({
 	if (!img_url || hasError) {
 		return (
 			<div
-				className={`rounded-4xl p-[3px] ${className}`}
-				style={{
-					filter:
-						"drop-shadow(var(--default-700) 1px 0px 0px) drop-shadow(var(--default-700) 0px 1px 0px) drop-shadow(var(--default-700) -1px 0px 0px) drop-shadow(var(--default-700) 0px -1px 0px)",
-				}}
+				className={`rounded-4xl flex w-full items-center justify-center ${className}`}
 			>
-				<Icon icon="heroicons:user-solid" className={className} />
+				<Icon icon="carbon:user-avatar-filled" className={`${className} text-default-400 text-4xl`} />
 			</div>
 		);
 	}

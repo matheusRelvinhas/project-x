@@ -104,8 +104,8 @@ const Menu = ({ children }: MenuProps) => {
                                 onClick={() => handleNavigation(item.href)}
                             >
                                 {pathname.startsWith(item.navId) && <div className='absolute fadeIn left-0 flex h-full w-full border-l-4 border-primary-600'>{''}</div>}
-                                <Icon name={item.icon} className="text-3xl" />
-                                {(isExpanded || isMobile) && <span className='fadeIn-menu'>{item.name}</span>}
+                                <Icon name={item.icon} className="text-3xl min-w-[30px]" />
+                                {(isExpanded || isMobile) && <span className='fadeIn-menu truncate'>{item.name}</span>}
                             </Button>
                         ))}
                     </div>

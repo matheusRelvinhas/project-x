@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 export const axiosGet = async (
     endpoint: string,
     callback: (data: any) => void,
@@ -12,12 +10,13 @@ export const axiosGet = async (
         const token = localStorage.getItem("token_access");
         const headers: any = {
             "ngrok-skip-browser-warning": "true",
+            "X-Service-Token": process.env.NEXT_PUBLIC_SERVICE_TOKEN,
         };
         if (accessToken && token && token !== "not_user") {
             headers["Authorization"] = `Bearer ${token}`;
         };
         const response = await axios.get(
-            `${API_BASE_URL}/api${endpoint}`,
+            `/api${endpoint}`,
             { timeout: 20000, headers }
         );
         callback(response.data);

@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { axiosGet } from "@/utils/axios";
 import { useAppContext } from "@/context/context";
+import LogoButton from './logo-button';
 
 export default function Login() {
 
@@ -169,8 +170,16 @@ export default function Login() {
     }, [searchParams]);
 
     return (
-        <div className="flex h-full w-full flex-row justify-center items-center fadeIn select-none">
-            <div className="min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded">
+        <div className="flex h-full w-full flex-col justify-between gap-4 items-center fadeIn select-none">
+            <div className='flex w-full max-w-md'>
+                <LogoButton
+                    isExpanded={true}
+                    isMobile={false}
+                    handleNavigation={(() => {})}
+                    isFooter={true}
+                />
+            </div>
+            <div className="flex flex-col min-w-xs max-w-md w-full p-6 bg-default-200 shadow-xl rounded">
                 <span className="text-lg font-bold text-default-950">{isRegister ? 'Registrar' : forgotPassword  ? 'Recuperar senha' : recoverPassword ? 'Recuperar senha' : 'Login'}</span>
                 <form className="flex gap-3 flex-col mt-4" onSubmit={(e) => {e.preventDefault(); handleSubmit('default')}}>
                     {!recoverPassword && (
@@ -404,6 +413,9 @@ export default function Login() {
                         </div>
                     )}
                 </form>
+            </div>
+            <div className="px-3 py-4 text-center text-xs text-default-600">
+                {`© ${new Date().getFullYear()} REDONDO — Todos os direitos reservados.`}
             </div>
         </div>
     );
