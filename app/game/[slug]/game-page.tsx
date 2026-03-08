@@ -11,7 +11,7 @@ import { axiosGet } from '@/utils/axios';
 import { toast } from "react-toastify";
 import TeamImage from '@/components/team-image';
 import { type GameStats } from "@/app/games/games-page";
-import { type PlayerStats } from "@/app/players/page";
+import { type PlayerStats } from "@/app/players/players-page";
 import{ type GameSideInfo } from '@/components/game-side';
 import { mapsName } from '@/utils/utils';
 import GameMapsScore from '@/components/game-maps-score';
