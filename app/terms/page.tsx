@@ -11,16 +11,16 @@ export default function TermsPage() {
                         Última atualização: 2026
                     </p>
                     <p className="text-default-700">
-                        Estes termos regulam o uso da plataforma <strong>REDONDO</strong>.
+                        Estes termos regulam o uso da plataforma <strong>REDONDO.FUN</strong>.
                         Ao acessar ou utilizar o serviço, você concorda com as condições descritas abaixo.
                     </p>
                 </header>
 
 
                 <section className="space-y-3">
-                    <h2 className="text-2xl font-semibold">1. Sobre o REDONDO</h2>
+                    <h2 className="text-2xl font-semibold">1. Sobre o REDONDO.FUN</h2>
                     <p>
-                        O <strong>REDONDO</strong> é uma plataforma dedicada à análise estatística do cenário competitivo de
+                        O <strong>REDONDO.FUN</strong> é uma plataforma dedicada à análise estatística do cenário competitivo de
                         <strong> Counter-Strike 2 (CS2)</strong> e esportes eletrônicos.
                     </p>
 
@@ -46,7 +46,7 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold">2. Natureza das Análises</h2>
 
                     <p>
-                        As métricas, previsões e análises apresentadas no REDONDO são geradas a partir de:
+                        As métricas, previsões e análises apresentadas no REDONDO.FUN são geradas a partir de:
                     </p>
 
                     <ul className="list-disc pl-6 space-y-1">
@@ -63,7 +63,7 @@ export default function TermsPage() {
                     </p>
 
                     <p>
-                        O REDONDO não fornece aconselhamento financeiro, recomendações de apostas
+                        O REDONDO.FUN não fornece aconselhamento financeiro, recomendações de apostas
                         ou garantias de desempenho esportivo.
                     </p>
                 </section>
@@ -72,7 +72,7 @@ export default function TermsPage() {
                 <section className="space-y-3">
                     <h2 className="text-2xl font-semibold">3. Uso Aceitável da Plataforma</h2>
 
-                    <p>Ao utilizar o REDONDO, o usuário concorda em não:</p>
+                    <p>Ao utilizar o REDONDO.FUN, o usuário concorda em não:</p>
 
                     <ul className="list-disc pl-6 space-y-1">
                         <li>Realizar scraping automatizado em massa</li>
@@ -85,7 +85,7 @@ export default function TermsPage() {
                     </ul>
 
                     <p>
-                        O REDONDO se reserva o direito de limitar, suspender ou bloquear o acesso
+                        O REDONDO.FUN se reserva o direito de limitar, suspender ou bloquear o acesso
                         de usuários que violem estas condições.
                     </p>
                 </section>
@@ -108,7 +108,7 @@ export default function TermsPage() {
                     </ul>
 
                     <p>
-                        é propriedade do REDONDO ou utilizado sob licença apropriada.
+                        é propriedade do REDONDO.FUN ou utilizado sob licença apropriada.
                     </p>
 
                     <p>
@@ -121,7 +121,7 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold">5. Limitação de Responsabilidade</h2>
 
                     <p>
-                        O REDONDO não garante que as informações disponibilizadas sejam
+                        O REDONDO.FUN não garante que as informações disponibilizadas sejam
                         totalmente completas, precisas ou atualizadas em tempo real.
                     </p>
 
@@ -130,7 +130,7 @@ export default function TermsPage() {
                     </p>
 
                     <p>
-                        O REDONDO não se responsabiliza por:
+                        O REDONDO.FUN não se responsabiliza por:
                     </p>
 
                     <ul className="list-disc pl-6 space-y-1">
@@ -146,7 +146,7 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold">6. Segurança da Plataforma</h2>
 
                     <p>
-                        Para proteger a integridade da plataforma, o REDONDO utiliza
+                        Para proteger a integridade da plataforma, o REDONDO.FUN utiliza
                         mecanismos técnicos como:
                     </p>
 
@@ -168,7 +168,7 @@ export default function TermsPage() {
                     <h2 className="text-2xl font-semibold">7. Privacidade e Dados</h2>
 
                     <p>
-                        O REDONDO coleta apenas dados técnicos necessários para
+                        O REDONDO.FUN coleta apenas dados técnicos necessários para
                         operação da plataforma, incluindo:
                     </p>
 
@@ -191,7 +191,7 @@ export default function TermsPage() {
                     </ul>
 
                     <p>
-                        O REDONDO não vende informações pessoais de usuários.
+                        O REDONDO.FUN não vende informações pessoais de usuários.
                     </p>
                 </section>
 
@@ -205,7 +205,7 @@ export default function TermsPage() {
                     </p>
 
                     <p>
-                        O uso contínuo do REDONDO após atualizações implica
+                        O uso contínuo do REDONDO.FUN após atualizações implica
                         aceitação das novas condições.
                     </p>
                 </section>
@@ -216,7 +216,7 @@ export default function TermsPage() {
 
                     <p>
                         Caso tenha dúvidas sobre estes termos ou sobre o uso da plataforma,
-                        entre em contato através dos canais oficiais do REDONDO.
+                        entre em contato através dos canais oficiais do REDONDO.FUN.
                     </p>
                 </section>
             </div>

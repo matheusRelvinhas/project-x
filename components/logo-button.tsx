@@ -30,7 +30,7 @@ export default function LogoButton({
 			<img className="h-[36px] min-w-[36px] animate-float" src={`/img/logo-${theme}.png`} />
             {(isExpanded || isMobile) && (
                 <div className="flex flex-col w-full truncate justify-center fadeIn-menu">
-                    <span className="font-black truncate">{'REDONDO'}</span>
+                    <span className="font-black truncate">{'REDONDO.FUN'}</span>
                     <span className="text-xs text-default-700 truncate">{'E-sports stats'}</span>
                 </div>
             )}

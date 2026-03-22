@@ -4,7 +4,7 @@ import { useAppContext } from "@/context/context";
 import { FilterTag } from '@/components/filter-tag';
 import LeagueImage from '@/components/league-image';
 import TeamImage from '@/components/team-image';
-import { type LeagueStats, type TournamentPrize } from "@/app/leagues/page";
+import { type LeagueStats, type TournamentPrize } from "@/app/leagues/leagues-page";
 import Pagination from './pagination';
 import { useRouter } from 'next/navigation';
 

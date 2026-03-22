@@ -2,7 +2,7 @@ import Icon from '@/components/icon';
 import { useMemo, ReactNode } from "react";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';
-import { type GameScore } from "@/app/games/page";
+import { type GameScore } from "@/app/games/games-page";
 import { mapsName } from '@/utils/utils';
 import { useAppContext } from '@/context/context';
 import { useRouter } from 'next/navigation';

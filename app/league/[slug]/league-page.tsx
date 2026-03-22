@@ -150,6 +150,27 @@ export default function League() {
         new Map(mergedStages.map(item => [item.value, item]))
     ).map(([_, item]) => item);
 
+    const getWins = (team_slug:string|null) => {
+        return gamesFinished.filter(g => (g.team1_slug == team_slug || g.team2_slug == team_slug) && g.winner_team_slug == team_slug).length;
+    };
+
+    const getLoses = (team_slug:string|null) => {
+        return gamesFinished.filter(g => (g.team1_slug == team_slug || g.team2_slug == team_slug) && g.winner_team_slug != team_slug).length;
+    };
+
+    const divGamesPerformance = (team_slug:string|null) => {
+        if (!team_slug) return;
+        const winGames = getWins(team_slug);
+        const loseGames = getLoses(team_slug);
+        return (
+            <div className='flex text-sm items-center justify-center font-semibold text-nowrap min-w-[36px]'>
+                <span className={`${winGames > loseGames ? 'text-success' : winGames < loseGames ? 'text-danger' : winGames == loseGames ? 'text-default-900' : ''}`}>
+                    {`${winGames} - ${loseGames}`}
+                </span>
+            </div>
+        );
+    };
+
     return (
         <div className="flex flex-col w-full h-full fadeIn gap-2">
             <div className='flex items-center gap-2 transition border-default-400 pb-2 h-[38px]'>
@@ -226,7 +247,7 @@ export default function League() {
             </div>
 
             <div className='flex w-full items-start gap-2 flex-wrap max-w-5xl'>
-                <div className='flex items-center w-full max-w-4xl'>
+                <div className='flex items-center w-full max-w-5xl'>
                     <GamesStatsTable
                         gamesStats={status=='finished' ? (
                             stageSelected ? gamesFinished.filter(g=>g.stage_round?.round==stageSelected) : gamesFinished
@@ -239,14 +260,14 @@ export default function League() {
                 </div>
                 
                 {(leagueInfo?.teams?.length || leagueInfo?.tournament_prizes?.length) ? (
-                    <div className='flex flex-col w-full max-w-md gap-2 bg-default-200 p-2 rounded'>
+                    <div className='flex flex-col w-full max-w-lg gap-2 bg-default-200 p-2 rounded'>
                         <div className='flex items-center gap-2'>
                             <span className='text-default-800 font-semibold text-sm'>{'Times'}</span>
                         </div>
                         <div className='grid grid-cols-2 gap-1 w-full justify-center'>
                             {leagueInfo.tournament_prizes ? (
                                 leagueInfo.tournament_prizes
-                                    .slice()                             // evita mutação
+                                    .slice()
                                     .sort((a, b) => parsePlace(a.place) - parsePlace(b.place))
                                     .map((t,i)=> (
                                     <div key={`${t.teams.slug}${i}`} className='flex w-full items-center justify-between gap-2 cursor-pointer rounded bg-default-50 px-2 py-1 hover:text-primary-600'
@@ -255,20 +276,33 @@ export default function League() {
                                             <TeamImage slug={t.teams.slug} img_url={t.teams.img_url} className='h-[20px] w-[20px]' />
                                             <span className='text-xs'>{t.teams.name}</span>
                                         </div>
-                                        <div className='flex gap-1 items-center'>
-                                            <span className='text-xs'>{t.place}</span>
-                                            {t.place=='1st' && (
-                                                <Icon className="text-md" name="mdi:crown" />
-                                            )}
+                                        <div className='flex gap-2 items-center'>
+                                            <div className='flex gap-1 items-center'>
+                                                <span className='text-xs'>{t.place}</span>
+                                                {t.place=='1st' && (
+                                                    <Icon className="text-md" name="mdi:crown" />
+                                                )}
+                                            </div>
+                                            {divGamesPerformance(t.teams.slug)}
                                         </div>
                                     </div>
                                 ))
                             ) : leagueInfo.teams ? (
-                                leagueInfo.teams.map((t,i)=> (
-                                    <div key={`${t.slug}${i}`} className='flex w-full items-center gap-2 cursor-pointer rounded bg-default-50 px-2 py-1 hover:text-primary-600'
+                                leagueInfo.teams
+                                    .slice()
+                                    .sort((a, b) => {
+                                        const saldoA = getWins(a.slug) - getLoses(a.slug);
+                                        const saldoB = getWins(b.slug) - getLoses(b.slug);
+                                        return saldoB - saldoA;
+                                    })
+                                    .map((t,i)=> (
+                                    <div key={`${t.slug}${i}`} className='flex w-full items-center justify-between gap-2 cursor-pointer rounded bg-default-50 px-2 py-1 hover:text-primary-600'
                                         onClick={()=>handleNavigation(`/team/${t.slug}`)}>
-                                        <TeamImage slug={t.slug} img_url={t.img_url} className='h-[20px] w-[20px]' />
-                                        <span className='text-xs font-semibold'>{t.name}</span>
+                                        <div className='flex gap-2 items-center'>
+                                            <TeamImage slug={t.slug} img_url={t.img_url} className='h-[20px] w-[20px]' />
+                                            <span className='text-xs font-semibold'>{t.name}</span>
+                                        </div>
+                                        {leagueInfo.status!='upcoming' && divGamesPerformance(t.slug)}
                                     </div>
                                 ))
                             ) : null}

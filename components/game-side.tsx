@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useAppContext } from '@/context/context';
 import { useRouter } from 'next/navigation';
-import { type GameStats } from "@/app/games/page";
+import { type GameStats } from "@/app/games/games-page";
 import TeamImage from './team-image';
 import Icon from './icon';
 

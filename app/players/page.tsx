@@ -4,7 +4,7 @@ import PlayersPage from "./players-page";
 export const metadata: Metadata = {
     title: "Jogadores e Estatísticas de CS2",
     description:
-        "Explore professional Counter-Strike 2 players on REDONDO. Analyze player statistics, performance, rankings, match history and advanced CS2 esports analytics.",
+        "Explore professional Counter-Strike 2 players on REDONDO.FUN. Analyze player statistics, performance, rankings, match history and advanced CS2 esports analytics.",
     keywords: [
         "cs2 players", "counter strike 2 players", "cs2 player stats", "cs2 pro players", "counter strike 2 player statistics",
         "cs2 esports players", "cs2 player rankings", "cs2 player analytics", "cs2 professional players",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         description:
             "Discover professional Counter-Strike 2 players and explore advanced statistics, rankings and esports performance analytics.",
         type: "website",
-        siteName: "REDONDO",
+        siteName: "REDONDO.FUN",
     },
     twitter: {
         card: "summary_large_image",

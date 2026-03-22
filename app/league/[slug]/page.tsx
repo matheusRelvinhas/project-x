@@ -14,7 +14,7 @@ export async function generateMetadata({
 
     return {
         title: `${formattedTitle}`,
-        description: `Explore estatísticas completas do campeonato ${formattedTitle} de Counter-Strike 2. Veja times participantes, partidas, resultados, mapas e desempenho das equipes no REDONDO.`,
+        description: `Explore estatísticas completas do campeonato ${formattedTitle} de Counter-Strike 2. Veja times participantes, partidas, resultados, mapas e desempenho das equipes no REDONDO.FUN.`,
         keywords: [
             slug,
             formattedTitle,
@@ -25,14 +25,14 @@ export async function generateMetadata({
             "liga cs2 estatísticas", "torneio cs2 estatísticas",
         ],
         openGraph: {
-            title: `${formattedTitle} – CS2 Tournament Statistics | REDONDO`,
+            title: `${formattedTitle} – CS2 Tournament Statistics | REDONDO.FUN`,
             description: `Veja estatísticas completas do campeonato ${formattedTitle} de Counter-Strike 2, incluindo partidas, resultados e desempenho dos times.`,
             type: "website",
-            siteName: "REDONDO",
+            siteName: "REDONDO.FUN",
         },
         twitter: {
             card: "summary_large_image",
-            title: `${formattedTitle} – CS2 Tournament Statistics | REDONDO`,
+            title: `${formattedTitle} – CS2 Tournament Statistics | REDONDO.FUN`,
             description: `Explore estatísticas completas do campeonato ${formattedTitle} de Counter-Strike 2.`,
         },
     };

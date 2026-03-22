@@ -3,7 +3,7 @@ import { useMemo, ReactNode } from "react";
 import { useAppContext } from "@/context/context";
 import TeamImage from '@/components/team-image';
 import Pagination from '@/components/pagination';
-import { type GameScore, type GameStats } from "@/app/games/page";
+import { type GameScore, type GameStats } from "@/app/games/games-page";
 import { useRouter } from 'next/navigation';
 import { mapsName } from '@/utils/utils';
 import GameMapsScore from '@/components/game-maps-score';

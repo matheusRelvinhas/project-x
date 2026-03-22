@@ -6,11 +6,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
     title: {
-        default: "REDONDO",
-        template: "%s | REDONDO",
+        default: "REDONDO.FUN",
+        template: "%s | REDONDO.FUN",
     },
     description:
-        "REDONDO é uma plataforma de estatísticas avançadas de Counter-Strike 2. Analise jogadores, times, campeonatos e partidas com métricas detalhadas e insights competitivos.",
+        "REDONDO.FUN é uma plataforma de estatísticas avançadas de Counter-Strike 2. Analise jogadores, times, campeonatos e partidas com métricas detalhadas e insights competitivos.",
     keywords: [
         "cs2 stats", "counter strike 2 stats", "estatísticas cs2", "cs2 analytics", "cs2 jogadores", "cs2 teams stats",
         "cs2 esports stats", "counter strike 2 analytics", "estatísticas counter strike 2", "cs2 jogos", "counter strike 2 matches",

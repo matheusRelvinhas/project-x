@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAppContext } from '@/context/context';
 import { mapsName } from '@/utils/utils';
-import type { GameScore, GameStats } from '@/app/games/page';
+import type { GameScore, GameStats } from '@/app/games/games-page';
 import Button from './button';
 import { useRouter } from 'next/navigation';
 
