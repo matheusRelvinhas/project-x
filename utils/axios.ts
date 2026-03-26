@@ -5,6 +5,7 @@ export const axiosGet = async (
     callback: (data: any) => void,
     errorCallback?: (error: any) => void,
     accessToken?: boolean,
+    timeout?: number
 ) => {
     try {
         const token = localStorage.getItem("token_access");
@@ -17,7 +18,7 @@ export const axiosGet = async (
         };
         const response = await axios.get(
             `/api${endpoint}`,
-            { timeout: 20000, headers }
+            { timeout: timeout || 20000, headers }
         );
         callback(response.data);
     } catch (error: any) {

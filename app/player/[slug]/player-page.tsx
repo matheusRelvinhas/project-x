@@ -13,6 +13,7 @@ import { type PlayerStats, type NumericStatKeys } from "@/app/players/players-pa
 import PlayerImage from '@/components/player-image';
 import PlayerStatsTable from '@/components/player-stats-table';
 import TeamImage from '@/components/team-image';
+import { Typewriter } from '@/components/typewiter';
 
 interface PlayerInfo {
     slug: string | null;
@@ -30,7 +31,7 @@ interface PlayerInfo {
 };
 
 export default function PlayerPage() {
-    const { setLoading } = useAppContext();
+    const { setLoading, theme } = useAppContext();
     const router = useRouter();
     const handleNavigation = (href: string) => {
         router.push(href);
@@ -39,10 +40,26 @@ export default function PlayerPage() {
     const { slug } = params;
 
     const [playerInfo, setPlayerInfo] = useState<PlayerInfo|null>(null);
+    const [aiAnalytics, setAiAnalytics] = useState<string|null>(null);
+    const [loadingAi, setLoadingAi] = useState<boolean>(false);
 
     const [sortedBy, setSortedBy] = useState<NumericStatKeys>('period');
     const [desc, setDesc] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState(1);
+
+    const aiAnalyticsPlayer = async (not_ai_return:boolean=false) => {
+        setLoading(true);
+        setLoadingAi(true);
+        await axiosGet(
+            `/ai_analytics/player?slug=${slug}${not_ai_return ? '&not_ai_return=ok' : ''}`,
+            (data) => {
+                setAiAnalytics(data.ai_analytics_player ?  data.ai_analytics_player : null);
+            },
+            () => toast.error('Erro inesperado, tente novamente. #18'), true, 120000
+        );
+        setLoading(false);
+        setLoadingAi(false);
+    };
 
     useEffect(() => {
         const getPlayer = async (slug:string|string[]) => {
@@ -55,6 +72,7 @@ export default function PlayerPage() {
                 () => toast.error('Erro inesperado, tente novamente. #10'), true
             );
             setLoading(false);
+            aiAnalyticsPlayer(true);
         };
         if (slug) {
             getPlayer(slug);
@@ -120,6 +138,20 @@ export default function PlayerPage() {
                 setSortedBy={setSortedBy} desc={desc} setDesc={setDesc} periods={true}
                 currentPage={currentPage} onPageChange={setCurrentPage}
             />
+
+            <div className='flex justify-end justify-center w-full mt-2 w-full max-w-5xl'>
+                {aiAnalytics ? (
+                    <Typewriter text={aiAnalytics} />
+                ) : (
+                    <Button onClick={()=>aiAnalyticsPlayer(false)} className='flex items-center gap-2 hover:text-primary-600 hover:border-primary-600' padding="px-3 py-2">
+                        <img className="h-[28px] min-w-[28px] animate-float" src={`/img/logo-${theme}.png`} />
+                        {loadingAi 
+                            ? <span className='text-left text-xs fadeIn'>{'Pensando...'}</span>
+                            : <span className='text-left text-xs fadeIn'>{'Análise IA'}</span>
+                        }
+                    </Button>
+                )}
+            </div>
         </div>
     );
 }

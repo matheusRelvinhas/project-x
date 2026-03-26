@@ -27,3 +27,27 @@ export function useMounted() {
     }, []);
     return mounted;
 };
+
+export function useTypewriter(text: string, speed = 50) {
+    const [displayedText, setDisplayedText] = useState("");
+    const [index, setIndex] = useState(0);
+    const words = text.split(" ");
+    useEffect(() => {
+        if (!text) return;
+        if (index < words.length) {
+            const timeout = setTimeout(() => {
+                setDisplayedText((prev) =>
+                    prev ? prev + " " + words[index] : words[index]
+                );
+                setIndex((prev) => prev + 1);
+            }, speed);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [index, text]);
+    useEffect(() => {
+        setDisplayedText("");
+        setIndex(0);
+    }, [text]);
+    return displayedText;
+}
