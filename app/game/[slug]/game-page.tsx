@@ -201,17 +201,21 @@ export default function GamePage() {
         const fetchPlayers = async () => {
             const playersInfo = await Promise.all(
                 gamePlayerStats.map(p =>
-                    new Promise<PlayerStats>((resolve, reject) => {
+                    new Promise<PlayerStats | null>((resolve) => {
                         axiosGet(
                             `/player_stats/player?slug=${p.slug}&period=6`,
                             (data) => resolve(data),
-                            (error) => reject(error),
+                            (error) => {
+                                if (error?.error === 'player_not_found') {
+                                    resolve(null);
+                                }
+                            },
                             true
                         );
                     })
                 )
             );
-            setPlayerStatsInfo(playersInfo);
+            setPlayerStatsInfo(playersInfo.filter(Boolean) as PlayerStats[]);
         };
         fetchPlayers();
     }, [gamePlayerStats]);

@@ -5,7 +5,7 @@ import Flag from 'react-world-flags';
 import { useParams, useRouter } from 'next/navigation';
 import Icon from '@/components/icon';
 import Button from "@/components/button";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAppContext } from "@/context/context";
 import { axiosGet } from '@/utils/axios';
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ import LeaguesStatsTable from '@/components/leagues-stats-table';
 import { type LeagueStats } from "@/app/leagues/leagues-page";
 import MapsStatsTable from '@/components/maps-stats-table';
 import { mapsName, periodText } from '@/utils/utils';
+import { Typewriter } from '@/components/typewiter';
 
 type Period = "12_months" | "6_months" | "3_months" | "last_month";
 type PeriodPlayerStats = {
@@ -29,7 +30,7 @@ type PeriodPlayerStats = {
 };
 
 export default function TeamPage() {
-    const { isMobile, setLoading } = useAppContext();
+    const { isMobile, setLoading, theme } = useAppContext();
     const router = useRouter();
     const params = useParams();
     const { slug } = params;
@@ -44,16 +45,61 @@ export default function TeamPage() {
     const [gamesStats, setGamesStats] = useState<GameStats[]>([]);
     const [gamesCurrentPage, setGamesCurrentPage] = useState(1);
     const [filteredGamesStats, setFilteredGamesStats] = useState<GameStats[]>([]);
+    const [aiAnalytics, setAiAnalytics] = useState<string|null>(null);
+    const [loadingAi, setLoadingAi] = useState<boolean>(false);
 
     const [mapsStats, setMapsStats] = useState<GameScore[]>([]);
     const [mapsCurrentPage, setMapsCurrentPage] = useState(1);
     const [filteredMapsStats, setFilteredMapsStats] = useState<GameScore[]>([]);
-
+    
     const [sortedBy, setSortedBy] = useState<NumericStatKeys>('avg_kills');
     const [desc, setDesc] = useState<boolean>(true);
     const [period, setPeriod] = useState<Period>('6_months');
     const [mapSelected, setMapSelected] = useState<string>('');
     const [bestOfSelected, setBestOfSelected] = useState<string>('');
+
+    const isActiveRef = useRef(true);
+    useEffect(() => {
+        return () => {
+            isActiveRef.current = false; // cancela quando sair da página
+        };
+    }, []);
+    
+    const aiAnalyticsTeam = async (not_ai_return: boolean = false) => {
+        isActiveRef.current = true;
+        setLoading(true);
+        setLoadingAi(true);
+        let isFinished = false;
+        while (!isFinished && isActiveRef.current) {
+            await axiosGet(
+                `/ai_analytics/team?slug=${slug}${not_ai_return ? '&not_ai_return=ok' : ''}`,
+                (data) => {
+                    if (!isActiveRef.current) return;
+                    if (data.not_ai_return) {
+                        isFinished = true;
+                        return;
+                    }
+                    setAiAnalytics(data.ai_analytics_team ?? null);
+                    if (data.status === 'success') {
+                        isFinished = true;
+                    }
+                },
+                () => {
+                    if (!isActiveRef.current) return;
+                    isFinished = true;
+                    toast.error('Erro inesperado, tente novamente. #19');
+                },
+                true
+            );
+            if (!isFinished && isActiveRef.current) {
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+            }
+        }
+        if (isActiveRef.current) {
+            setLoading(false);
+            setLoadingAi(false);
+        }
+    };
 
     useEffect(() => {
         const getTeam = async (slug:string|string[]) => {
@@ -73,6 +119,7 @@ export default function TeamPage() {
         };
         if (slug) {
             getTeam(slug);
+            aiAnalyticsTeam(true);
         };
     }, [slug]);
 
@@ -101,7 +148,7 @@ export default function TeamPage() {
                 </div>
                 <div className='flex gap-1 bg-default-100 w-full items-center justify-between pl-2 pe-3 rounded py-[2px]'>
                     <span className='text-xs text-default-800'>{'Desempenho'}</span>
-                    <span className={`text-xs font-semibold ${performance < 50 ? 'text-danger' : 'text-success'}`}>{`${performance}%`}</span>
+                    <span className={`text-xs font-semibold ${performance < 35 ? 'text-danger' : performance < 70 ? 'text-tr' : performance >= 70 ? 'text-success' : ''}`}>{`${performance}%`}</span>
                 </div>
                 <div className='flex gap-1 bg-default-100 w-full items-center justify-between pl-2 pe-3 rounded py-[2px]'>
                     <span className='text-xs text-default-800'>{'Derrotas'}</span>
@@ -179,11 +226,11 @@ export default function TeamPage() {
                 )}
             </div>
             
-            <div className='flex w-full items-center justify-between max-w-7xl'>
+            <div className='flex w-full items-center justify-between max-w-[1170px]'>
                 <Button onClick={handleBack} typeButton="default" padding="p-0">
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
-                {teamInfo && (
+                {(teamInfo && teamInfo?.rank && teamInfo?.points) && (
                     <div className='flex flex-col w-[78px] h-[32px] px-2 py-[1px] bg-default-50 rounded-sm'>
                         <span style={{fontSize: 'x-small'}}>valve rank</span>
                         <div className='flex w-full items-center justify-between'>
@@ -194,7 +241,7 @@ export default function TeamPage() {
                 )}
             </div>
 
-            <div className='flex text-sm'>
+            <div className='flex text-sm max-w-[1170px]'>
                 <Select value={period} setValue={(val) => setPeriod(val as Period)} placeholder='Selecione um período'
                     options={[
                         {title: periodText('last_month'), value: 'last_month'},
@@ -205,7 +252,7 @@ export default function TeamPage() {
                 />
             </div>
 
-            <div className={`flex items-start flex-wrap gap-2 w-full  max-w-7xl`}>
+            <div className={`flex items-start flex-wrap gap-2 w-full max-w-[1170px]`}>
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>
                     <GamesStatsTable gamesStats={filteredGamesStats} currentPage={gamesCurrentPage} title={'Jogos'} slug={slug}
                         onPageChange={setGamesCurrentPage} gameMap={false} itemsPerPage={ 4 + (isMobile ? 0 : 1)} >
@@ -265,11 +312,29 @@ export default function TeamPage() {
             </div>
             
             {playersStats.length ? (
-                <PlayerStatsTable filterPlayers={filteredPlayersStats} sortedBy={sortedBy}
-                    setSortedBy={setSortedBy} desc={desc} setDesc={setDesc} title={'Jogadores'}
-                    currentPage={playerCurrentPage} onPageChange={setPlayerCurrentPage}
-                />
+                <div className='flex w-full items-center max-w-[1170px]'>
+                    <PlayerStatsTable filterPlayers={filteredPlayersStats} sortedBy={sortedBy}
+                        setSortedBy={setSortedBy} desc={desc} setDesc={setDesc} title={'Jogadores'}
+                        currentPage={playerCurrentPage} onPageChange={setPlayerCurrentPage}
+                    />
+                </div>
             ) : null}
+
+            { gamesStats.length ? (
+                <div className='flex justify-end justify-center w-full mt-2 w-full max-w-[1170px]'>
+                    {aiAnalytics ? (
+                        <Typewriter text={aiAnalytics} />
+                    ) : (
+                        <Button isDisabled={loadingAi} onClick={()=>aiAnalyticsTeam(false)} className='flex items-center hover:text-primary-600 hover:border-primary-600' padding="px-3 py-2">
+                            <img className={`h-[28px] min-w-[28px] animate-float ${loadingAi ? "animate-spin" : ""}`} src={`/img/logo-${theme}.png`} />
+                            {loadingAi 
+                                ? <span className='text-left pl-2 text-xs fadeIn'>{'Pensando...'}</span>
+                                : <span className='text-left pl-2 text-xs fadeIn'>{'Análise IA'}</span>
+                            }
+                        </Button>
+                    )}
+                </div>
+            ):null}
         </div>
     );
 };

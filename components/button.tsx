@@ -25,7 +25,7 @@ const Button: React.FC<BtnProps> = ({ onClick, children, border = true, rounded 
     return (
         <Ripple
             className={`relative transition cursor-pointer select-none font-medium ${borderClass} ${rounded && roundedClass} ${paddingClass} ${defaultClass}`}
-            onClick={onClick}
+            onClick={isDisabled ? ()=>{} : onClick}
         >
             {children}
             {isSubmit && <button className='fixed top-0' type={'submit'}></button>}

@@ -47,20 +47,6 @@ export default function PlayerPage() {
     const [desc, setDesc] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const aiAnalyticsPlayer = async (not_ai_return:boolean=false) => {
-        setLoading(true);
-        setLoadingAi(true);
-        await axiosGet(
-            `/ai_analytics/player?slug=${slug}${not_ai_return ? '&not_ai_return=ok' : ''}`,
-            (data) => {
-                setAiAnalytics(data.ai_analytics_player ?  data.ai_analytics_player : null);
-            },
-            () => toast.error('Erro inesperado, tente novamente. #18'), true, 120000
-        );
-        setLoading(false);
-        setLoadingAi(false);
-    };
-
     useEffect(() => {
         const getPlayer = async (slug:string|string[]) => {
             setLoading(true);
@@ -72,7 +58,6 @@ export default function PlayerPage() {
                 () => toast.error('Erro inesperado, tente novamente. #10'), true
             );
             setLoading(false);
-            aiAnalyticsPlayer(true);
         };
         if (slug) {
             getPlayer(slug);
@@ -120,16 +105,18 @@ export default function PlayerPage() {
                     <Icon name="material-symbols:arrow-back-rounded" className="text-2xl" />
                 </Button>
                 {playerInfo && (
-                    <div className='flex gap-2 cursor-pointer px-2 items-center bg-default-50 rounded-sm hover:text-primary-600'
+                    <div className='flex gap-2 cursor-pointer py-1 px-2 items-center bg-default-50 rounded-sm hover:text-primary-600'
                         onClick={()=>handleNavigation(`/team/${playerInfo.team_slug}`)}>
-                        <TeamImage slug={playerInfo.team_slug} img_url={playerInfo.team_img_url} className='h-[20px] min-w-[20px] text-default-950' />
-                        <div className='flex flex-col min-w-[78px] h-[32px]'>
-                            <span style={{fontSize: 'x-small'}}>valve rank</span>
-                            <div className='flex w-full items-center justify-between'>
-                                <span className='text-xs font-bold'>{`${playerInfo.team_rank}º`}</span>
-                                <span style={{fontSize: 'x-small'}}>{`${playerInfo.team_points}pts`}</span>
+                        <TeamImage slug={playerInfo.team_slug} img_url={playerInfo.team_img_url} className='h-[20px] min-w-[20px] text-default-950'/>
+                        {playerInfo.team_rank && playerInfo.team_points &&
+                            <div className='flex flex-col min-w-[78px] h-[32px]'>
+                                <span style={{fontSize: 'x-small'}}>valve rank</span>
+                                <div className='flex w-full items-center justify-between'>
+                                    <span className='text-xs font-bold'>{`${playerInfo.team_rank}º`}</span>
+                                    <span style={{fontSize: 'x-small'}}>{`${playerInfo.team_points}pts`}</span>
+                                </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 )}
             </div>
@@ -139,19 +126,6 @@ export default function PlayerPage() {
                 currentPage={currentPage} onPageChange={setCurrentPage}
             />
 
-            <div className='flex justify-end justify-center w-full mt-2 w-full max-w-5xl'>
-                {aiAnalytics ? (
-                    <Typewriter text={aiAnalytics} />
-                ) : (
-                    <Button onClick={()=>aiAnalyticsPlayer(false)} className='flex items-center gap-2 hover:text-primary-600 hover:border-primary-600' padding="px-3 py-2">
-                        <img className="h-[28px] min-w-[28px] animate-float" src={`/img/logo-${theme}.png`} />
-                        {loadingAi 
-                            ? <span className='text-left text-xs fadeIn'>{'Pensando...'}</span>
-                            : <span className='text-left text-xs fadeIn'>{'Análise IA'}</span>
-                        }
-                    </Button>
-                )}
-            </div>
         </div>
     );
 }

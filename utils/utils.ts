@@ -13,11 +13,11 @@ export const mapsName = [
     { title: "Mirage", value: "de_mirage" },
     { title: "Inferno", value: "de_inferno" },
     { title: "Nuke", value: "de_nuke" },
-    { title: "Train", value: "de_train" },
     { title: "Overpass", value: "de_overpass" },
     { title: "Ancient", value: "de_ancient" },
     { title: "Anubis", value: "de_anubis" },
-    { title: "Vertigo", value: "de_vertigo" },
+    //{ title: "Train", value: "de_train" },
+    //{ title: "Vertigo", value: "de_vertigo" },
 ];
 
 export function useMounted() {
