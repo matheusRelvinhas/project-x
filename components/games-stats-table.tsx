@@ -7,6 +7,7 @@ import { type GameScore, type GameStats } from "@/app/games/games-page";
 import { useRouter } from 'next/navigation';
 import { mapsName } from '@/utils/utils';
 import GameMapsScore from '@/components/game-maps-score';
+import { formatTimestamp } from '@/app/game/[slug]/game-page';
 
 interface GamesStatsTableProps {
     gamesStats: GameStats[];
@@ -32,7 +33,7 @@ export default function GamesStatsTable({
     rounterLeague=true
 }: GamesStatsTableProps) {
 
-    const { isMobile, theme } = useAppContext();
+    const { isMobile } = useAppContext();
     const router = useRouter()
     const handleNavigation = (href: string) => {
         router.push(href);
@@ -44,20 +45,6 @@ export default function GamesStatsTable({
         const end = start + itemsPerPage;
         return gamesStats.slice(start, end);
     }, [gamesStats, currentPage, itemsPerPage]);
-
-    const formatTimestamp = (timestamp: number, typeDate: 'date' | 'hour') => {
-        const data = new Date(timestamp * 1000);
-        const pad = (n: number) => n.toString().padStart(2, '0');
-        if (typeDate === 'date') {
-            const dia = pad(data.getDate());
-            const mes = pad(data.getMonth() + 1);
-            return `${dia}/${mes}`;
-        } else if (typeDate === 'hour') {
-            const horas = pad(data.getHours());
-            const minutos = pad(data.getMinutes());
-            return `${horas}:${minutos}`;
-        }
-    };
 
     return (
         <div className='fadeIn transition flex flex-col p-2 gap-2 bg-default-200 rounded w-full'>
@@ -88,12 +75,14 @@ export default function GamesStatsTable({
                 <div className='min-w-max w-full flex flex-col'>{currentGames.map((game, i) => (
                     <div key={game.slug + i} className={`relative flex gap-2 overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
                         <div className='absolute top-[4px] left-[8px] z-10 flex gap-2 flex-nowrap'>
-                            <span className='bg-primary-600 text-default-100 whitespace-nowrap font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
-                                {game.stage_round?.round && game.stage_round.round.length > 14
-                                    ? game.stage_round?.round.slice(0, 14) + "..."
-                                    : game.stage_round?.round
-                                }
-                            </span>
+                            {game.stage_round?.round && (
+                                <span className='bg-primary-600 text-default-100 whitespace-nowrap font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>
+                                    {game.stage_round.round.length > 14
+                                        ? game.stage_round?.round.slice(0, 14) + "..."
+                                        : game.stage_round?.round
+                                    }
+                                </span>
+                            )}
                             <span className='bg-primary-600 text-default-100 font-semibold text-[11px] rounded-sm px-2 h-[16px] flex text-center items-center justify-center'>{game.bo_type && `Bo${game.bo_type}`}</span>
                             <span className={`text-default-800 text-[11px] whitespace-nowrap h-[16px] flex text-center items-center justify-center ${rounterLeague ? 'hover:text-primary-600 cursor-pointer' : ''}`}
                                 onClick={rounterLeague ? ()=>handleNavigation(`/league/${game.league_slug}`) : ()=>{}}>
@@ -110,8 +99,8 @@ export default function GamesStatsTable({
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'date')}</span>
                             <span className='text-default-800'>{formatTimestamp(game.start_timestamp, 'hour')}</span>
                         </div>
-                        <div className={`flex gap-2 pt-4 items-center justify-center w-full max-w-[40%] min-w-[260px] ${game.status=='finished' && 'hover:text-primary-600 cursor-pointer'}`}
-                            onClick={()=>game.status=='finished' && handleNavigation(`/game/${game.slug}`)}>
+                        <div className={`flex gap-2 pt-4 items-center justify-center w-full max-w-[40%] min-w-[260px] hover:text-primary-600 cursor-pointer`}
+                            onClick={()=> handleNavigation(`/game/${game.slug}`)}>
                             <div className='flex w-full min-w-[136px] items-center justify-end gap-2'>
                                 <span className={`font-semibold whitespace-nowrap overflow-hidden text-end text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
                                     { game.team1_name ? game.team1_name : (

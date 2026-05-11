@@ -19,14 +19,14 @@ const Footer = ({ handleNavigation }: FooterProps) => {
                         <span className="font-semibold text-[#f0f0f0]">{'REDONDO.FUN'}</span>
                         <span>{' é uma plataforma de estatísticas avançadas e análise com inteligência artificial focada no cenário competitivo de '}</span>
                         <span className="font-medium text-[#f0f0f0]">{'Counter-Strike 2'}</span>
-                        <span>{'. Especializada em campeonatos High Tier S e A, fornecemos métricas detalhadas e insights estratégicos sobre jogadores, times e campeonatos.'}</span>
+                        <span>{'. Análise de campeonatos Tier S e A, fornecemos métricas detalhadas e insights estratégicos sobre jogadores, times e campeonatos.'}</span>
                     </div>
                 </div>
 
                 <div className="flex flex-col gap-2 text-sm">
                     <span className="font-semibold text-[#f0f0f0]">{'Plataforma'}</span>
                     <span className="text-default-600">{'Estatísticas Avançadas'}</span>
-                    <span className="text-default-600">{'Análise de IA'}</span>
+                    <span className="text-default-600">{'Análise IA'}</span>
                     <span className="text-default-600">{'Desemepnho de jogadores e equipes'}</span>
                 </div>
 
@@ -34,7 +34,7 @@ const Footer = ({ handleNavigation }: FooterProps) => {
                     <div className="flex flex-col gap-2 text-sm">
                         <span className="font-semibold text-[#f0f0f0]">{'Contato'}</span>
                         <a className="text-default-600 hover:text-primary-600 transition">
-                            {'contato.redondo.gg@gmail.com'}
+                            {'contato@redondo.fun'}
                         </a>
 
                         <span className="text-default-600 text-xs">{'Respondemos em até 48h'}</span>

@@ -12,7 +12,7 @@ interface GameMapsScoreProps {
     selectedMap?: string|null;
     setSelectMap?: (mapName: string | null) => void;
     navigateToMap?: boolean;
-}
+};
 
 export const GameMapsScore: React.FC<GameMapsScoreProps> = ({ gamesScore, game, size='md', selectedMap, setSelectMap, navigateToMap=false }) => {
     const { theme, isMobile } = useAppContext();

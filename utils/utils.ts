@@ -31,23 +31,26 @@ export function useMounted() {
 export function useTypewriter(text: string, speed = 50) {
     const [displayedText, setDisplayedText] = useState("");
     const [index, setIndex] = useState(0);
+    const wordsPerChunk = 5;
     const words = text.split(" ");
+    
     useEffect(() => {
         if (!text) return;
         if (index < words.length) {
             const timeout = setTimeout(() => {
+                const chunk = words.slice(index, index + wordsPerChunk).join(" ");
                 setDisplayedText((prev) =>
-                    prev ? prev + " " + words[index] : words[index]
+                    prev ? prev + " " + chunk : chunk
                 );
-                setIndex((prev) => prev + 1);
+                setIndex((prev) => prev + wordsPerChunk);
             }, speed);
 
             return () => clearTimeout(timeout);
         }
-    }, [index, text]);
+    }, [index, text, words]);
     useEffect(() => {
         setDisplayedText("");
         setIndex(0);
     }, [text]);
     return displayedText;
-}
+};

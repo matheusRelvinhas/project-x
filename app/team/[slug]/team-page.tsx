@@ -46,6 +46,7 @@ export default function TeamPage() {
     const [gamesCurrentPage, setGamesCurrentPage] = useState(1);
     const [filteredGamesStats, setFilteredGamesStats] = useState<GameStats[]>([]);
     const [aiAnalytics, setAiAnalytics] = useState<string|null>(null);
+    const [timestampAiAnalytics, setTimestampAiAnalytics] = useState<number|null>(null);
     const [loadingAi, setLoadingAi] = useState<boolean>(false);
 
     const [mapsStats, setMapsStats] = useState<GameScore[]>([]);
@@ -80,6 +81,7 @@ export default function TeamPage() {
                         return;
                     }
                     setAiAnalytics(data.ai_analytics_team ?? null);
+                    setTimestampAiAnalytics(data.timestamp ?? null);
                     if (data.status === 'success') {
                         isFinished = true;
                     }
@@ -320,10 +322,10 @@ export default function TeamPage() {
                 </div>
             ) : null}
 
-            { gamesStats.length ? (
+            {gamesStats.length ? (
                 <div className='flex justify-end justify-center w-full mt-2 w-full max-w-[1170px]'>
                     {aiAnalytics ? (
-                        <Typewriter text={aiAnalytics} />
+                        <Typewriter text={aiAnalytics} timestamp={timestampAiAnalytics} />
                     ) : (
                         <Button isDisabled={loadingAi} onClick={()=>aiAnalyticsTeam(false)} className='flex items-center hover:text-primary-600 hover:border-primary-600' padding="px-3 py-2">
                             <img className={`h-[28px] min-w-[28px] animate-float ${loadingAi ? "animate-spin" : ""}`} src={`/img/logo-${theme}.png`} />

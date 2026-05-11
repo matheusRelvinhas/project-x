@@ -5,7 +5,7 @@ import Flag from 'react-world-flags';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Icon from '@/components/icon';
 import Button from "@/components/button";
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useAppContext } from "@/context/context";
 import { axiosGet } from '@/utils/axios';
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ import PlayerImage from '@/components/player-image';
 import Ripple from 'react-ripplejs';
 import { FilterTag } from '@/components/filter-tag';
 import GameSide from '@/components/game-side';
+import { Typewriter } from '@/components/typewiter';
 
 export type GamePlayerStats = {
     additional_value: number;
@@ -60,9 +61,22 @@ export type GameMapsPlayerStats = {
     players_stats: GamePlayerStats[];
 };
 
+export const formatTimestamp = (timestamp: number, typeDate: 'date' | 'hour') => {
+    const data = new Date(timestamp * 1000);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    if (typeDate === 'date') {
+        const dia = pad(data.getDate());
+        const mes = pad(data.getMonth() + 1);
+        return `${dia}/${mes}`;
+    } else if (typeDate === 'hour') {
+        const horas = pad(data.getHours());
+        const minutos = pad(data.getMinutes());
+        return `${horas}:${minutos}`;
+    }
+};
 
 export default function GamePage() {
-    const { isMobile, setLoading } = useAppContext();
+    const { isMobile, theme, setLoading } = useAppContext();
     const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
@@ -82,6 +96,10 @@ export default function GamePage() {
     const [sortAsc, setSortAsc] = useState<boolean>(true);
     const [mobileSelectedTab, setMobileSelectedTab] = useState<'overall'|'performance'>('overall');
     const [isShortStats, setIsShortStats] = useState<boolean>(false);
+
+    const [aiAnalytics, setAiAnalytics] = useState<string|null>(null);
+    const [timestampAiAnalytics, setTimestampAiAnalytics] = useState<number|null>(null);
+    const [loadingAi, setLoadingAi] = useState<boolean>(false);
 
     const statsTable = useMemo(() => {
         const base = [{ title: 'Jogador', key: 'name', tooltip: 'Jogador' }];
@@ -156,6 +174,50 @@ export default function GamePage() {
         };
     }, [slug]);
 
+    const isActiveRef = useRef(true);
+    useEffect(() => {
+        return () => {
+            isActiveRef.current = false;
+        };
+    }, []);
+
+    const aiAnalyticsGame = async (not_ai_return: boolean = false) => {
+        isActiveRef.current = true;
+        setLoading(true);
+        setLoadingAi(true);
+        let isFinished = false;
+        while (!isFinished && isActiveRef.current) {
+            await axiosGet(
+                `/ai_analytics/game?slug=${slug}${not_ai_return ? '&not_ai_return=ok' : ''}`,
+                (data) => {
+                    if (!isActiveRef.current) return;
+                    if (data.not_ai_return) {
+                        isFinished = true;
+                        return;
+                    };
+                    setAiAnalytics(data.ai_analytics_game ?? null);
+                    setTimestampAiAnalytics(data.timestamp ?? null);
+                    if (data.status === 'success') {
+                        isFinished = true;
+                    }
+                },
+                () => {
+                    if (!isActiveRef.current) return;
+                    isFinished = true;
+                    toast.error('Erro inesperado, tente novamente. #20');
+                },
+                true
+            );
+            if (!isFinished && isActiveRef.current) {
+                await new Promise((resolve) => setTimeout(resolve, 5000));
+            }
+        }
+        if (isActiveRef.current) {
+            setLoading(false);
+            setLoadingAi(false);
+        }
+    };
+
     useEffect(() => {
         const getStats = async (
             slug:string|string[], 
@@ -193,6 +255,9 @@ export default function GamePage() {
                 },
                 () => toast.error('Erro inesperado, tente novamente. #17'), true
             );
+        };
+        if (slug && (gameInfo?.status == 'finished')) {
+            aiAnalyticsGame(true);
         };
     }, [slug, gameInfo?.status]);
 
@@ -377,11 +442,17 @@ export default function GamePage() {
             <div className='flex items-center gap-3 transition border-default-400 pb-2 h-[38px]'>
                 {gameInfo && (
                     <div className='fadeIn flex flex-col'>
-                        <div className='flex items-center gap-2'>
+                        <div 
+                            className='flex items-center gap-2 hover:text-primary-600 cursor-pointer transition'
+                            onClick={()=>handleNavigation(`/team/${gameInfo.team1_slug}`)}
+                        >
                             <TeamImage slug={gameInfo.team1_slug} img_url={gameInfo.team1_img_url} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                             <span className='flex text-sm font-semibold'>{gameInfo.team1_name}</span>
                         </div>
-                        <div className='flex items-center gap-2'>
+                        <div 
+                            className='flex items-center gap-2 hover:text-primary-600 cursor-pointer transition'
+                            onClick={()=>handleNavigation(`/team/${gameInfo.team2_slug}`)}
+                        >
                             <TeamImage slug={gameInfo.team2_slug} img_url={gameInfo.team2_img_url} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                             <span className='flex text-sm font-semibold'>{gameInfo.team2_name}</span>
                         </div>
@@ -412,14 +483,14 @@ export default function GamePage() {
                 )}
             </div>
 
-            {gameInfo && gameInfo.games_score && (
+            {gameInfo && (
                 <div className='fadeIn flex flex-col w-full items-center justify-center gap-2 max-w-5xl'>
                     <Button className={`flex overflow-hidden w-full max-w-lg bg-default-100 gap-3 items-center justify-center hover:border-primary-700 hover:bg-default-200 ${!selectedMap ? 'border-primary-600' : ''}`} onClick={()=> setSelectedMap(null)}>
                         <div className='flex w-full items-center justify-end gap-3'>
                             <TeamImage slug={gameInfo.team1_slug} img_url={gameInfo.team1_img_url} className={`${ isMobile ? 'h-[27px] w-[27px] min-w-[27px] max-w-[27px]' : 'h-[42px] w-[42px] min-w-[42px] max-w-[42px]'}`} />
                             <span className='flex items-center justify-end w-full max-w-[125px] text-sm text-end font-semibold'>{gameInfo.team1_name}</span>
                             <span className={`flex items-center justify-center rounded shadow-md bg-default-200 min-w-[27px] ${!gameInfo.winner_team_slug ? 'text-default-950' : gameInfo.team1_slug == gameInfo.winner_team_slug ? 'text-success' : 'text-danger'}`}>
-                            {gameInfo.team1_score}
+                                {gameInfo.team1_score}
                             </span>
                         </div>
                         <div className='flex w-full items-center gap-3'>
@@ -430,10 +501,11 @@ export default function GamePage() {
                             <TeamImage slug={gameInfo.team2_slug} img_url={gameInfo.team2_img_url} className={`${ isMobile ? 'h-[27px] w-[27px] min-w-[27px] max-w-[27px]' : 'h-[42px] w-[42px] min-w-[42px] max-w-[42px]'}`} />
                         </div>
                     </Button>
-              
-                    <div className='flex w-full items-center justify-center'>
-                        <GameMapsScore size='lg' gamesScore={gameInfo.games_score} game={gameInfo} selectedMap={selectedMap} setSelectMap={setSelectedMap} />
-                    </div>
+                    {gameInfo.games_score && gameInfo.games_score.length > 0 && ( 
+                        <div className='flex w-full items-center justify-center'>
+                            <GameMapsScore size='lg' gamesScore={gameInfo.games_score} game={gameInfo} selectedMap={selectedMap} setSelectMap={setSelectedMap} />
+                        </div>
+                    )}
                 </div>
              
             )}
@@ -455,17 +527,35 @@ export default function GamePage() {
                     </div>
                 </div>
             )}
-            {gameInfo && gameInfo.status == "finished" && filterPlayerStats?.length ? (
-                <div key={`${gameInfo.slug}-finished`} className='flex flex-col gap-2 fadeIn'>
-                    {scoreboardDiv(gameInfo, '1')}
-                    {scoreboardDiv(gameInfo, '2')}
+            {gameInfo && gameInfo.status == "finished" && (
+                filterPlayerStats?.length ? (
+                    <div key={`${gameInfo.slug}-finished`} className='flex flex-col gap-2 fadeIn'>
+                        {scoreboardDiv(gameInfo, '1')}
+                        {scoreboardDiv(gameInfo, '2')}
+                    </div>
+                ) : (
+                    <div className='fadeIn flex w-full items-center justify-center max-w-5xl gap-3 p-4'>
+                        <Icon name="streamline-sharp:share-time-solid" className='text-2xl text-default-700' />
+                        <span className='text-sm text-default-700'>{'Aguarde, nenhum resultado disponível'}</span>
+                    </div>
+                )
+            )}
+
+            {gameInfo ? (
+                <div className='flex justify-end justify-center w-full mt-2 w-full max-w-[1170px]'>
+                    {aiAnalytics ? (
+                        <Typewriter text={aiAnalytics} timestamp={timestampAiAnalytics} />
+                    ) : gameInfo.status != "finished" ? (
+                        <Button isDisabled={loadingAi} onClick={()=>aiAnalyticsGame(false)} className='flex items-center hover:text-primary-600 hover:border-primary-600' padding="px-3 py-2">
+                            <img className={`h-[28px] min-w-[28px] animate-float ${loadingAi ? "animate-spin" : ""}`} src={`/img/logo-${theme}.png`} />
+                            {loadingAi 
+                                ? <span className='text-left pl-2 text-xs fadeIn'>{'Pensando...'}</span>
+                                : <span className='text-left pl-2 text-xs fadeIn'>{'Análise IA'}</span>
+                            }
+                        </Button>
+                    ) : null}
                 </div>
-            ) : (
-                <div className='fadeIn flex w-full items-center justify-center max-w-5xl gap-3 p-4'>
-                    <Icon name="streamline-sharp:share-time-solid" className='text-2xl text-default-700' />
-                    <span className='text-sm text-default-700'>{'Aguarde, nenhum resultado disponível'}</span>
-                </div>
-            )} 
+            ):null}
            
         </div>
     );
