@@ -1,5 +1,6 @@
 name = "project-x"
+main = ".open-next/worker.js"
 compatibility_date = "2026-05-16"
 compatibility_flags = ["nodejs_compat"]
 
-pages_build_output_dir = ".next"
+assets = { directory = ".open-next/assets" }
