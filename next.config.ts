@@ -37,7 +37,12 @@ const nextConfig = {
         ];
     },
     async rewrites() {
-        return [];
+        return [
+            {
+                source: "/api/:path*",
+                destination: `${API_BASE_URL}/api/:path*`,
+            },
+        ];
     },
     modularizeImports: {
         lodash: {

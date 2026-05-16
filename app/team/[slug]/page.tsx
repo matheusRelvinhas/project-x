@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import TeamPage from "./team-page";
 
+export const runtime = "edge";
+
 export async function generateMetadata({
     params,
 }: {
