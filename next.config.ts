@@ -2,31 +2,6 @@
 
 const securityHeaders = [
     {
-        key: "Content-Security-Policy",
-        value: `
-            default-src 'self';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval'
-                https://accounts.google.com
-                https://apis.google.com
-                https://www.gstatic.com
-                https://static.cloudflareinsights.com
-                https://www.googletagmanager.com
-                https://www.google-analytics.com;
-            style-src 'self' 'unsafe-inline'
-                https://accounts.google.com;
-            img-src 'self' data: https:;
-            font-src 'self' data: https:;
-            frame-src
-                https://accounts.google.com;
-            connect-src 'self'
-                https://accounts.google.com
-                https://www.gstatic.com
-                https://api.redondo.fun
-                https://www.google-analytics.com;
-            base-uri 'self' https://accounts.google.com;
-        `.replace(/\n/g, ""),
-    },
-    {
         key: "X-DNS-Prefetch-Control",
         value: "on",
     },
