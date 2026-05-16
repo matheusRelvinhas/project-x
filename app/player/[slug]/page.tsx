@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import PlayerPage from "./player-page";
 
-export const runtime = "edge";
-
 export async function generateMetadata({
     params,
 }: {
