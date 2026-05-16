@@ -4,13 +4,14 @@ import { useTypewriter } from "@/utils/utils";
 
 type TypewriterProps = {
     text: string;
+    type_analysis: 'pre-game' | 'team';
     timestamp?: number|null;
 };
 
-export function Typewriter({ text, timestamp }: TypewriterProps) {
+export function Typewriter({ text, type_analysis, timestamp }: TypewriterProps) {
     const { theme } = useAppContext();
 
-    const typedText = useTypewriter(text, 50);
+    const typedText = useTypewriter(text);
     const isTyping = typedText !== text;
 
     const htmlWithCursor = isTyping
@@ -25,7 +26,15 @@ export function Typewriter({ text, timestamp }: TypewriterProps) {
             />
 
             <div className='flex w-full pt-3'>
-                <div className="bg-default-50 w-full text-xs rounded-tr-xl rounded-br-xl rounded-bl-xl rounded-tl-none py-2 px-3 leading-relaxed">
+                <div className="bg-default-50 w-full text-xs rounded-tr-xl rounded-br-xl rounded-bl-xl rounded-tl-none pt-1 pb-2 px-3 leading-relaxed">
+                    {timestamp && (
+                        <span className="flex pb-2 w-full fadeIn items-center text-[11px] font-semibold text-default-600">
+                            {
+                                `${type_analysis === 'pre-game' ? 'Análise pré-jogo' : 'Análise de time'} - 
+                                ${timestamp && formatTimestamp(timestamp, 'date')} ${timestamp && formatTimestamp(timestamp, 'hour')}`
+                            }
+                        </span>
+                    )}
                     <span>{''}</span>
                     <div
                         className="
@@ -41,13 +50,8 @@ export function Typewriter({ text, timestamp }: TypewriterProps) {
                     {!isTyping && (
                         <>
                             <span className="flex w-full fadeIn items-center justify-end text-[11px] font-semibold text-default-600">
-                                {'Análise pré-jogo. Redondo IA considera estatíticas atuais dos últimos meses e de campeonatos do tier S e A.'}
+                                {'Redondo IA considera estatíticas atuais de campeonatos do tier S e A.'}
                             </span>
-                            {timestamp && (
-                                <span className="flex fadeIn w-full items-center justify-end text-[11px] font-semibold text-default-600">
-                                    {`${timestamp && formatTimestamp(timestamp, 'date')} ${timestamp && formatTimestamp(timestamp, 'hour')}`}
-                                </span>
-                            )}
                         </>
                     )}
                     <style>

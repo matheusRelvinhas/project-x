@@ -28,10 +28,10 @@ export function useMounted() {
     return mounted;
 };
 
-export function useTypewriter(text: string, speed = 50) {
+export function useTypewriter(text: string, speed = 100) {
     const [displayedText, setDisplayedText] = useState("");
     const [index, setIndex] = useState(0);
-    const wordsPerChunk = 5;
+    const wordsPerChunk = 10;
     const words = text.split(" ");
     
     useEffect(() => {

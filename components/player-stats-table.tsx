@@ -83,7 +83,7 @@ export default function PlayerStatsTable({
         if (statKey=='avg_kills') return 'Kills';
         else if (statKey=='period') return 'Período';
         else if (statKey=='avg_death') return 'Morte';
-        else if (statKey=='avg_damage') return 'Danos';
+        else if (statKey=='avg_damage') return 'ADR';
         else if (statKey=='games_count') return 'Mapas';
         else if (statKey=='avg_first_kills') return 'Primeira kill';
         else if (statKey=='avg_first_death') return 'Primeira morte';
