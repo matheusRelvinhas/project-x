@@ -16,11 +16,7 @@ const securityHeaders = [
     {
         key: "Referrer-Policy",
         value: "strict-origin-when-cross-origin",
-    },
-    {
-        key: "X-XSS-Protection",
-        value: "1; mode=block",
-    },
+    }
 ];
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -41,12 +37,7 @@ const nextConfig = {
         ];
     },
     async rewrites() {
-        return [
-            {
-                source: "/api/:path*",
-                destination: `${API_BASE_URL}/api/:path*`,
-            },
-        ];
+        return [];
     },
     modularizeImports: {
         lodash: {
