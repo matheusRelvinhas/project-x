@@ -81,6 +81,26 @@ export default function Login() {
         setIsConfirmNewPassword(validatePassword(confirmNewPassword) && newPassword == confirmNewPassword);
     }, [confirmNewPassword]);
 
+    const handleParam = async (param: string) => {
+        const currentUrl = window.location.pathname;
+        if (!param) {
+            await router.push(currentUrl);
+            setForgotPassword(false);
+            setIsRegister(false);
+            setRecoverPassword(null);
+            return;
+        }
+        const params = new URLSearchParams(window.location.search);
+        const [key, value] = param.split('=');
+        if (value) {
+            params.set(key, value);
+        } else {
+            params.delete(key);
+        }
+        const queryString = params.toString();
+        await router.push(`${currentUrl}${queryString ? `?${queryString}` : ''}`);
+    };
+
     const handleSubmit = (typeLogin:string='default') => {
         toast.dismiss();
         if (typeLogin=='default') {
@@ -146,11 +166,6 @@ export default function Login() {
             }
             if (error.error == 'error_reset_password') toast.error('Error ao atualizar senha.');
         });
-    };
-
-    const handleParam = (param: string) => {
-        const currentUrl = window.location.pathname;
-        router.push(`${currentUrl}?${param}`);
     };
 
     useEffect(() => {
@@ -231,7 +246,7 @@ export default function Login() {
                                 </Button>
                             </div>
                             <div className="flex">
-                                <span onClick={() => handleParam('forgot_password=0')} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
+                                <span onClick={() => handleParam('')} className="flex cursor-pointer text-sm transition text-primary-600 hover:text-primary-700 font-semibold">
                                     Voltar
                                 </span>
                             </div>
