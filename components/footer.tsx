@@ -16,7 +16,7 @@ const Footer = ({ handleNavigation }: FooterProps) => {
             <div className="max-w-7xl mx-auto container px-6 pt-8 pb-3 flex flex-wrap gap-6 justify-between">
                 <div className="flex flex-col gap-3 max-w-md">
                     <div className="text-sm text-default-600 leading-relaxed">
-                        <span className="font-semibold text-[#f0f0f0]">{'REDONDO.FUN'}</span>
+                        <span className="font-semibold text-[#f0f0f0]">{'REDONDO STATS'}</span>
                         <span>{' é uma plataforma de estatísticas avançadas e análise com inteligência artificial focada no cenário competitivo de '}</span>
                         <span className="font-medium text-[#f0f0f0]">{'Counter-Strike 2'}</span>
                         <span>{'. Análise de campeonatos Tier S e A, fornecemos métricas detalhadas e insights estratégicos sobre jogadores, times e campeonatos.'}</span>
@@ -33,8 +33,8 @@ const Footer = ({ handleNavigation }: FooterProps) => {
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2 text-sm">
                         <span className="font-semibold text-[#f0f0f0]">{'Contato'}</span>
-                        <a className="text-default-600 hover:text-primary-600 transition">
-                            {'contato@redondo.fun'}
+                        <a className="text-primary-600 cursor-pointer hover:text-primary-500 transition">
+                            {'contato@redondostats.site'}
                         </a>
 
                         <span className="text-default-600 text-xs">{'Respondemos em até 48h'}</span>
@@ -48,7 +48,7 @@ const Footer = ({ handleNavigation }: FooterProps) => {
                 </div>
             </div>
             <div className="px-3 py-4 text-center text-xs text-default-600">
-                {`© ${new Date().getFullYear()} REDONDO.FUN — Todos os direitos reservados.`}
+                {`© ${new Date().getFullYear()} REDONDO STATS — Todos os direitos reservados.`}
             </div>
         </footer>
     );

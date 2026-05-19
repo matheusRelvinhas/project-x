@@ -2,15 +2,16 @@ import type { Metadata } from "next";
 import { AppProvider } from "@/context/context";
 import Menu from "@/components/menu";
 import Toast from "@/components/toast";
+import SchemaOrganization from "@/components/schema-organization";
 import "./globals.css";
 
 export const metadata: Metadata = {
     title: {
-        default: "REDONDO.FUN",
-        template: "%s | REDONDO.FUN",
+        default: "REDONDO STATS",
+        template: "%s | REDONDO STATS",
     },
     description:
-        "REDONDO.FUN é uma plataforma de estatísticas avançadas de Counter-Strike 2. Analise jogadores, times, campeonatos e partidas com métricas detalhadas e insights competitivos.",
+        "REDONDO STATS é uma plataforma de estatísticas avançadas de Counter-Strike 2. Analise jogadores, times, campeonatos e partidas com métricas detalhadas e insights competitivos.",
     keywords: [
         "cs2 stats", "counter strike 2 stats", "estatísticas cs2", "cs2 analytics", "cs2 jogadores", "cs2 teams stats",
         "cs2 esports stats", "counter strike 2 analytics", "estatísticas counter strike 2", "cs2 jogos", "counter strike 2 matches",
@@ -35,6 +36,9 @@ export default function RootLayout({
     const classFull = 'transition flex min-h-full w-full bg-default-100 text-default-950';
     return (
         <html lang="pt" className={classFull}>
+            <head>
+                <SchemaOrganization />
+            </head>
             <AppProvider>
                 <body className={classFull}>
                     <Toast />

@@ -367,11 +367,13 @@ export default function GamePage() {
     const scoreboardDiv = (gameInfo:GameStats, teamNum: '1' | '2') => {
         return playerStatsInfo && playerStatsInfo.length && (
             <div key={`${gameInfo.slug}-${teamNum}`} className='flex w-full flex-col gap-2 max-w-5xl p-2 bg-default-200 rounded fadeIn'>
-                <div onClick={()=>handleNavigation(`/team/${gameInfo[`team${teamNum}_slug`]}`)}
-                    className='flex items-center transition gap-2 hover:text-primary-600 cursor-pointer'>
+                <div className='flex items-center gap-2'>
                     <span className='font-semibold text-default-800 text-sm'>{`Placar`}</span>
-                    <span className='font-semibold text-sm'>{`${gameInfo[`team${teamNum}_name`]}`}</span>
-                    <TeamImage slug={gameInfo[`team${teamNum}_slug`]} img_url={gameInfo[`team${teamNum}_img_url`]} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
+                    <div onClick={()=>handleNavigation(`/team/${gameInfo[`team${teamNum}_slug`]}`)}
+                        className='flex items-center text-default-800 transition hover:text-primary-600 cursor-pointer gap-2'>
+                        <span className='font-semibold text-sm'>{`${gameInfo[`team${teamNum}_name`]}`}</span>
+                        <TeamImage slug={gameInfo[`team${teamNum}_slug`]} img_url={gameInfo[`team${teamNum}_img_url`]} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
+                    </div>
                 </div>
                 <div className='flex flex-col w-full overflow-x-auto gap-[1px] rounded'>
                     <div className={`flex w-full border-b border-default-200  `}>

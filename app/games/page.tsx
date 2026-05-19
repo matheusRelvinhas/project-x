@@ -4,7 +4,7 @@ import GamesPage from "./games-page";
 export const metadata: Metadata = {
     title: "Jogos e Estatísticas de CS2",
     description:
-        "Explore estatísticas detalhadas de partidas de Counter-Strike 2 no REDONDO.FUN. Analise jogos, resultados, mapas, rounds e desempenho de times em partidas profissionais de CS2.",
+        "Explore estatísticas detalhadas de partidas de Counter-Strike 2 no REDONDO STATS. Analise jogos, resultados, mapas, rounds e desempenho de times em partidas profissionais de CS2.",
     keywords: [
         "cs2 matches", "counter strike 2 matches", "cs2 match statistics", "cs2 game stats", "cs2 results", "cs2 match analytics",
         "counter strike 2 game statistics", "cs2 map statistics", "cs2 rounds stats", "cs2 match results", "cs2 pro matches",
@@ -17,15 +17,16 @@ export const metadata: Metadata = {
         "cs2 desempenho times", "cs2 match breakdown"
     ],
     openGraph: {
-        title: "CS2 Matches & Game Statistics | REDONDO.FUN",
+        title: "CS2 Matches & Game Statistics | REDONDO STATS",
         description:
             "Analyze Counter-Strike 2 matches with advanced statistics, results, map performance, and team analytics.",
         type: "website",
-        siteName: "REDONDO.FUN",
+        siteName: "REDONDO STATS",
+        url: "https://csanalyticssandbox.com",
     },
     twitter: {
         card: "summary_large_image",
-        title: "CS2 Matches & Game Statistics | REDONDO.FUN",
+        title: "CS2 Matches & Game Statistics | REDONDO STATS",
         description:
             "Explore advanced Counter-Strike 2 match statistics, results, and analytics.",
     },

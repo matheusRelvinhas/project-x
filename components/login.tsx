@@ -415,7 +415,7 @@ export default function Login() {
                 </form>
             </div>
             <div className="px-3 py-4 text-center text-xs text-default-600">
-                {`© ${new Date().getFullYear()} REDONDO.FUN — Todos os direitos reservados.`}
+                {`© ${new Date().getFullYear()} REDONDO STATS — Todos os direitos reservados.`}
             </div>
         </div>
     );

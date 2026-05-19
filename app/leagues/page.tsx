@@ -4,7 +4,7 @@ import LeaguesPage from "./leagues-page";
 export const metadata: Metadata = {
     title: "Campeonatos e Estatísticas de CS2",
     description:
-        "Explore campeonatos de Counter-Strike 2 no REDONDO.FUN. Veja estatísticas de torneios, ligas, times participantes, resultados e desempenho em competições de CS2.",
+        "Explore campeonatos de Counter-Strike 2 no REDONDO STATS. Veja estatísticas de torneios, ligas, times participantes, resultados e desempenho em competições de CS2.",
     keywords: [
         "cs2 tournaments", "counter strike 2 tournaments", "cs2 leagues", "counter strike 2 leagues", "cs2 esports tournaments",
         "cs2 tournament stats", "cs2 league statistics", "cs2 esports events", "cs2 competitions", "counter strike 2 competitions",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
         description:
             "Descubra campeonatos de Counter-Strike 2 com estatísticas completas de torneios, ligas, times e resultados.",
         type: "website",
-        siteName: "REDONDO.FUN",
+        siteName: "REDONDO STATS",
     },
     twitter: {
         card: "summary_large_image",

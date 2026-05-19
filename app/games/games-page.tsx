@@ -99,7 +99,7 @@ export default function GamesPage() {
         if (saved === 'finished' || saved === 'upcoming') {
             setStatus(saved);
         } else {
-            setStatus('finished');
+            setStatus('upcoming');
         }
     }, []);
 

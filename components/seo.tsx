@@ -7,12 +7,12 @@ type SeoProps = {
 }
 
 export default function Seo({
-  title = "REDONDO.FUN",
+  title = "REDONDO STATS",
   description = "",
   keywords = "",
 }: SeoProps) {
 
-  const fullTitle = `REDONDO.FUN | ${title}`
+  const fullTitle = `REDONDO STATS | ${title}`
 
   return (
     <Head>

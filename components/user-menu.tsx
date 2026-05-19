@@ -30,10 +30,10 @@ const UserMenu = ({ isMobile, isExpanded, handleNavigation }: UserMenuProps) => 
                 {(isExpanded || isMobile) && (
                     <span className="flex fadeIn-menu text-xs text-wrap truncate font-medium">
                         {user?.logged
-                            ? ((user?.name ?? user?.email ?? "User").length > 16
-                                ? (user?.name ?? user?.email ?? "User").slice(0, 16) + "..."
-                                : (user?.name ?? user?.email ?? "User"))
-                            : "User"
+                            ? ((user?.name ?? user?.email ?? "Log in").length > (isMobile ? 16 : 10)
+                                ? (user?.name ?? user?.email ?? "Log in").slice(0, (isMobile ? 16 : 10)) + "..."
+                                : (user?.name ?? user?.email ?? "Log in"))
+                            : "Log in"
                         }
                     </span>
                 )}
