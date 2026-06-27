@@ -7,8 +7,9 @@ import Pagination from '@/components/pagination';
 // @ts-expect-error not error
 import Flag from 'react-world-flags';
 import Button from "@/components/button";
-import { type PlayerStats, type NumericStatKeys } from "@/app/players/players-page"; 
+import { type PlayerStats, type NumericStatKeys } from "@/app/players/players-page";
 import { useRouter } from 'next/navigation';
+import Tooltip from '@/components/tooltip';
 
 interface PlayerStatsTableProps {
     filterPlayers: PlayerStats[];
@@ -52,13 +53,11 @@ export default function PlayerStatsTable({
 
     const [showStats, setShowStats] = useState<string[]>([]);
     const statsGroup = [
-        { title: 'Geral', stats: ['avg_kills', 'avg_death', 'avg_damage', 'games_count']},
-        { title: 'Desempenho', stats: ['avg_first_kills', 'avg_first_death', 'avg_trade_kills', 'avg_assists']},
-        { title: 'Objetivo', stats: ['avg_headshots', 'avg_headshot_kills_accuracy', 'avg_shots', 'avg_shots_accuracy']},
-        { title: 'Granadas', stats: ['avg_flash_assists', 'avg_flash_hits', 'avg_flash_duration', 'avg_he_damage', 'avg_molotov_damage']},
+        { title: 'Geral', stats: ['avg_kills', 'avg_death', 'avg_assists', 'avg_damage']},
+        { title: 'Desempenho', stats: ['avg_first_kills', 'avg_first_death', 'avg_trade_kills', 'games_count']},
+        { title: 'Ultilitárias', stats: ['avg_flash_assists', 'avg_flash_hits', 'avg_flash_duration', 'avg_he_damage', 'avg_molotov_damage']},
         { title: 'Rifles', stats: ['avg_ak47_kills', 'avg_ak47_damage', 'avg_awp_kills', 'avg_awp_damage', 'avg_m4a1_kills', 'avg_m4a1_damage']},
         { title: 'Pistols', stats: ['avg_desert_eagle_kills', 'avg_desert_eagle_damage', 'avg_glock_kills', 'avg_glock_damage', 'avg_usp_s_kills', 'avg_usp_s_damage']},
-        { title: 'Economia', stats: ['avg_kill_cost', 'avg_hundred_damage_cost', 'avg_saved']},
         { title: 'Multikills', stats: ['multikills_vs_5', 'multikills_vs_4', 'multikills_vs_3', 'multikills_vs_2']},
         { title: 'Clutches', stats: ['clutches_vs_5', 'clutches_vs_4', 'clutches_vs_3', 'clutches_vs_2', 'clutches_vs_1']},
     ];
@@ -133,6 +132,54 @@ export default function PlayerStatsTable({
         else return statValue;
     };
 
+    const getStatTooltip = (statKey: string): string => {
+        const tooltips: { [key: string]: string } = {
+            'avg_kills': 'Média de kills por round',
+            'avg_death': 'Média de mortes por round',
+            'avg_assists': 'Média de assistências por round',
+            'avg_damage': 'Dano médio por round',
+            'avg_first_kills': 'Média de primeiras kills por round',
+            'avg_first_death': 'Média de primeiras mortes por round',
+            'avg_trade_kills': 'Média de trade kills por round',
+            'games_count': 'Número de mapas jogados',
+            'avg_headshots': 'Média de tiros na cabeça por round',
+            'avg_headshot_kills_accuracy': 'Porcentagem de kills com headshot por round',
+            'avg_shots': 'Média de tiros por round',
+            'avg_shots_accuracy': 'Precisão geral dos tiros por round',
+            'avg_flash_assists': 'Média de assistências com flash por round',
+            'avg_flash_hits': 'Média de blindagens com flash por round',
+            'avg_flash_duration': 'Duração média do efeito de flash por round',
+            'avg_he_damage': 'Dano médio de granadas HE por round',
+            'avg_molotov_damage': 'Dano médio de molotov por round',
+            'avg_ak47_kills': 'Média de kills com AK47 por round',
+            'avg_ak47_damage': 'Dano médio com AK47 por round',
+            'avg_awp_kills': 'Média de kills com AWP por round',
+            'avg_awp_damage': 'Dano médio com AWP por round',
+            'avg_m4a1_kills': 'Média de kills com M4A1 por round',
+            'avg_m4a1_damage': 'Dano médio com M4A1 por round',
+            'avg_desert_eagle_kills': 'Média de kills com Desert Eagle por round',
+            'avg_desert_eagle_damage': 'Dano médio com Desert Eagle por round',
+            'avg_glock_kills': 'Média de kills com Glock por round',
+            'avg_glock_damage': 'Dano médio com Glock por round',
+            'avg_usp_s_kills': 'Média de kills com USP-S por round',
+            'avg_usp_s_damage': 'Dano médio com USP-S por round',
+            'avg_kill_cost': 'Custo médio por kill por round',
+            'avg_hundred_damage_cost': 'Custo para 100 de dano por round',
+            'avg_saved': 'Valor médio economizado por round',
+            'multikills_vs_5': 'Multikills contra 5 inimigos',
+            'multikills_vs_4': 'Multikills contra 4 inimigos',
+            'multikills_vs_3': 'Multikills contra 3 inimigos',
+            'multikills_vs_2': 'Multikills contra 2 inimigos',
+            'clutches_vs_5': 'Clutches contra 5 inimigos',
+            'clutches_vs_4': 'Clutches contra 4 inimigos',
+            'clutches_vs_3': 'Clutches contra 3 inimigos',
+            'clutches_vs_2': 'Clutches contra 2 inimigos',
+            'clutches_vs_1': 'Clutches contra 1 inimigo',
+            'period': 'Período de tempo dos dados',
+        };
+        return tooltips[statKey] || '';
+    };
+
     const formatStat = (statKey:string, statValue:number) => {
         if (['games_count', 'multikills_vs_5', 'multikills_vs_4', 'multikills_vs_3', 'multikills_vs_2', 'clutches_vs_5', 'clutches_vs_4', 'clutches_vs_3', 'clutches_vs_2', 'clutches_vs_1'].includes(statKey)) return statValue.toFixed(0);
         else if (['avg_first_kills', 'avg_first_death', 'avg_trade_kills', 'avg_assists', 'avg_flash_assists', 'avg_ak47_kills', 'avg_awp_kills', 'avg_m4a1_kills', 'avg_desert_eagle_kills', 'avg_glock_kills', 'avg_usp_s_kills'].includes(statKey)) return statValue.toFixed(3);
@@ -186,8 +233,10 @@ export default function PlayerStatsTable({
                                 {!periods && <span className={`flex w-full pl-3 py-2 min-w-[200px] ${isMobile ? 'max-w-[200px]' : 'max-w-[30%]'}`}>{'Jogador'}</span>}
                                 {showStats.map(s => (
                                     <Ripple key={s} onClick={() => selectStat(s)} className={`flex min-h-[48px] fadeIn py-2 w-full text-center items-center justify-center min-w-[88px] cursor-pointer ${sortedBy === s && 'text-default-1000'}`}>
-                                        <span className='flex'>{statText(s)}</span>
-                                        <Icon name="material-symbols:keyboard-arrow-down-rounded" className={`text-[14px] transition ${(!desc && sortedBy === s) && 'rotate-180'}`} />
+                                        <Tooltip message={getStatTooltip(s)} delayDuration={300}>
+                                            <span className='flex'>{statText(s)}</span>
+                                            <Icon name="material-symbols:keyboard-arrow-down-rounded" className={`text-[16px] transition ${(!desc && sortedBy === s) && 'rotate-180'}`} />
+                                        </Tooltip>
                                     </Ripple>
                                 ))}
                             </div>

@@ -28,8 +28,8 @@ const Theme = () => {
             className='flex flex-col transition select-none cursor-pointer items-center justify-center py-1 border-t-1 border-l-1 border-default-400 min-h-[64px] max-h-[64px] min-w-[64px] text-default-900 hover:text-default-1000 hover:bg-glass-effect'
             onClick={toggleTheme}
         >  
-                {theme != "light" && <Icon name={"material-symbols:wb-sunny"} className="text-4xl fadeIn" />}
-                {theme == "light" && <Icon name={"material-symbols:clear-night"} className="text-4xl fadeIn" />}
+                {theme == "light" && <Icon name={"material-symbols:wb-sunny"} className="text-4xl fadeIn" />}
+                {theme != "light" && <Icon name={"material-symbols:clear-night"} className="text-4xl fadeIn" />}
         </Ripple>
     );
 };

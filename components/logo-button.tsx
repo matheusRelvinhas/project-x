@@ -1,4 +1,5 @@
 import { useMounted } from "@/utils/utils";
+import Image from "next/image";
 import Button from "./button";
 import { useAppContext } from "@/context/context";
 
@@ -25,9 +26,15 @@ export default function LogoButton({
 			onClick={() => handleNavigation("/")}
 			border={false}
 			rounded={false}
-			className={`flex flex-row w-full gap-4 transition items-center min-h-[64px] max-h-[64px] font-medium cursor-pointer text-primary-600 ${!isFooter ?  'border-b border-default-400 hover:bg-glass-effect' : 'rounded-md'} ${isExpanded || isMobile ? "pl-6 px-2 py-3" : "justify-center px-2 py-3"}`}
+			className={`flex flex-row w-full gap-4 items-center min-h-[64px] max-h-[64px] font-medium cursor-pointer text-primary-600 ${!isFooter ?  'border-b border-default-400 hover:bg-glass-effect' : 'rounded-md'} ${isExpanded || isMobile ? "pl-6 px-2 py-3" : "justify-center px-2 py-3"}`}
 		>
-			<img className="h-[36px] min-w-[36px] animate-float" src={`/img/logo-${theme}.png`} />
+			<Image 
+				src={`/img/logo-${theme}.png`}
+				alt="REDONDO STATS Logo"
+				width={36}
+				height={36}
+				className="h-[36px] min-w-[36px] animate-float"
+			/>
             {(isExpanded || isMobile) && (
                 <div className="flex flex-col w-full truncate justify-center fadeIn-menu">
                     <span className="font-black truncate">{'REDONDO STATS'}</span>

@@ -38,11 +38,11 @@ const Select: React.FC<SelectProps> = ({
 	const roundedClass = rounded ? "rounded-lg" : "";
 	const sizeClass =
 		size === "md"
-			? `w-[240px] ${isMobile}`
+			? `w-[240px]`
 			: size === "sm"
 			? "w-[72px]"
 			: size === "lg"
-			? "w-full"
+			? "w-[100%]"
 			: "";
 
 	const toggleDropdown = () => setIsOpen((prev) => !prev);
@@ -83,9 +83,10 @@ const Select: React.FC<SelectProps> = ({
 					isOpen ? "border-primary-600" : ""
 				}`}
 			>
-				<span>
-					{selectedOption?.title ||
-						(!disabledDefault ? placeholder : "")}
+				<span className="flex w-full">
+					{selectedOption?.title == 'Todos'
+						? placeholder
+						: selectedOption?.title || (!disabledDefault ? placeholder : "")}
 				</span>
 				<Icon
 					name="solar:alt-arrow-up-linear"

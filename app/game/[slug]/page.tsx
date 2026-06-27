@@ -12,7 +12,7 @@ export async function generateMetadata({
         .replace(/(\d{2})-(\d{2})-(\d{4})$/, "$1/$2/$3")
         .replace(/-/g, " ")
         .replace(/\b\w/g, (l) => l.toUpperCase())
-        .replace(/\bVs\b/g, "X");
+        .replace(/\bRs\b/g, "X");
 
     return {
         title: `${formattedTitle}`,

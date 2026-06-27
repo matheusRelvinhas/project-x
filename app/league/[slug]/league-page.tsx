@@ -162,6 +162,7 @@ export default function League() {
         if (!team_slug) return;
         const winGames = getWins(team_slug);
         const loseGames = getLoses(team_slug);
+        if (winGames == 0 && loseGames == 0) return null;
         return (
             <div className='flex text-sm items-center justify-center font-semibold text-nowrap min-w-[36px]'>
                 <span className={`${winGames > loseGames ? 'text-success' : winGames < loseGames ? 'text-danger' : winGames == loseGames ? 'text-default-900' : ''}`}>

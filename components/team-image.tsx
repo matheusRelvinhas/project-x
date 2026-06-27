@@ -39,7 +39,9 @@ const TeamImage = ({
 				alt={slug ?? ''}
 				fill
 				sizes="(max-width: 100px) 100px, 50vw"
-				className={`object-contain transition-opacity duration-300 ${
+				loading="lazy"
+				quality={75}
+				className={`object-contain duration-300 ${
 					isLoaded ? "opacity-100" : "opacity-0"
 				}`}
 				onLoad={() => setIsLoaded(true)}

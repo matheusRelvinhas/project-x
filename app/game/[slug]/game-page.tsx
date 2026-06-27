@@ -20,6 +20,7 @@ import Ripple from 'react-ripplejs';
 import { FilterTag } from '@/components/filter-tag';
 import GameSide from '@/components/game-side';
 import { Typewriter } from '@/components/typewiter';
+import Tooltip from '@/components/tooltip';
 
 export type GamePlayerStats = {
     additional_value: number;
@@ -163,6 +164,7 @@ export default function GamePage() {
             await axiosGet(
                 `/games_stats/game?slug=${slug}`,
                 (data) => {
+                    console.log(data);
                     setGameInfo(data);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #14'), true
@@ -251,6 +253,7 @@ export default function GamePage() {
             axiosGet(
                 `/games_stats/game_info?slug=${slug}&game_stat=game_side_stats`,
                 (data) => {
+                    console.log(data);
                     setGameSideStats(data.game_side_stats);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #17'), true
@@ -491,14 +494,32 @@ export default function GamePage() {
                         <div className='flex w-full items-center justify-end gap-3'>
                             <TeamImage slug={gameInfo.team1_slug} img_url={gameInfo.team1_img_url} className={`${ isMobile ? 'h-[27px] w-[27px] min-w-[27px] max-w-[27px]' : 'h-[42px] w-[42px] min-w-[42px] max-w-[42px]'}`} />
                             <span className='flex items-center justify-end w-full max-w-[125px] text-sm text-end font-semibold'>{gameInfo.team1_name}</span>
-                            <span className={`flex items-center justify-center rounded shadow-md bg-default-200 min-w-[27px] ${!gameInfo.winner_team_slug ? 'text-default-950' : gameInfo.team1_slug == gameInfo.winner_team_slug ? 'text-success' : 'text-danger'}`}>
-                                {gameInfo.team1_score}
-                            </span>
+                            <div className={`flex flex-col items-center justify-center gap-[2px] ${gameInfo.ai_predictions ? 'pt-2': ''}`}>
+                                <span className={`flex items-center justify-center rounded shadow-md bg-default-200 min-w-[27px] ${!gameInfo.winner_team_slug ? 'text-default-950' : gameInfo.team1_slug == gameInfo.winner_team_slug ? 'text-success' : 'text-danger'}`}>
+                                    {gameInfo.team1_score}
+                                </span>
+                                {gameInfo.ai_predictions && (
+                                    <Tooltip message={'Previsão da IA'} delayDuration={300}>
+                                        <span className={`flex items-center justify-center text-xs shadow-md text-default-800 bg-default-200 min-w-[18px] rounded`}>
+                                            {gameInfo.ai_predictions?.split('-')[0]}
+                                        </span>
+                                    </Tooltip>
+                                )}
+                            </div>
                         </div>
                         <div className='flex w-full items-center gap-3'>
-                            <span className={`flex items-center justify-center rounded shadow-md bg-default-200 min-w-[27px] ${!gameInfo.winner_team_slug ? 'text-default-950' : gameInfo.team2_slug == gameInfo.winner_team_slug ? 'text-success' : 'text-danger'}`}>
-                                {gameInfo.team2_score}
-                            </span>
+                            <div className={`flex flex-col items-center justify-center gap-[2px] ${gameInfo.ai_predictions ? 'pt-2': ''}`}>
+                                <span className={`flex items-center justify-center rounded shadow-md bg-default-200 min-w-[27px] ${!gameInfo.winner_team_slug ? 'text-default-950' : gameInfo.team2_slug == gameInfo.winner_team_slug ? 'text-success' : 'text-danger'}`}>
+                                    {gameInfo.team2_score}
+                                </span>
+                                {gameInfo.ai_predictions && (
+                                    <Tooltip message={'Previsão da IA'} delayDuration={300}>
+                                        <span className={`flex items-center justify-center text-xs shadow-md text-default-800 bg-default-200 min-w-[18px] rounded`}>
+                                            {gameInfo.ai_predictions?.split('-')[1]}
+                                        </span>
+                                    </Tooltip>
+                                )}
+                            </div>
                             <span className='flex items-center justify-start w-full max-w-[125px] text-sm font-semibold'>{gameInfo.team2_name}</span>
                             <TeamImage slug={gameInfo.team2_slug} img_url={gameInfo.team2_img_url} className={`${ isMobile ? 'h-[27px] w-[27px] min-w-[27px] max-w-[27px]' : 'h-[42px] w-[42px] min-w-[42px] max-w-[42px]'}`} />
                         </div>

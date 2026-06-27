@@ -33,11 +33,15 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
-    const classFull = 'transition flex min-h-full w-full bg-default-100 text-default-950';
+    const classFull = 'flex min-h-full w-full bg-default-100 text-default-950';
     return (
         <html lang="pt" className={classFull}>
             <head>
                 <SchemaOrganization />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+                <link rel="preconnect" href="https://www.googleadservices.com" />
             </head>
             <AppProvider>
                 <body className={classFull}>
@@ -45,6 +49,22 @@ export default function RootLayout({
                     <Menu>
                         {children}
                     </Menu>
+                    <script
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                (function(w,d,s,l,i){
+                                    w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+                                    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+                                    j.async=true;j.src='https://www.googletagmanager.com/gtag/js?id=AW-18173053796';
+                                    f.parentNode.insertBefore(j,f);
+                                })(window,document,'script','dataLayer','AW-18173053796');
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', 'AW-18173053796');
+                            `,
+                        }}
+                    />
                 </body>
             </AppProvider>
         </html>

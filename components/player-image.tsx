@@ -36,7 +36,9 @@ const PlayerImage = ({
 				src={imageUrl}
 				alt={slug || "player_image"}
 				width={100}
-  				height={100} 
+  				height={100}
+				loading="lazy"
+				quality={75}
 				className={`${className} absolute scale-225 bottom-1 right-[-1px] top-[25px] fadeIn ${
 					isLoaded ? "opacity-100" : "opacity-0"
 				}`}

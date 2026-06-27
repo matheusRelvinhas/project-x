@@ -52,12 +52,15 @@ export default function TeamPage() {
     const [mapsStats, setMapsStats] = useState<GameScore[]>([]);
     const [mapsCurrentPage, setMapsCurrentPage] = useState(1);
     const [filteredMapsStats, setFilteredMapsStats] = useState<GameScore[]>([]);
+    const [teamsSelectedList, setTeamsSelectedList] = useState<{ value: string; title: string }[]>([]);
     
     const [sortedBy, setSortedBy] = useState<NumericStatKeys>('avg_kills');
     const [desc, setDesc] = useState<boolean>(true);
     const [period, setPeriod] = useState<Period>('6_months');
     const [mapSelected, setMapSelected] = useState<string>('');
     const [bestOfSelected, setBestOfSelected] = useState<string>('');
+    const [teamCounterSelected, setTeamCounterSelected] = useState<string>('');
+    const [teamMapCounterSelected, setTeamMapCounterSelected] = useState<string>('');
 
     const isActiveRef = useRef(true);
     useEffect(() => {
@@ -167,11 +170,14 @@ export default function TeamPage() {
             .filter(game => game.start_timestamp >= minTimestamp)
             .sort((a, b) => b.start_timestamp - a.start_timestamp);
         if (bestOfSelected) {
-            filteredGames = filteredGames.filter(game => game.bo_type == Number(bestOfSelected))
-        }
+            filteredGames = filteredGames.filter(game => game.bo_type == Number(bestOfSelected));
+        };
+        if (teamCounterSelected ) {
+            filteredGames = filteredGames.filter(game => (game.team1_slug == teamCounterSelected || game.team2_slug == teamCounterSelected));
+        };
         setFilteredGamesStats(filteredGames);
         setGamesCurrentPage(1);
-    }, [period, gamesStats, bestOfSelected, isMobile]);
+    }, [period, gamesStats, bestOfSelected, teamCounterSelected, isMobile]);
 
     useEffect(() => {
         if (!mapsStats || mapsStats.length === 0) return;
@@ -182,9 +188,12 @@ export default function TeamPage() {
         if (mapSelected) {
             filteredMaps = filteredMaps.filter(map => map.map_name == mapSelected)
         };
+        if (teamMapCounterSelected ) {
+            filteredMaps = filteredMaps.filter(map => (map.team1_slug == teamMapCounterSelected || map.team2_slug == teamMapCounterSelected));
+        }
         setFilteredMapsStats(filteredMaps);
         setMapsCurrentPage(1);
-    }, [period, mapSelected, mapsStats, isMobile]);
+    }, [period, mapSelected, mapsStats, teamMapCounterSelected, isMobile]);
 
     useEffect(() => {
         if (!leaguesStats || leaguesStats.length === 0) return;
@@ -195,6 +204,21 @@ export default function TeamPage() {
         setFilteredLeaguesStats(filteredLeagues);
         setLeagueCurrentPage(1);
     }, [period, leaguesStats, isMobile]);
+
+    useEffect(() => {
+        if (gamesStats.length === 0) return;
+        console.log(gamesStats);
+        const uniqueTeams = Array.from(
+            new Map( gamesStats.map(game => {
+                const team_slug = game.team1_slug !== slug ? game.team1_slug : game.team2_slug;
+                const team_name = game.team1_slug !== slug ? game.team1_name : game.team2_name;
+                return team_slug && team_name ? [team_slug, { value: team_slug, title: team_name }] : null;
+            }).filter(Boolean) as [string, { value: string; title: string }][]
+            ).values()
+        ).sort((a, b) => a.title.localeCompare(b.title));
+        setTeamsSelectedList(uniqueTeams);
+        console.log(uniqueTeams);
+    }, [gamesStats, slug]);
 
     useEffect(() => {
         if (!playersStats || playersStats.length === 0) return;
@@ -265,12 +289,17 @@ export default function TeamPage() {
                                 filteredGamesStats.length ? Math.round(filteredGamesStats.filter(m => m.winner_team_slug == slug).length * 100 / filteredGamesStats.length) : 0
                             )
                         }
-                        <div className='flex text-sm max-w-[50%]'>
-                            <Select value={bestOfSelected} setValue={(val) => setBestOfSelected(val as string)} placeholder='Selecione'
+                        <div className='flex text-sm gap-2 w-full'>
+                            <Select value={bestOfSelected} setValue={(val) => setBestOfSelected(val as string)} 
                                 options={[
-                                    {title: 'Todos', value: ''}, {title: 'Bo1', value: '1'}, 
+                                    {title: 'Todos', value: ''}, {title: 'Bo1', value: '1'},
                                     {title: 'Bo3', value: '3'}, {title: 'Bo5', value: '5'}
                                 ]}
+                                placeholder='Selecione' size='lg'
+                                />
+                            <Select value={teamCounterSelected} setValue={(val) => setTeamCounterSelected(val as string)} 
+                                options={teamsSelectedList.length > 0 ? [{title: 'Todos', value: ''}, ...teamsSelectedList] : []}
+                                placeholder='Selecione um time' size='lg'
                             />
                         </div>
                     </GamesStatsTable>
@@ -284,13 +313,17 @@ export default function TeamPage() {
                             filteredMapsStats.filter(m=>m.winner_team!=slug).length, 
                             filteredMapsStats.length ? Math.round(filteredMapsStats.filter(m => m.winner_team == slug).length * 100 / filteredMapsStats.length) : 0
                         )}
-                        <div className='flex items-center justify-between w-full gap-1'>
-                            <div className='flex text-sm max-w-[calc(50%-2px)]'>
-                                <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
-                                    options={[{title: 'Todos', value: ''}, ...mapsName]}
-                                />
-                            </div>
+                        
+                        <div className='flex text-sm gap-2 w-full'>
+                            <Select value={mapSelected} setValue={(val) => setMapSelected(val as string)} placeholder='Selecione um mapa'
+                                options={[{title: 'Todos', value: ''}, ...mapsName]} size='lg'
+                            />
+                            <Select value={teamMapCounterSelected} setValue={(val) => setTeamMapCounterSelected(val as string)} 
+                                options={teamsSelectedList.length > 0 ? [{title: 'Todos', value: ''}, ...teamsSelectedList] : []}
+                                placeholder='Selecione um time' size='lg'
+                            />
                         </div>
+                        
                     </MapsStatsTable>
                 </div>
                 <div className={`flex max-w-sm ${isMobile ? 'w-[100%]' : 'w-[50%]'}`}>

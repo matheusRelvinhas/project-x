@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { mapsName } from '@/utils/utils';
 import GameMapsScore from '@/components/game-maps-score';
 import { formatTimestamp } from '@/app/game/[slug]/game-page';
+import Tooltip from './tooltip';
 
 interface GamesStatsTableProps {
     gamesStats: GameStats[];
@@ -72,7 +73,7 @@ export default function GamesStatsTable({
             )}
             {children}
             {currentGames.length ? <div className='flex fadeIn bg-default-50 overflow-y-hidden rounded w-full'>
-                <div className='min-w-max w-full flex flex-col'>{currentGames.map((game, i) => (
+                <div className='w-full flex flex-col'>{currentGames.map((game, i) => (
                     <div key={game.slug + i} className={`relative flex gap-2 overflow-x-auto overflow-y-hidden w-full h-[60px] min-h-[60px] max-h-[60px] transition hover:bg-glass-primary p-2 ${i ? 'short-top-border' : ''}`}>
                         <div className='absolute top-[4px] left-[8px] z-10 flex gap-2 flex-nowrap'>
                             {game.stage_round?.round && (
@@ -108,11 +109,26 @@ export default function GamesStatsTable({
                                     )}
                                 </span>
                                 <TeamImage slug={game.team1_slug} img_url={game.team1_img_url} className='h-[16px] w-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
-                                <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team1_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.team1_score ? game.team1_score : '0'}</span>
                             </div>
-
+                            <div className="flex w-full flex-col gap-[1px] items-center justify-center">
+                                <div className='flex gap-2'>
+                                    <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[19px] w-[24px] min-w-[24px] max-w-[24px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team1_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.status == 'upcoming' ? '-' : game.team1_score ? game.team1_score : '0'}</span>
+                                    <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[19px] w-[24px] min-w-[24px] max-w-[24px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team2_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.status == 'upcoming' ? '-' : game.team2_score ? game.team2_score : '0'}</span>
+                                </div>
+                                { game.ai_predictions && (
+                                    <Tooltip message={'Previsão da IA'} delayDuration={300}>
+                                        <div className='flex gap-4'>
+                                            <span className={`text-xs text-default-800 h-[14px] w-[16px] text-center flex items-center justify-center bg-default-100 px-1 rounded font-medium`}>
+                                                {game.ai_predictions?.split('-')[0]}
+                                            </span>
+                                            <span className={`text-xs text-default-800 h-[14px] w-[16px] text-center flex items-center justify-center bg-default-100 px-1 rounded font-medium`}>
+                                                {game.ai_predictions?.split('-')[1]}
+                                            </span>
+                                        </div>
+                                    </Tooltip>
+                                )}
+                            </div>
                             <div className='flex w-full min-w-[136px] items-center gap-2'>
-                                <span className={`rounded transition flex items-center justify-center bg-default-200 p-1 h-[23x] w-[25px] min-w-[25px] max-w-[25px] text-xs font-semibold ${!game.winner_team_slug ? 'text-default-950' : game.team2_slug == game.winner_team_slug ? 'text-success' : 'text-danger'}`}>{game.team2_score ? game.team2_score : '0'}</span>
                                 <TeamImage slug={game.team2_slug} img_url={game.team2_img_url} className='h-[16px] w-[16px] min-w-[16px] max-w-[16px]' />
                                 <span className={`font-semibold whitespace-nowrap overflow-hidden text-ellipsis flex-1 ${isMobile ? 'text-[11px]' : 'text-xs'}`}>
                                     { game.team2_name ? game.team2_name : (

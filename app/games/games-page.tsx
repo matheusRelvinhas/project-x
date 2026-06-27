@@ -72,6 +72,7 @@ export interface GameStats {
     start_date: string;
     start_timestamp: number;
     games_score: GameScore[];
+    ai_predictions: string|null;
 };
 
 interface Leagues {

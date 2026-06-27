@@ -39,6 +39,8 @@ const LeagueImage = ({
 				alt={slug || "league_image"}
 				width={100}
 				height={100}
+				loading="lazy"
+				quality={75}
 				className={`${className} fadeIn ${isLoaded ? "opacity-100" : "opacity-0"}`}
 				onLoad={() => setIsLoaded(true)}
 				onError={() => setHasError(true)}

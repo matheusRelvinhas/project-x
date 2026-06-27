@@ -45,7 +45,7 @@ const Menu = ({ children }: MenuProps) => {
         }
         if(pathname === '/login') setIsLoginPage(true);
         else setIsLoginPage(false);
-        if (pathname === '/' || pathname === '/profile') {
+        if (pathname === '/profile') {
             handleNavigation('/games');
         }
 
