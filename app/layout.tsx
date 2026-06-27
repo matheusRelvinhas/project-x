@@ -42,6 +42,7 @@ export default function RootLayout({
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
                 <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
                 <link rel="preconnect" href="https://www.googleadservices.com" />
+                <meta name="google-adsense-account" content="ca-pub-5377852341726601"></meta>
             </head>
             <AppProvider>
                 <body className={classFull}>

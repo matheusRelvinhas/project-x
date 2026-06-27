@@ -10,6 +10,7 @@ import Loader from "@/components/loader";
 import LogoButton from './logo-button';
 import Ripple from 'react-ripplejs';
 import Footer from './footer';
+import GoogleAd from '@/components/google-ad';
 
 interface MenuProps {
     children: ReactNode;
@@ -126,7 +127,17 @@ const Menu = ({ children }: MenuProps) => {
                 <div className='flex w-full flex-col flex-1'>
                     <div className={`flex w-full h-full mx-auto container ${isMobile ? 'pt-20 pb-4 px-4' : 'px-6 py-8'}`}>
                         {children}
+                        {!isMobile ?
+                            <div className='flex px-3 items-center justify-center w-full h-full min-w-[200px] max-w-[200px]'>
+                                <GoogleAd adSlot="1234567890" adFormat="horizontal" />
+                            </div>
+                        : null}
                     </div>
+                    {isMobile ? 
+                        <div className='flex w-full items-center justify-center pb-2 px-4'>
+                            <GoogleAd adSlot="0987654321" adFormat="rectangle" /> 
+                        </div>
+                    : null}
                     {!isLoginPage && <Footer handleNavigation={handleNavigation} />}
                 </div>
             </div>
