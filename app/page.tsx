@@ -90,7 +90,7 @@ export default function Home() {
             <span className="font-black text-xl text-primary-600 truncate">{'REDONDO STATS'}</span>
             <span className='font-bold text-default-950 pb-1'>{'Gráfico de previsões '}</span>
             <ChartAiPerfomance />
-            <div className="flex flex-col gap-2 pt-1">
+            <div className="flex flex-col gap-2 pt-1 w-full max-w-5xl">
                 <div className="w-full overflow-x-auto overflow-y-hidden rounded min-h-[40px]">
                     <div className="flex w-max py-1 px-2 rounded gap-2 bg-default-200 text-default-700">
                         {buttonGroup('finished')}
