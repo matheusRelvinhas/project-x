@@ -164,7 +164,6 @@ export default function GamePage() {
             await axiosGet(
                 `/games_stats/game?slug=${slug}`,
                 (data) => {
-                    console.log(data);
                     setGameInfo(data);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #14'), true
@@ -253,7 +252,6 @@ export default function GamePage() {
             axiosGet(
                 `/games_stats/game_info?slug=${slug}&game_stat=game_side_stats`,
                 (data) => {
-                    console.log(data);
                     setGameSideStats(data.game_side_stats);
                 },
                 () => toast.error('Erro inesperado, tente novamente. #17'), true

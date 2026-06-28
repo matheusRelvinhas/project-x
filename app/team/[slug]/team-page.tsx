@@ -207,7 +207,6 @@ export default function TeamPage() {
 
     useEffect(() => {
         if (gamesStats.length === 0) return;
-        console.log(gamesStats);
         const uniqueTeams = Array.from(
             new Map( gamesStats.map(game => {
                 const team_slug = game.team1_slug !== slug ? game.team1_slug : game.team2_slug;
@@ -217,7 +216,6 @@ export default function TeamPage() {
             ).values()
         ).sort((a, b) => a.title.localeCompare(b.title));
         setTeamsSelectedList(uniqueTeams);
-        console.log(uniqueTeams);
     }, [gamesStats, slug]);
 
     useEffect(() => {
