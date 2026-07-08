@@ -16,8 +16,9 @@ export const mapsName = [
     { title: "Overpass", value: "de_overpass" },
     { title: "Ancient", value: "de_ancient" },
     { title: "Anubis", value: "de_anubis" },
-    //{ title: "Train", value: "de_train" },
-    //{ title: "Vertigo", value: "de_vertigo" },
+    { title: "Train", value: "de_train" },
+    { title: "Vertigo", value: "de_vertigo" },
+    { title: "Cache", value: "de_cache" }
 ];
 
 export function useMounted() {

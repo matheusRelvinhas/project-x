@@ -85,7 +85,11 @@ export default function LeaguesPage() {
         {title: 'Tier A', value: 'a'},
     ];
 
-    const yearGroup = ['2026','2025', '2024', '2023', '2022', '2021', '2020'].map(y => ({ value: y, name: y, title: y }));
+    const currentYear = new Date().getFullYear();
+    const yearGroup = Array.from({ length: currentYear - 2019 }, (_, index) => {
+        const year = String(2020 + index);
+        return { value: year, name: year, title: year };
+    });
 
     const buttonGroup = (statusValue:'current'|'finished') => {
         return (

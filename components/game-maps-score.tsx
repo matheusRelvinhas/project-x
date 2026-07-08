@@ -29,7 +29,7 @@ export const GameMapsScore: React.FC<GameMapsScoreProps> = ({ gamesScore, game, 
     };
 
     return (
-        <div className={`flex h-full items-center justify-center flex-wrap ${size=='md' || isMobile ? 'gap-1' : 'gap-2'}`}>
+        <div className={`flex h-full items-center justify-center ${size=='md' || isMobile ? 'gap-1' : 'gap-2'}`}>
             {sortedGames.map((g, i) => g.map_name && (
                 <Button
                     className={`relative transition flex flex-col pb-2 justify-between gap-1 rounded cursor-pointer overflow-hidden border-1 border-default-200 hover:border-primary-600 w-fit ${selectedMap === g.map_name ? 'border-primary-600' : ''} ${size=='md' || isMobile ? 'h-[48px] min-w-[64px]' : 'h-[60px] min-w-[80px]'}`}

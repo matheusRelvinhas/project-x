@@ -8,7 +8,7 @@ export default function TermsPage() {
                 <header className="space-y-4">
                     <h1 className="text-4xl font-bold">Termos de Uso e Política de Privacidade</h1>
                     <p className="text-sm text-default-500">
-                        Última atualização: 2026
+                        Última atualização: {new Date().getFullYear()}
                     </p>
                     <p className="text-default-700">
                         Estes termos regulam o uso da plataforma <strong>REDONDO STATS</strong>.
