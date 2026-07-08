@@ -111,15 +111,6 @@ export default function Home() {
                     itemsPerPage={ 8 + (isMobile ? 0 : 4)} />}
 
             </div>
-            <div data-modal-id="1" data-modal-link="https://extrascores.app/pro" data-modal-cta="Ver dica da IA">
-                <h2>Dica da <strong>IA disponível</strong></h2>
-                <p>Nossa <strong>Inteligência Artificial</strong> analisou mais de <strong>500 estatísticas</strong> desse jogo. Acesse a <em>Dica da IA</em> com até <strong>87% de confiança</strong>.</p>
-            </div>
-
-            <div data-modal-id="2" data-modal-link="https://extrascores.app/stats" data-modal-cta="Assinar agora">
-                <h2>Stats <strong>ao vivo</strong></h2>
-                <p>Acompanhe <strong>estatísticas em tempo real</strong>: pressão, posse, finalizações e muito mais. Assine o <strong>ExtraScores Pro</strong> e tenha acesso completo.</p>
-            </div>
         </div>
     );
 };
