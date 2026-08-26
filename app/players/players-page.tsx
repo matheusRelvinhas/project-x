@@ -242,7 +242,7 @@ export default function PlayersPage() {
             <div className='flex flex-col gap-2 w-full max-w-5xl'>
                 <div className='flex justify-end flex-wrap w-full gap-[6px] whitespace-nowrap'>
                     <FilterTag items={periodText(period)} />
-                    <FilterTag items={`No mínimo ${gameCount} jogos`} />
+                    <FilterTag items={`No mínimo ${gameCount} mapas`} />
                     <FilterTag
                         items={countrySelect.map((c) => (
                             <>

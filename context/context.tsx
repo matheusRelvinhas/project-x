@@ -1,7 +1,7 @@
 'use client';
 
-import { axiosGet } from '@/utils/axios';
-import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
+import { axiosPost } from '@/utils/axios';
+import { createContext, useState, ReactNode, useContext, useEffect } from 'react';
 
 interface User {
     id: number | null;
@@ -55,7 +55,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             setUser(defaultUser);
             return;
         };
-        axiosGet(`/login/check_auth`, (data) => {
+        axiosPost(`/login/check_auth`, {}, (data) => {
             setUser({
                 id: data.user_id,
                 name: data.name,

@@ -1,6 +1,6 @@
 import Icon from '@/components/icon';
 import { useAppContext } from '@/context/context';
-import { axiosGet } from '@/utils/axios';
+import { axiosPost } from '@/utils/axios';
 import { toast } from "react-toastify";
 import Ripple from 'react-ripplejs';
 
@@ -13,7 +13,7 @@ const Logout = ({ handleNavigation }: LogoutProps) => {
     const { setAccessToken } = useAppContext();
 
     const logout = () => {
-        axiosGet(`/login/logout`, (data) => {
+        axiosPost(`/login/logout`, {}, (data) => {
             if(data.message == 'logout_success') {
                 localStorage.setItem("token_access", 'not_user');
                 setAccessToken('not_user');

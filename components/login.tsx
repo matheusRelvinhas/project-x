@@ -9,7 +9,7 @@ import Checkbox from "@/components/checkbox";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
-import { axiosGet } from "@/utils/axios";
+import { axiosPost } from "@/utils/axios";
 import { useAppContext } from "@/context/context";
 import LogoButton from './logo-button';
 
@@ -112,7 +112,7 @@ export default function Login() {
                 if (!acceptTerms) return toast.error("Você precisa aceitar os termos e políticas de privacidade, para continuar.");
                 loginForm = 'register';
             }
-            axiosGet(`/login?email=${email}&pwd=${password}&login_type=${loginForm}`, (data) => {
+            axiosPost(`/login`, { email, password, login_type: loginForm }, (data) => {
                 if (data.message == 'user_registered') toast.success('Usuário registrado e logado com sucesso.');
                 if (data.message == 'login_success') toast.success('Usuário logado.');
                 localStorage.setItem("token_access", data.token);
@@ -136,7 +136,7 @@ export default function Login() {
         toast.dismiss();
         if (!isEmail) return toast.error("Email inválido.");
         if (!isConfirmEmail) return toast.error("Confirme seu email.");
-        axiosGet(`/login/recover_password?email=${email}`, (data) => {
+        axiosPost(`/login/recover_password`, { email }, (data) => {
             if (data.message == 'email_sent') {
                 toast.success("Email enviado, verifique seu email.");
             };
@@ -154,7 +154,7 @@ export default function Login() {
         toast.dismiss();
         if (!isNewPassword) return toast.error("Digite um nova senha.");
         if (!isConfirmNewPassword) return toast.error("Confirme sua nova senha.");
-        axiosGet(`/login/reset_password?recover_token=${recoverPassword}&new_password=${newPassword}`, (data) => {
+        axiosPost(`/login/reset_password`, { recover_token: recoverPassword, new_password: newPassword }, (data) => {
             if (data.message == 'password_updated') {
                 toast.success("Senha atualizada com sucesso!");
                 handleParam('');
